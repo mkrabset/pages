@@ -1,8 +1,8 @@
 <html>
- <body background="bg.png">
+ <head>
+  <link rel="stylesheet" href="style.css">
   <script src="bundle.js"></script> 
   <script type="application/x-javascript">
-
 var paths=require('paths')
 var complex=require('complex')
 var fourier=require('fourier')
@@ -16,11 +16,11 @@ var endpoints=[]
 var timedelta=0.0001
 
 function setImage(pathString, mfreq, sortOrder) {
-  console.log(mfreq)
   presentation=getPresentationData(pathString, mfreq, sortOrder)
   endpoints=[]
   t=0
   maxFreq=mfreq
+  document.getElementById("formula").hidden=true
 }
 
 function getPresentationData(pathString, mfreq, sortOrder) {
@@ -139,71 +139,117 @@ function draw(id) {
   setTimeout ( "draw('"+id+"')", 10 );      
 }
 
+function sign(x) {
+  return x>=0 ? "+" : "-"
+}
+
+function updateFormula() {
+  document.getElementById("formula").hidden=false
+  var constants=[presentation.freq0Constant, ...presentation.freqConstants]
+  var formula="$$ f(t) = "
+  formula=formula+constants.map(c=>"("+c.constant.a+sign(c.constant.b)+Math.abs(c.constant.b)+"i) e^{2 \\pi i t * ("+c.freq+")} ").join("+\\\\")
+  formula=formula+"$$"
+  document.getElementById("formula").innerText=formula
+  MathJax.Hub.Queue(["Typeset",MathJax.Hub,document.getElementById("formula")]);
+}
+
 function getSelectedImage() {
-  return document.getElementById("selectimage").value
+  return document.getElementById("selectimage")
 }
 
 function getSelectedMaxFreq() {
-  return document.getElementById("maxFreq").valueAsNumber
+  return document.getElementById("maxFreq")
 }
 
 function getSelectedSortOrder() {
-  return document.getElementById("sortOrder").value
+  return document.getElementById("sortOrder")
+}
+
+function getSelectedSpeed() {
+  return document.getElementById("speed")
 }
 
 window.onload = function() {
-
   // Create image options
   Object.keys(images).map(key=>{
     var opt=document.getElementById("dummyoption").cloneNode()
     opt.hidden=false
     opt.innerText=key
-    document.getElementById("selectimage").appendChild(opt)
+    getSelectedImage().appendChild(opt)
   })
   document.getElementById("dummyoption").hidden=true
-  document.getElementById("selectimage").selectedIndex=1
+
+  // Handle query params
+  const urlParams = new URLSearchParams(window.location.search);
+  const imageParam=urlParams.get("image")
+  const maxFreqParam=urlParams.get("maxFreq")
+  const speedParam=urlParams.get("speed")
+
+  if (imageParam!==null && Object.keys(images).includes(imageParam)) {
+    getSelectedImage().value=imageParam
+  } else {
+    getSelectedImage().value="kiwi"
+  }
+
+  if (maxFreqParam!==null) {
+    getSelectedMaxFreq().valueAsNumber=Math.min(200,Math.max(2,parseInt(maxFreqParam)))
+  }
+
+  if (speedParam!==null) {
+    const log2speed=Math.pow(2,Math.min(6,Math.max(0,Math.round(Math.log2(parseInt(speedParam))))))/10000
+
+    getSelectedSpeed().value=log2speed
+  }
+
 
   // Select image handler
-  document.getElementById("selectimage").onchange=(event) => {
-   setImage(images[event.target.value], getSelectedMaxFreq(), getSelectedSortOrder())
+  getSelectedImage().onchange=(event) => {
+   setImage(images[event.target.value], getSelectedMaxFreq().valueAsNumber, getSelectedSortOrder().value)
   }
 
   // Select max frequency handler
-  document.getElementById("maxFreq").onchange = (event) => {
-    setImage(images[getSelectedImage()], event.target.valueAsNumber, getSelectedSortOrder())
+  getSelectedMaxFreq().onchange = (event) => {
+    setImage(images[getSelectedImage().value], event.target.valueAsNumber, getSelectedSortOrder().value)
   }
 
   // Select orbit sort-order handler
-  document.getElementById("sortOrder").onchange = (event) => {
-    setImage(images[getSelectedImage()], getSelectedMaxFreq(), getSelectedSortOrder())
+  getSelectedSortOrder().onchange = (event) => {
+    setImage(images[getSelectedImage().value], getSelectedMaxFreq().valueAsNumber, getSelectedSortOrder().value)
   }
 
   // Select speed handler
-  document.getElementById("speed").onchange = (event) => {
+  getSelectedSpeed().onchange = (event) => {
     timedelta=parseFloat(event.target.value)
     endpoints=[]
   }
 
-  setImage(images[getSelectedImage()], getSelectedMaxFreq(), getSelectedSortOrder())
-  timedelta=parseFloat(document.getElementById("speed").value)
+  setImage(images[getSelectedImage().value], getSelectedMaxFreq().valueAsNumber, getSelectedSortOrder().value)
+  timedelta=parseFloat(getSelectedSpeed().value)
   
+  document.getElementById("showformula").onclick=(e) => {
+    updateFormula()
+  }
+
   draw('canvas');
 }
+  </script>  
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
   </script>
-   <table>
-   <tr>
-     <td>
+  </head>
+  <body background="bg.png">
+   <div class="header">
+     <div>
        Image:
        <select id="selectimage">
          <option id="dummyoption" visible="false">dummy</option>
        </select>
-     </td>
-     <td>
+     </div>
+     <div>
        Max frequency:
        <input id="maxFreq" min="1" max="200" type="number" value="20"></input>
-     </td>
-     <td>
-       Sort order:
+     </div>
+     <div>
+      Sort order:
        <select id="sortOrder" >
          <option value="1">-magnitude</option>
          <option value="2">magnitude</option>
@@ -212,26 +258,31 @@ window.onload = function() {
          <option value="5">abs(freq)</option>
          <option value="6">-abs(freq)</option>
        </select>
-     </td>
-     <td>
+     </div>
+     <div>
        Speed:
        <select id="speed">
          <option value="0.0001">slow</option>
          <option value="0.0002">x 2</option>
          <option value="0.0004">x 4</option>
-         <option value="0.0008" selected="selected">x 8</option>
+         <option value="0.0008" selected="selected" >x 8</option>
          <option value="0.0016">x 16</option>
          <option value="0.0032">x 32</option>
          <option value="0.0064">x 64</option>
        </select>
-     </td>
-     <td><a href="https://github.com/mkrabset/epicycles">https://github.com/mkrabset/epicycles</a></td>
-   </tr>
-   <tr>
-     <td colspan="5"><canvas id="canvas" width="1600" height="1600"/></td>
-   </tr>
-   </table>
+     </div>
+     <div>
+       <input id="showformula" type="button" value="Show math function (below)"/>
+     </div>
+     <div class="githublink">
+       <a href="https://github.com/mkrabset/epicycles">https://github.com/mkrabset/epicycles</a>
+     </div>
+   </div>
 
+   <div>
+     <canvas id="canvas" width="1600" height="1000"/>
+   </div>
+   <p id="formula" style="float: left"/>
  </body>
 </html>
 
