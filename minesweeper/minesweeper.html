@@ -1,0 +1,257 @@
+<html>
+    <head>
+        <script>
+function game() {
+    const c=document.getElementById("canvas");
+    const ctx=canvas.getContext("2d");
+    const cellSize=30;
+    const rows=Math.floor(canvas.height/cellSize);
+    const cols=Math.floor(canvas.width/cellSize);
+    const cellsPrMine=6;
+    const numMines=rows*cols/cellsPrMine;
+    const colors=["#000000","#2020ff","#00a000","#ff2020","#ff20ff","#000000","#800000","#a0a0a0","#20ffff"]
+
+    const isMine=[]
+    const isOpen=[]
+    const isMarked=[]
+
+    const ind=(c,r)=>r*cols+c;
+
+    // Initialize cell properties
+    for (var row=0;row<rows;row++) {
+        for (var col=0;col<=cols;col++) {
+            const index=ind(col,row);
+            isMine[index]=false;
+            isOpen[index]=false;
+            isMarked[index]=false;
+        }
+    }
+
+    // Add one mine at random location
+    const addMine=()=> {
+        while(true) {
+            const row=Math.floor(Math.random() * rows); 
+            const col=Math.floor(Math.random() * cols); 
+            const index=ind(col,row);
+            if (!isMine[index]) {
+                isMine[index]=true;
+                return;
+            }
+        }
+    }
+
+    // Add all mines
+    for (var m=0;m<numMines;m++) {
+        addMine();
+    }
+
+    // Count number of mines surrounding cell
+    const countMines=(c,r)=>{
+        var mines=0;
+        for (var x=-1;x<=1;x++) {
+            var col=c+x;
+            if (col<0 || col>=cols) continue;
+
+            for (var y=-1;y<=1;y++) {
+                var row=r+y;
+                if (row<0 || row>=rows) continue;
+                const index=ind(col,row);
+                if (isMine[index]) {
+                    mines++;
+                }
+
+            }
+        }
+        return mines;
+    }
+
+
+
+    const draw=()=> {
+
+        // Draw background
+        ctx.save();
+        ctx.translate(0.5,0.5);
+
+        ctx.fillStyle="#909090"
+        ctx.fillRect(0,0, cols*cellSize, rows*cellSize);
+
+        ctx.strokeStyle="#000000"
+        ctx.beginPath();
+        for (var row=0;row<=rows;row++) {
+            ctx.moveTo(0,row*cellSize);
+            ctx.lineTo(cols*cellSize, row*cellSize);
+        }
+        
+        for (var col=0;col<=cols;col++) {
+            ctx.moveTo(col*cellSize,0);
+            ctx.lineTo(col*cellSize, rows*cellSize);
+        }
+        
+        ctx.stroke();
+        ctx.restore();
+
+        // Draw cells
+        for (var row=0;row<rows;row++) {
+            for (var col=0;col<=cols;col++) {
+                const index=ind(col,row);
+                const bx=col*cellSize;
+                const by=row*cellSize;
+
+
+                if (isOpen[index]) {
+                    if (isMine[index]) {
+                        ctx.fillStyle="#000000"
+                        ctx.strokeStyle="#000000"
+                        const cx=bx+cellSize/2;
+                        const cy=by+cellSize/2;
+                        ctx.beginPath();
+                        ctx.moveTo(cx,by+cellSize/8);
+                        ctx.lineTo(cx,by+cellSize*7/8);
+                        ctx.moveTo(bx+cellSize/8,cy);
+                        ctx.lineTo(bx+cellSize*7/8,cy);
+
+                        ctx.moveTo(bx+cellSize/4,by+cellSize/4);
+                        ctx.lineTo(bx+cellSize*3/4,by+cellSize*3/4);
+
+                        ctx.moveTo(bx+cellSize/4,by+cellSize*3/4 );
+                        ctx.lineTo(bx+cellSize*3/4,by+cellSize/4);
+
+                        ctx.stroke();
+
+
+                        ctx.beginPath();
+                        ctx.arc(bx+cellSize/2, by+cellSize/2,cellSize/4,0,2*Math.PI) ;
+                        ctx.fill();
+
+                        ctx.fillStyle="#ffffff"
+                        ctx.beginPath();
+                        ctx.arc(bx+cellSize/2.5, by+cellSize/2.5,cellSize/18,0,2*Math.PI) ;
+                        ctx.fill();
+
+
+                    } else {
+                        var numMines=countMines(col,row);
+                        if (numMines>0) {
+                            ctx.fillStyle=colors[numMines]
+                            ctx.font = ""+cellSize/1.5+"px Arial";
+                            ctx.textAlign = "center"; 
+                            ctx.fillText(""+numMines, bx+cellSize/2,by+cellSize/2+cellSize/4);
+                        }
+                    }
+                } else {
+                    ctx.fillStyle="#c0c0c0"
+                    ctx.fillRect(bx+1,by+1, cellSize-2,cellSize-2);
+                    if (isMarked[index]) {
+                        // Draw flag
+                        ctx.fillStyle="#ff0000"
+                        ctx.beginPath();
+                        ctx.moveTo(bx+cellSize*3/4,by+cellSize*4/5);
+                        ctx.lineTo(bx+cellSize*3/4,by+cellSize*1/5);
+
+                        ctx.lineTo(bx+cellSize*1/4,by+cellSize*2/5);
+                        ctx.lineTo(bx+cellSize*3/4,by+cellSize*3/5);
+                        ctx.closePath();
+                        ctx.fill();
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+    }
+
+    const fail=()=> {
+        for (var row=0;row<rows;row++) {
+            for (var col=0;col<=cols;col++) {
+                const index=ind(col,row);
+                isOpen[index]=true;
+            }
+        }
+    }
+
+    const open=(col,row)=>{
+        const queue=[];
+        queue.push([col,row])
+        
+        while (queue.length>0) {
+            const [c,r]=queue.pop();
+            const index=ind(c,r);
+            if (!isOpen[index]) {
+                isOpen[index]=true;
+                if (countMines(c,r)==0) {
+                    for (var x=-1;x<=1;x++) {
+                        var col=c+x;
+                        if (col<0 || col>=cols) continue;
+
+                        for (var y=-1;y<=1;y++) {
+                            var row=r+y;
+                            if (row<0 || row>=rows) continue;
+                            queue.push([col,row]);
+                            
+                        }
+                    }
+                }
+            }
+        }
+
+        const index=ind(col,row);
+        isOpen[index]=true;
+    }
+
+    var neverClicked=true;
+
+    const leftClick=(e)=> {
+        const x=e.clientX;
+        const y=e.clientY;
+        const rect = canvas.getBoundingClientRect()
+        const dx=rect.left;
+        const dy=rect.top;
+        const col=Math.floor((x-dx)/cellSize);
+        const row=Math.floor((y-dy)/cellSize);
+
+        const index=ind(col,row);
+        if (!isOpen[index])  {
+            if (isMine[index]) {
+                if (neverClicked) {
+                    addMine();
+                    isMine[index]=false;
+                    open(col,row);
+                } else {
+                    fail();
+                }
+            } else {
+                open(col,row);
+            }
+            
+            draw();
+        }
+        neverClicked=false;
+    }
+
+    const rightClick=(e)=>{
+        e.preventDefault();
+        const x=e.clientX;
+        const y=e.clientY;
+        const rect = canvas.getBoundingClientRect()
+        const dx=rect.left;
+        const dy=rect.top;
+        const col=Math.floor((x-dx)/cellSize);
+        const row=Math.floor((y-dy)/cellSize);
+        const index=ind(col,row);
+        isMarked[index]=!isMarked[index]
+        draw();
+    }
+
+
+    c.onclick=leftClick;
+    c.oncontextmenu=rightClick;
+
+    draw();
+    
+}  
+        </script>
+    </head>
+    <body onload="game();">
+        <canvas id="canvas" width="1500" height="800"/>
+    </body>
+</html>
