@@ -1,0 +1,68 @@
+<html>
+<body onLoad="anim();">
+
+  
+  <canvas id="canvas" width="1500" height="900"/>
+  
+  
+    <script>
+    
+    const ang=Math.PI/18
+    const len=10
+    var limit=1
+    var step = 500
+    
+    function collatz(n) {
+      const result=[]
+      while (n!=1) {
+        result.push(n)
+        n = (n % 2 == 1) ? (n*3+1)/2 : n/2
+      }
+      result.push(1);
+      return result.reverse();
+    }
+    
+    function renderSeq(ctx, seq) {
+      ctx.moveTo(0,0)
+      ctx.beginPath();
+      seq.forEach(n=>{
+        ctx.rotate(n%2==0 ? ang : -ang)
+        ctx.lineTo(len,0)
+        ctx.translate(len,0)
+        
+      })
+      ctx.stroke()
+    }
+    
+    function render(limit) {
+      const canvas=document.getElementById("canvas");
+      const ctx=canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      for (var i=1;i<limit;i++) {
+        ctx.save()
+        ctx.strokeStyle="rgba(200,0,"+i/500+",0.1)"
+        ctx.translate(canvas.width/2, canvas.height-20);
+        ctx.rotate(-(Math.PI/2))
+        renderSeq(ctx, collatz(i));
+        ctx.restore();
+      }
+    }
+    
+    
+    function anim() {
+	console.log(limit)
+    	limit+=step;
+    	render(limit);
+    	setTimeout(()=>anim(),1)
+    }
+    
+    
+    
+    
+    
+    
+    
+  </script>
+</body>
+</html>
