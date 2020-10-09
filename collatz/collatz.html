@@ -1,7 +1,8 @@
 <html>
 <body onLoad="anim();">
 
-  
+  <span id="limit" style="color: #d0d0d0"></span>
+  <br/>
   <canvas id="canvas" width="1500" height="900"/>
   
   
@@ -51,10 +52,12 @@
     
     
     function anim() {
-	console.log(limit)
     	limit+=step;
     	render(limit);
-    	setTimeout(()=>anim(),1)
+      document.getElementById("limit").innerHTML=""+limit
+      if (limit<15000) {
+    	  setTimeout(()=>anim(),1)
+      }
     }
     
     
