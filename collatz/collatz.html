@@ -3,15 +3,16 @@
 
   <span id="limit" style="color: #d0d0d0"></span>
   <br/>
-  <canvas id="canvas" width="1500" height="900"/>
+  <canvas id="canvas" width="1500" height="1500"/>
   
   
     <script>
     
     const ang=Math.PI/18
-    const len=10
-    var limit=1
-    var step = 500
+    const len=8
+    var limit=50000
+    var threshold=1
+    var step = 0.005
     
     function collatz(n) {
       const result=[]
@@ -22,50 +23,97 @@
       result.push(1);
       return result.reverse();
     }
-    
-    function renderSeq(ctx, seq) {
-      ctx.moveTo(0,0)
-      ctx.beginPath();
-      seq.forEach(n=>{
-        ctx.rotate(n%2==0 ? ang : -ang)
-        ctx.lineTo(len,0)
-        ctx.translate(len,0)
-        
-      })
-      ctx.stroke()
+
+    function fill(node, list) {
+      const dir=(list[0]%2 === 0) ? "right": "left"
+      node[dir]=(node[dir]===undefined)
+          ? {weight:1}
+          : {...node[dir],weight: node[dir].weight+1}
+      const tail=list.slice(1)
+      if (tail.length>0) {
+        fill(node[dir],tail)
+      }
     }
-    
-    function render(limit) {
-      const canvas=document.getElementById("canvas");
-      const ctx=canvas.getContext("2d");
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      for (var i=1;i<limit;i++) {
-        ctx.save()
-        ctx.strokeStyle="rgba(200,0,"+i/500+",0.1)"
-        ctx.translate(canvas.width/2, canvas.height-20);
-        ctx.rotate(-(Math.PI/2))
-        renderSeq(ctx, collatz(i));
-        ctx.restore();
+
+    function collatzTree(n) {
+      const root={}
+      const numList=[...Array(n).keys()].map(a=>a+1)
+      numList.forEach(s=>{
+        var l=collatz(s)
+        fill(root,l)
+      })
+      root.weight=0
+      if (root.right!=undefined) {
+        root.weight=root.weight+root.right.weight
+      }
+      if (root.left!=undefined) {
+        root.weight=root.weight+root.left.weight
+      }
+      return root
+    }
+
+    function renderTree(ctx, node, threshold, logMaxWeight) {
+      if (node["right"]!==undefined) {
+        const child=node["right"]
+        const alpha=Math.log(child.weight)/logMaxWeight
+        if (alpha>threshold) {       
+          ctx.save()
+          ctx.strokeStyle=`rgba(200,0,100,${alpha-threshold})`
+          //ctx.strokeStyle=`rgba(0,0,0,1)`
+          ctx.rotate(ang)
+          ctx.beginPath()
+          ctx.moveTo(0,0)
+          ctx.lineTo(len,0)
+          ctx.stroke()
+          ctx.translate(len,0)
+          renderTree(ctx, child, threshold, logMaxWeight)
+          ctx.restore()
+        }
+      }
+      if (node["left"]!==undefined) {
+        const child=node["left"]
+        const alpha=Math.log(child.weight)/logMaxWeight
+        if (alpha>threshold) {
+          ctx.save()
+          ctx.strokeStyle=`rgba(200,0,100,${alpha-threshold})`
+          //ctx.strokeStyle=`rgba(0,0,0,1)`
+          ctx.rotate(-ang)
+          ctx.beginPath()
+          ctx.moveTo(0,0)
+          ctx.lineTo(len,0)
+          ctx.stroke()
+          ctx.translate(len,0)
+          renderTree(ctx, child, threshold, logMaxWeight)
+          ctx.restore()
+        }
       }
     }
     
+
+    
+    function render(root, threshold) {
+      const canvas=document.getElementById("canvas");
+      const ctx=canvas.getContext("2d");
+      ctx.save()
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.lineWidth=0.5
+      ctx.translate(canvas.width/2, canvas.height/2);
+      ctx.rotate(-(Math.PI/2))
+      renderTree(ctx, root, threshold, Math.log(root.weight))
+      ctx.restore()
+    }
+
+    const tree=collatzTree(limit)
     
     function anim() {
-    	limit+=step;
-    	render(limit);
-      document.getElementById("limit").innerHTML=""+limit
-      if (limit<15000) {
+    	threshold-=step;
+    	render(tree, threshold);
+      document.getElementById("limit").innerHTML=""+threshold
+      if (threshold>0) {
     	  setTimeout(()=>anim(),1)
       }
     }
-    
-    
-    
-    
-    
-    
-    
+
   </script>
 </body>
 </html>
