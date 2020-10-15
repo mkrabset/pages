@@ -1,4 +1,4 @@
-module PerlinNoise exposing (perlin)
+module PerlinNoise exposing (..)
 
 -- Trivially translated from C code on wikipedia: https://en.wikipedia.org/wiki/Perlin_noise#Algorithm_detail
 
@@ -25,8 +25,8 @@ dotGridGradient ix iy x y =
         -- Compute the dot-product
         dx*gx + dy*gy
 
-perlin: Float -> Float -> Float
-perlin x y = 
+perlin: (Float,Float) -> Float
+perlin (x,y) = 
     let
         -- Grid cell coordinates
         x0 = floor x

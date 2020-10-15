@@ -10,6 +10,7 @@ import Html.Attributes exposing (style)
 import List exposing (..)
 import Dict exposing (..)
 import LinAlg exposing (..)
+import PerlinNoise exposing (perlin)
 --import Debug exposing (..) 
 
 -- Canvas size
@@ -17,7 +18,7 @@ width=2000
 height=1200
 
 -- Branching angle
-angle=pi/24
+angle (x,y) = (pi/24) * (0.5 + 0.5 * perlin (x/2000, y/2000))
 
 -- Segment length
 segLength=8
@@ -38,12 +39,12 @@ collatzList: Int -> List (List Int)
 collatzList n = List.range 1 n |> List.map collatz  |> List.map List.reverse
 
 -- Matrix for left turn
-leftTurn: Matrix
-leftTurn=rotation (-angle)
+leftTurn: Vector -> Matrix
+leftTurn p=rotation (-(angle p))
 
 -- Matrix for right turn
-rightTurn: Matrix
-rightTurn=rotation angle
+rightTurn: Vector -> Matrix
+rightTurn p=rotation (angle p)
 
 -- Matrix for segment translation
 move: Matrix
@@ -53,8 +54,8 @@ move = translation (segLength,0)
 type CollatzNode = None | Node Int Vector CollatzNode CollatzNode
 
 -- Turn-and-move operations
-turnLeftAndMove m = matrixMult m (matrixMult move leftTurn)
-turnRightAndMove m = matrixMult m (matrixMult move rightTurn)
+turnLeftAndMove m p = matrixMult m (matrixMult move (leftTurn p))
+turnRightAndMove m p = matrixMult m (matrixMult move (rightTurn p))
 
 -- Combine method for adding a collatz (sub)sequence to a collatz-(sub)tree
 combine: CollatzNode -> List Int -> Matrix -> CollatzNode
@@ -65,15 +66,15 @@ combine node list m =
             if (odd h) then
                 case node of 
                     None -> 
-                        Node 1 (transformVector m (0,0)) (combine None t (turnLeftAndMove m)) None
+                        Node 1 (transformVector m (0,0)) (combine None t (turnLeftAndMove m (transformVector m (0,0)))) None
                     Node w p left right ->
-                        Node (w+1) p (combine left t (turnLeftAndMove m)) right
+                        Node (w+1) p (combine left t (turnLeftAndMove m p)) right
             else
                 case node of 
                     None -> 
-                        Node 1 (transformVector m (0,0)) None (combine None t (turnRightAndMove m))
+                        Node 1 (transformVector m (0,0)) None (combine None t (turnRightAndMove m (transformVector m (0,0))))
                     Node w p left right ->
-                        Node (w+1) p left (combine right t (turnRightAndMove m))
+                        Node (w+1) p left (combine right t (turnRightAndMove m p))
 
 -- Turns a list of reversed collatz sequences into a collatz-tree (needs an empty start-node since it's recursive) 
 combineLists: List (List Int) -> CollatzNode -> CollatzNode
@@ -126,7 +127,7 @@ weightedLinesToPathSeg wLines = wLines |> List.map (\l->[moveTo l.from, lineTo l
 
 -- Given a weight, maxWeight and a list of WeightedLines, turns it into a renderable with logarithmic alphas
 toLineShape: Int -> Int -> List WeightedLine -> Renderable
-toLineShape w max l = shapes [ transform [translate 0 400], stroke (Color.rgba 0 0 0 (toAlpha w max)), lineWidth 1] [ path (0,0) (weightedLinesToPathSeg l)]
+toLineShape w max l = shapes [ transform [translate 0 500], stroke (Color.rgba 0 0 0 (toAlpha w max)), lineWidth 1] [ path (0,0) (weightedLinesToPathSeg l)]
 
 -- Turns a collatz-dictionary and a max-weight into a list of Renderables
 toLineShapes: Dict Int (List WeightedLine) -> Int -> List Renderable

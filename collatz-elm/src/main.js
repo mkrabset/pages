@@ -4701,13 +4701,59 @@ var $author$project$LinAlg$transformVector = F2(
 		var vy = _v5.b;
 		return _Utils_Tuple2(((m11 * vx) + (m21 * vy)) + m31, ((m12 * vx) + (m22 * vy)) + m32);
 	});
+var $elm$core$Basics$cos = _Basics_cos;
+var $elm$core$Basics$sin = _Basics_sin;
+var $author$project$PerlinNoise$randomGradient = F2(
+	function (ix, iy) {
+		var random = (2920.0 * $elm$core$Basics$sin(((ix * 21942.0) + (iy * 171324.0)) + 8912.0)) * $elm$core$Basics$cos((((ix * 23157.0) * iy) * 217832.0) + 9758.0);
+		return _Utils_Tuple2(
+			$elm$core$Basics$cos(random),
+			$elm$core$Basics$sin(random));
+	});
+var $author$project$PerlinNoise$dotGridGradient = F4(
+	function (ix, iy, x, y) {
+		var dy = y - iy;
+		var dx = x - ix;
+		var _v0 = A2($author$project$PerlinNoise$randomGradient, ix, iy);
+		var gx = _v0.a;
+		var gy = _v0.b;
+		return (dx * gx) + (dy * gy);
+	});
+var $author$project$PerlinNoise$interpolate = F3(
+	function (a, b, t) {
+		return ((1.0 - t) * a) + (t * b);
+	});
+var $author$project$PerlinNoise$perlin = function (_v0) {
+	var x = _v0.a;
+	var y = _v0.b;
+	var y0 = $elm$core$Basics$floor(y);
+	var y1 = y0 + 1;
+	var x0 = $elm$core$Basics$floor(x);
+	var x1 = x0 + 1;
+	var sy = y - y0;
+	var sx = x - x0;
+	var ix1 = A3(
+		$author$project$PerlinNoise$interpolate,
+		A4($author$project$PerlinNoise$dotGridGradient, x0, y1, x, y),
+		A4($author$project$PerlinNoise$dotGridGradient, x1, y1, x, y),
+		sx);
+	var ix0 = A3(
+		$author$project$PerlinNoise$interpolate,
+		A4($author$project$PerlinNoise$dotGridGradient, x0, y0, x, y),
+		A4($author$project$PerlinNoise$dotGridGradient, x1, y0, x, y),
+		sx);
+	return A3($author$project$PerlinNoise$interpolate, ix0, ix1, sy);
+};
 var $elm$core$Basics$pi = _Basics_pi;
-var $author$project$Main$angle = $elm$core$Basics$pi / 24;
+var $author$project$Main$angle = function (_v0) {
+	var x = _v0.a;
+	var y = _v0.b;
+	return ($elm$core$Basics$pi / 24) * (0.5 + (0.5 * $author$project$PerlinNoise$perlin(
+		_Utils_Tuple2(x / 2000, y / 2000))));
+};
 var $elm$core$Basics$negate = function (n) {
 	return -n;
 };
-var $elm$core$Basics$cos = _Basics_cos;
-var $elm$core$Basics$sin = _Basics_sin;
 var $author$project$LinAlg$rotation = function (angle) {
 	return _Utils_Tuple3(
 		_Utils_Tuple3(
@@ -4720,7 +4766,10 @@ var $author$project$LinAlg$rotation = function (angle) {
 			0),
 		_Utils_Tuple3(0, 0, 1));
 };
-var $author$project$Main$leftTurn = $author$project$LinAlg$rotation(-$author$project$Main$angle);
+var $author$project$Main$leftTurn = function (p) {
+	return $author$project$LinAlg$rotation(
+		-$author$project$Main$angle(p));
+};
 var $author$project$LinAlg$matrixMult = F2(
 	function (a, b) {
 		var _v0 = _Utils_Tuple2(a, b);
@@ -4766,19 +4815,30 @@ var $author$project$LinAlg$translation = function (v) {
 };
 var $author$project$Main$move = $author$project$LinAlg$translation(
 	_Utils_Tuple2($author$project$Main$segLength, 0));
-var $author$project$Main$turnLeftAndMove = function (m) {
-	return A2(
-		$author$project$LinAlg$matrixMult,
-		m,
-		A2($author$project$LinAlg$matrixMult, $author$project$Main$move, $author$project$Main$leftTurn));
+var $author$project$Main$turnLeftAndMove = F2(
+	function (m, p) {
+		return A2(
+			$author$project$LinAlg$matrixMult,
+			m,
+			A2(
+				$author$project$LinAlg$matrixMult,
+				$author$project$Main$move,
+				$author$project$Main$leftTurn(p)));
+	});
+var $author$project$Main$rightTurn = function (p) {
+	return $author$project$LinAlg$rotation(
+		$author$project$Main$angle(p));
 };
-var $author$project$Main$rightTurn = $author$project$LinAlg$rotation($author$project$Main$angle);
-var $author$project$Main$turnRightAndMove = function (m) {
-	return A2(
-		$author$project$LinAlg$matrixMult,
-		m,
-		A2($author$project$LinAlg$matrixMult, $author$project$Main$move, $author$project$Main$rightTurn));
-};
+var $author$project$Main$turnRightAndMove = F2(
+	function (m, p) {
+		return A2(
+			$author$project$LinAlg$matrixMult,
+			m,
+			A2(
+				$author$project$LinAlg$matrixMult,
+				$author$project$Main$move,
+				$author$project$Main$rightTurn(p)));
+	});
 var $author$project$Main$combine = F3(
 	function (node, list, m) {
 		if (!list.b) {
@@ -4799,7 +4859,13 @@ var $author$project$Main$combine = F3(
 							$author$project$Main$combine,
 							$author$project$Main$None,
 							t,
-							$author$project$Main$turnLeftAndMove(m)),
+							A2(
+								$author$project$Main$turnLeftAndMove,
+								m,
+								A2(
+									$author$project$LinAlg$transformVector,
+									m,
+									_Utils_Tuple2(0, 0)))),
 						$author$project$Main$None);
 				} else {
 					var w = node.a;
@@ -4814,7 +4880,7 @@ var $author$project$Main$combine = F3(
 							$author$project$Main$combine,
 							left,
 							t,
-							$author$project$Main$turnLeftAndMove(m)),
+							A2($author$project$Main$turnLeftAndMove, m, p)),
 						right);
 				}
 			} else {
@@ -4831,7 +4897,13 @@ var $author$project$Main$combine = F3(
 							$author$project$Main$combine,
 							$author$project$Main$None,
 							t,
-							$author$project$Main$turnRightAndMove(m)));
+							A2(
+								$author$project$Main$turnRightAndMove,
+								m,
+								A2(
+									$author$project$LinAlg$transformVector,
+									m,
+									_Utils_Tuple2(0, 0)))));
 				} else {
 					var w = node.a;
 					var p = node.b;
@@ -4846,7 +4918,7 @@ var $author$project$Main$combine = F3(
 							$author$project$Main$combine,
 							right,
 							t,
-							$author$project$Main$turnRightAndMove(m)));
+							A2($author$project$Main$turnRightAndMove, m, p)));
 				}
 			}
 		}
@@ -5985,7 +6057,7 @@ var $author$project$Main$toLineShape = F3(
 					$joakin$elm_canvas$Canvas$Settings$Advanced$transform(
 					_List_fromArray(
 						[
-							A2($joakin$elm_canvas$Canvas$Settings$Advanced$translate, 0, 400)
+							A2($joakin$elm_canvas$Canvas$Settings$Advanced$translate, 0, 500)
 						])),
 					$joakin$elm_canvas$Canvas$Settings$stroke(
 					A4(
