@@ -5,12 +5,16 @@ import Canvas.Settings exposing (..)
 import Canvas.Settings.Line exposing (..)
 import Canvas.Settings.Advanced exposing (..)
 import Color
-import Html exposing (Html,text)
+import Html exposing (Html,text, div, button)
 import Html.Attributes exposing (style)
+import Html.Events exposing (onClick)
 import List exposing (..)
 import Dict exposing (..)
 import LinAlg exposing (..)
 import PerlinNoise exposing (perlin)
+import Browser exposing (..)
+import Task exposing (..)
+import Process exposing (..)
 --import Debug exposing (..) 
 
 -- Canvas size
@@ -18,7 +22,8 @@ width=2000
 height=1200
 
 -- Branching angle
-angle (x,y) = (pi/24) * (0.5 + 0.5 * perlin (x/2000, y/2000))
+angle: (Float,Float) -> Int ->Float
+angle (x,y) d = (pi/24) + ((toFloat d)/500 * perlin (0.5+x/500, 0.5+y/500))
 
 -- Segment length
 segLength=8
@@ -39,12 +44,12 @@ collatzList: Int -> List (List Int)
 collatzList n = List.range 1 n |> List.map collatz  |> List.map List.reverse
 
 -- Matrix for left turn
-leftTurn: Vector -> Matrix
-leftTurn p=rotation (-(angle p))
+leftTurn: Vector -> Int -> Matrix
+leftTurn p d=rotation (-(angle p d))
 
 -- Matrix for right turn
-rightTurn: Vector -> Matrix
-rightTurn p=rotation (angle p)
+rightTurn: Vector -> Int -> Matrix
+rightTurn p d=rotation (angle p d)
 
 -- Matrix for segment translation
 move: Matrix
@@ -54,37 +59,41 @@ move = translation (segLength,0)
 type CollatzNode = None | Node Int Vector CollatzNode CollatzNode
 
 -- Turn-and-move operations
-turnLeftAndMove m p = matrixMult m (matrixMult move (leftTurn p))
-turnRightAndMove m p = matrixMult m (matrixMult move (rightTurn p))
+turnLeftAndMove m p d = matrixMult m (matrixMult move (leftTurn p d))
+turnRightAndMove m p d = matrixMult m (matrixMult move (rightTurn p d))
 
 -- Combine method for adding a collatz (sub)sequence to a collatz-(sub)tree
-combine: CollatzNode -> List Int -> Matrix -> CollatzNode
-combine node list m = 
+combine: CollatzNode -> List Int -> Matrix -> Vector -> Int -> CollatzNode
+combine node list m offset d= 
     case list of 
         [] -> node
         h::t ->
+          let 
+            screenPos = (transformVector m (0,0))
+            perlinPos = vectorAdd (vectorScalarMult 1000 screenPos) offset
+          in
             if (odd h) then
                 case node of 
                     None -> 
-                        Node 1 (transformVector m (0,0)) (combine None t (turnLeftAndMove m (transformVector m (0,0)))) None
+                        Node 1 (transformVector m (0,0)) (combine None t (turnLeftAndMove m perlinPos d) offset (d+1)) None
                     Node w p left right ->
-                        Node (w+1) p (combine left t (turnLeftAndMove m p)) right
+                        Node (w+1) p (combine left t (turnLeftAndMove m perlinPos d) offset (d+1)) right
             else
                 case node of 
                     None -> 
-                        Node 1 (transformVector m (0,0)) None (combine None t (turnRightAndMove m (transformVector m (0,0))))
+                        Node 1 (transformVector m (0,0)) None (combine None t (turnRightAndMove m perlinPos d) offset (d+1))
                     Node w p left right ->
-                        Node (w+1) p left (combine right t (turnRightAndMove m p))
+                        Node (w+1) p left (combine right t (turnRightAndMove m perlinPos d) offset (d+1))
 
 -- Turns a list of reversed collatz sequences into a collatz-tree (needs an empty start-node since it's recursive) 
-combineLists: List (List Int) -> CollatzNode -> CollatzNode
-combineLists lists rootNode =
+combineLists: List (List Int) -> CollatzNode -> Vector -> CollatzNode
+combineLists lists rootNode offset =
     case lists of 
         [] -> rootNode
-        h::t -> combineLists t (combine rootNode h identityMatrix)
+        h::t -> combineLists t (combine rootNode h identityMatrix offset 1) offset
 
 -- Creates a collatz-tree of 'size' n
-collatzTree n = combineLists (collatzList n) None
+collatzTree n offset= combineLists (collatzList n) None offset
 
 -- Weighted line segment
 type alias WeightedLine = { from : Vector, to : Vector, w : Int }
@@ -106,8 +115,8 @@ collectLines czNode =
                 lb++rb++(collectLines left)++(collectLines right)
 
 -- Returns list of linesegments for a collatz-tree of given size (sorted by weight ascending)
-sortedTree: Int -> List WeightedLine
-sortedTree n = collectLines(collatzTree n) |> List.sortBy (\l -> l.w)
+sortedTree: Int -> Vector -> List WeightedLine
+sortedTree n offset = collectLines (collatzTree n offset) |> List.sortBy (\l -> l.w)
 
 -- Adds a list of weighted line segments to a dictionary, grouping all lines with same weights together
 dictInsert: Dict Int (List WeightedLine) -> List WeightedLine -> Dict Int (List WeightedLine)
@@ -118,8 +127,8 @@ dictInsert d lines = case lines of
         Just l -> dictInsert (Dict.insert h.w (h::l) d) t
 
 -- Creates a dictionary with weight as key and list of line-segments as value (for collatz-tree of given size)
-linesByWeight: Int -> Dict Int (List WeightedLine)
-linesByWeight n = dictInsert Dict.empty (sortedTree n)
+linesByWeight: Int -> Vector -> Dict Int (List WeightedLine)
+linesByWeight n offset = dictInsert Dict.empty (sortedTree n offset)
 
 -- Maps a list of WeightedLines to a list of PathSegments (usable by Canvas lib)
 weightedLinesToPathSeg: List WeightedLine -> List PathSegment
@@ -127,7 +136,10 @@ weightedLinesToPathSeg wLines = wLines |> List.map (\l->[moveTo l.from, lineTo l
 
 -- Given a weight, maxWeight and a list of WeightedLines, turns it into a renderable with logarithmic alphas
 toLineShape: Int -> Int -> List WeightedLine -> Renderable
-toLineShape w max l = shapes [ transform [translate 0 500], stroke (Color.rgba 0 0 0 (toAlpha w max)), lineWidth 1] [ path (0,0) (weightedLinesToPathSeg l)]
+toLineShape w max l = 
+    shapes 
+        [ transform [translate 0 500], stroke (Color.rgba 0 0 0 (toAlpha w max)), lineWidth 1] 
+        [ path (0,0) (weightedLinesToPathSeg l)]
 
 -- Turns a collatz-dictionary and a max-weight into a list of Renderables
 toLineShapes: Dict Int (List WeightedLine) -> Int -> List Renderable
@@ -138,11 +150,39 @@ toAlpha: Int -> Int -> Float
 toAlpha w m = (logBase e (toFloat w))/(logBase e (toFloat m))
 
 -- Creates the view for a given max-value
-view max = Canvas.toHtml (width, height)
-            [ style "border" "none" ]
-            ([]++(toLineShapes (linesByWeight max) max))
+viewCanvas (x,y) max =
+            let
+                title = Html.text ("x="++(String.fromFloat x))
+                startButton = button [onClick Start] [Html.text "Start"]
+                canvas = Canvas.toHtml (width, height)
+                            [ style "border" "none" ]
+                            ([clear ( 0, 0 ) width height] ++ (toLineShapes (linesByWeight max (x,y)) max))
+            in
+                div [] [ startButton, title , canvas ]
 
-main = view 25000
+type alias Model = Vector
 
+type Msg = SleepComplete | Start
 
+sleep : Cmd Msg
+sleep =
+    Process.sleep 50
+        |> Task.perform (\_ -> SleepComplete)
 
+initialModel: (Model, Cmd Msg)
+initialModel=((0, 0), Cmd.none)
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg (x,y) = case msg of
+    SleepComplete -> ((x+0.001,y+0.001), sleep)
+    Start -> ((x,y), sleep)
+
+view model = viewCanvas model 2500
+
+main : Program () Model Msg
+main = Browser.element
+            { init = \_ -> initialModel
+            , view = view
+            , update = update
+            , subscriptions = \_ -> Sub.none
+            }

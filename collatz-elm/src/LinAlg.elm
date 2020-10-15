@@ -37,3 +37,8 @@ transformVector m v = case (m,v) of
     (((m11,m21,m31),(m12,m22,m32),(m13,m23,m33)), (vx,vy)) -> 
         (m11*vx+m21*vy+m31, m12*vx+m22*vy+m32)
 
+vectorAdd: Vector -> Vector -> Vector
+vectorAdd (x1,y1) (x2,y2) = (x1+x2,y1+y2)
+
+vectorScalarMult: Float -> Vector -> Vector
+vectorScalarMult f (x,y)=(f*x, f*y)
