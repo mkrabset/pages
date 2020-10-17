@@ -9,7 +9,10 @@ import Html exposing (Html,text)
 import Html.Attributes exposing (style)
 import List exposing (..)
 import Dict exposing (..)
-import LinAlg exposing (..)
+import Graphics2D.Matrix exposing (..)
+import Graphics2D.Vector exposing (..)
+import Graphics2D.Transform exposing (..)
+
 --import Debug exposing (..) 
 
 -- Canvas size
@@ -20,7 +23,7 @@ height=1200
 angle=pi/24
 
 -- Segment length
-segLength=8
+segLength=10
 
 -- Oddity test
 odd: Int->Bool
@@ -53,10 +56,14 @@ move = translation (segLength,0)
 type CollatzNode = None | Node Int Vector CollatzNode CollatzNode
 
 -- Turn-and-move operations
-turnLeftAndMove m = matrixMult m (matrixMult move leftTurn)
-turnRightAndMove m = matrixMult m (matrixMult move rightTurn)
+turnLeftAndMove m = multiply m (multiply move leftTurn)
+turnRightAndMove m = multiply m (multiply move rightTurn)
 
 -- Combine method for adding a collatz (sub)sequence to a collatz-(sub)tree
+-- Arguments: 
+--   node = node to apply sequence to
+--   list = remaining part of sequence
+--   m = current matrix transform
 combine: CollatzNode -> List Int -> Matrix -> CollatzNode
 combine node list m = 
     case list of 
@@ -65,13 +72,13 @@ combine node list m =
             if (odd h) then
                 case node of 
                     None -> 
-                        Node 1 (transformVector m (0,0)) (combine None t (turnLeftAndMove m)) None
+                        Node 1 (apply m (0,0)) (combine None t (turnLeftAndMove m)) None
                     Node w p left right ->
                         Node (w+1) p (combine left t (turnLeftAndMove m)) right
             else
                 case node of 
                     None -> 
-                        Node 1 (transformVector m (0,0)) None (combine None t (turnRightAndMove m))
+                        Node 1 (apply m (0,0)) None (combine None t (turnRightAndMove m))
                     Node w p left right ->
                         Node (w+1) p left (combine right t (turnRightAndMove m))
 
@@ -80,7 +87,7 @@ combineLists: List (List Int) -> CollatzNode -> CollatzNode
 combineLists lists rootNode =
     case lists of 
         [] -> rootNode
-        h::t -> combineLists t (combine rootNode h identityMatrix)
+        h::t -> combineLists t (combine rootNode h Graphics2D.Matrix.identity)
 
 -- Creates a collatz-tree of 'size' n
 collatzTree n = combineLists (collatzList n) None
@@ -126,7 +133,7 @@ weightedLinesToPathSeg wLines = wLines |> List.map (\l->[moveTo l.from, lineTo l
 
 -- Given a weight, maxWeight and a list of WeightedLines, turns it into a renderable with logarithmic alphas
 toLineShape: Int -> Int -> List WeightedLine -> Renderable
-toLineShape w max l = shapes [ transform [translate 0 400], stroke (Color.rgba 0 0 0 (toAlpha w max)), lineWidth 1] [ path (0,0) (weightedLinesToPathSeg l)]
+toLineShape w max l = shapes [ transform [translate 1100 1200, rotate (-pi/2)], stroke (Color.rgba 0 0 0 (toAlpha w max)), lineWidth (logBase 10 (toFloat w))] [ path (0,0) (weightedLinesToPathSeg l)]
 
 -- Turns a collatz-dictionary and a max-weight into a list of Renderables
 toLineShapes: Dict Int (List WeightedLine) -> Int -> List Renderable
@@ -141,7 +148,7 @@ view max = Canvas.toHtml (width, height)
             [ style "border" "none" ]
             ([]++(toLineShapes (linesByWeight max) max))
 
-main = view 25000
+main = view 50000
 
 
 

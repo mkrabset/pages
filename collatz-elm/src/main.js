@@ -4680,7 +4680,7 @@ var $author$project$Main$Node = F4(
 	function (a, b, c, d) {
 		return {$: 'Node', a: a, b: b, c: c, d: d};
 	});
-var $author$project$LinAlg$transformVector = F2(
+var $author$project$Graphics2D$Transform$apply = F2(
 	function (m, v) {
 		var _v0 = _Utils_Tuple2(m, v);
 		var _v1 = _v0.a;
@@ -4708,7 +4708,7 @@ var $elm$core$Basics$negate = function (n) {
 };
 var $elm$core$Basics$cos = _Basics_cos;
 var $elm$core$Basics$sin = _Basics_sin;
-var $author$project$LinAlg$rotation = function (angle) {
+var $author$project$Graphics2D$Transform$rotation = function (angle) {
 	return _Utils_Tuple3(
 		_Utils_Tuple3(
 			$elm$core$Basics$cos(angle),
@@ -4720,8 +4720,19 @@ var $author$project$LinAlg$rotation = function (angle) {
 			0),
 		_Utils_Tuple3(0, 0, 1));
 };
-var $author$project$Main$leftTurn = $author$project$LinAlg$rotation(-$author$project$Main$angle);
-var $author$project$LinAlg$matrixMult = F2(
+var $author$project$Main$leftTurn = $author$project$Graphics2D$Transform$rotation(-$author$project$Main$angle);
+var $author$project$Main$segLength = 10;
+var $author$project$Graphics2D$Transform$translation = function (v) {
+	var x = v.a;
+	var y = v.b;
+	return _Utils_Tuple3(
+		_Utils_Tuple3(1, 0, x),
+		_Utils_Tuple3(0, 1, y),
+		_Utils_Tuple3(0, 0, 1));
+};
+var $author$project$Main$move = $author$project$Graphics2D$Transform$translation(
+	_Utils_Tuple2($author$project$Main$segLength, 0));
+var $author$project$Graphics2D$Matrix$multiply = F2(
 	function (a, b) {
 		var _v0 = _Utils_Tuple2(a, b);
 		var _v1 = _v0.a;
@@ -4755,29 +4766,18 @@ var $author$project$LinAlg$matrixMult = F2(
 		var c1 = _Utils_Tuple3(((a11 * b11) + (a21 * b12)) + (a31 * b13), ((a11 * b21) + (a21 * b22)) + (a31 * b23), ((a11 * b31) + (a21 * b32)) + (a31 * b33));
 		return _Utils_Tuple3(c1, c2, c3);
 	});
-var $author$project$Main$segLength = 8;
-var $author$project$LinAlg$translation = function (v) {
-	var x = v.a;
-	var y = v.b;
-	return _Utils_Tuple3(
-		_Utils_Tuple3(1, 0, x),
-		_Utils_Tuple3(0, 1, y),
-		_Utils_Tuple3(0, 0, 1));
-};
-var $author$project$Main$move = $author$project$LinAlg$translation(
-	_Utils_Tuple2($author$project$Main$segLength, 0));
 var $author$project$Main$turnLeftAndMove = function (m) {
 	return A2(
-		$author$project$LinAlg$matrixMult,
+		$author$project$Graphics2D$Matrix$multiply,
 		m,
-		A2($author$project$LinAlg$matrixMult, $author$project$Main$move, $author$project$Main$leftTurn));
+		A2($author$project$Graphics2D$Matrix$multiply, $author$project$Main$move, $author$project$Main$leftTurn));
 };
-var $author$project$Main$rightTurn = $author$project$LinAlg$rotation($author$project$Main$angle);
+var $author$project$Main$rightTurn = $author$project$Graphics2D$Transform$rotation($author$project$Main$angle);
 var $author$project$Main$turnRightAndMove = function (m) {
 	return A2(
-		$author$project$LinAlg$matrixMult,
+		$author$project$Graphics2D$Matrix$multiply,
 		m,
-		A2($author$project$LinAlg$matrixMult, $author$project$Main$move, $author$project$Main$rightTurn));
+		A2($author$project$Graphics2D$Matrix$multiply, $author$project$Main$move, $author$project$Main$rightTurn));
 };
 var $author$project$Main$combine = F3(
 	function (node, list, m) {
@@ -4792,7 +4792,7 @@ var $author$project$Main$combine = F3(
 						$author$project$Main$Node,
 						1,
 						A2(
-							$author$project$LinAlg$transformVector,
+							$author$project$Graphics2D$Transform$apply,
 							m,
 							_Utils_Tuple2(0, 0)),
 						A3(
@@ -4823,7 +4823,7 @@ var $author$project$Main$combine = F3(
 						$author$project$Main$Node,
 						1,
 						A2(
-							$author$project$LinAlg$transformVector,
+							$author$project$Graphics2D$Transform$apply,
 							m,
 							_Utils_Tuple2(0, 0)),
 						$author$project$Main$None,
@@ -4851,7 +4851,7 @@ var $author$project$Main$combine = F3(
 			}
 		}
 	});
-var $author$project$LinAlg$identityMatrix = _Utils_Tuple3(
+var $author$project$Graphics2D$Matrix$identity = _Utils_Tuple3(
 	_Utils_Tuple3(1, 0, 0),
 	_Utils_Tuple3(0, 1, 0),
 	_Utils_Tuple3(0, 0, 1));
@@ -4865,7 +4865,7 @@ var $author$project$Main$combineLists = F2(
 				var h = lists.a;
 				var t = lists.b;
 				var $temp$lists = t,
-					$temp$rootNode = A3($author$project$Main$combine, rootNode, h, $author$project$LinAlg$identityMatrix);
+					$temp$rootNode = A3($author$project$Main$combine, rootNode, h, $author$project$Graphics2D$Matrix$identity);
 				lists = $temp$lists;
 				rootNode = $temp$rootNode;
 				continue combineLists;
@@ -5714,6 +5714,10 @@ var $avh4$elm_color$Color$rgba = F4(
 	function (r, g, b, a) {
 		return A4($avh4$elm_color$Color$RgbaSpace, r, g, b, a);
 	});
+var $joakin$elm_canvas$Canvas$Settings$Advanced$Rotate = function (a) {
+	return {$: 'Rotate', a: a};
+};
+var $joakin$elm_canvas$Canvas$Settings$Advanced$rotate = $joakin$elm_canvas$Canvas$Settings$Advanced$Rotate;
 var $joakin$elm_canvas$Canvas$Internal$Canvas$DrawableShapes = function (a) {
 	return {$: 'DrawableShapes', a: a};
 };
@@ -5985,7 +5989,8 @@ var $author$project$Main$toLineShape = F3(
 					$joakin$elm_canvas$Canvas$Settings$Advanced$transform(
 					_List_fromArray(
 						[
-							A2($joakin$elm_canvas$Canvas$Settings$Advanced$translate, 0, 400)
+							A2($joakin$elm_canvas$Canvas$Settings$Advanced$translate, 1100, 1200),
+							$joakin$elm_canvas$Canvas$Settings$Advanced$rotate((-$elm$core$Basics$pi) / 2)
 						])),
 					$joakin$elm_canvas$Canvas$Settings$stroke(
 					A4(
@@ -5994,7 +5999,8 @@ var $author$project$Main$toLineShape = F3(
 						0,
 						0,
 						A2($author$project$Main$toAlpha, w, max))),
-					$joakin$elm_canvas$Canvas$Settings$Line$lineWidth(1)
+					$joakin$elm_canvas$Canvas$Settings$Line$lineWidth(
+					A2($elm$core$Basics$logBase, 10, w))
 				]),
 			_List_fromArray(
 				[
@@ -6045,5 +6051,5 @@ var $author$project$Main$view = function (max) {
 				$author$project$Main$linesByWeight(max),
 				max)));
 };
-var $author$project$Main$main = $author$project$Main$view(25000);
+var $author$project$Main$main = $author$project$Main$view(50000);
 _Platform_export({'Main':{'init':_VirtualDom_init($author$project$Main$main)(0)(0)}});}(this));
