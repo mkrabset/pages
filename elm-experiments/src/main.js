@@ -4425,14 +4425,18 @@ var $author$project$Graphics2D$Transform$apply = F2(
 		var vy = _v5.b;
 		return _Utils_Tuple2(((m11 * vx) + (m21 * vy)) + m31, ((m12 * vx) + (m22 * vy)) + m32);
 	});
-var $joakin$elm_canvas$Canvas$Internal$Canvas$Circle = F2(
-	function (a, b) {
-		return {$: 'Circle', a: a, b: b};
-	});
-var $joakin$elm_canvas$Canvas$circle = F2(
-	function (pos, radius) {
-		return A2($joakin$elm_canvas$Canvas$Internal$Canvas$Circle, pos, radius);
-	});
+var $joakin$elm_canvas$Canvas$Internal$Canvas$LineTo = function (a) {
+	return {$: 'LineTo', a: a};
+};
+var $joakin$elm_canvas$Canvas$lineTo = function (point) {
+	return $joakin$elm_canvas$Canvas$Internal$Canvas$LineTo(point);
+};
+var $joakin$elm_canvas$Canvas$Internal$Canvas$MoveTo = function (a) {
+	return {$: 'MoveTo', a: a};
+};
+var $joakin$elm_canvas$Canvas$moveTo = function (point) {
+	return $joakin$elm_canvas$Canvas$Internal$Canvas$MoveTo(point);
+};
 var $author$project$Graphics2D$Matrix$multiply = F2(
 	function (a, b) {
 		var _v0 = _Utils_Tuple2(a, b);
@@ -4470,7 +4474,29 @@ var $author$project$Graphics2D$Matrix$multiply = F2(
 var $elm$core$Basics$negate = function (n) {
 	return -n;
 };
-var $author$project$Graphics2D$Vector$origin = _Utils_Tuple2(0, 0);
+var $joakin$elm_canvas$Canvas$Internal$Canvas$Path = F2(
+	function (a, b) {
+		return {$: 'Path', a: a, b: b};
+	});
+var $joakin$elm_canvas$Canvas$path = F2(
+	function (startingPoint, segments) {
+		return A2($joakin$elm_canvas$Canvas$Internal$Canvas$Path, startingPoint, segments);
+	});
+var $elm$core$Basics$pi = _Basics_pi;
+var $elm$core$Basics$cos = _Basics_cos;
+var $elm$core$Basics$sin = _Basics_sin;
+var $author$project$Graphics2D$Transform$rotation = function (angle) {
+	return _Utils_Tuple3(
+		_Utils_Tuple3(
+			$elm$core$Basics$cos(angle),
+			-$elm$core$Basics$sin(angle),
+			0),
+		_Utils_Tuple3(
+			$elm$core$Basics$sin(angle),
+			$elm$core$Basics$cos(angle),
+			0),
+		_Utils_Tuple3(0, 0, 1));
+};
 var $author$project$Graphics2D$Transform$translation = function (v) {
 	var x = v.a;
 	var y = v.b;
@@ -4479,33 +4505,48 @@ var $author$project$Graphics2D$Transform$translation = function (v) {
 		_Utils_Tuple3(0, 1, y),
 		_Utils_Tuple3(0, 0, 1));
 };
-var $author$project$Main$circles = F2(
-	function (m, r) {
-		return (r > 1) ? _Utils_ap(
-			_List_fromArray(
-				[
-					A2(
-					$joakin$elm_canvas$Canvas$circle,
-					A2($author$project$Graphics2D$Transform$apply, m, $author$project$Graphics2D$Vector$origin),
-					r)
-				]),
-			_Utils_ap(
-				A2(
-					$author$project$Main$circles,
-					A2(
-						$author$project$Graphics2D$Matrix$multiply,
-						$author$project$Graphics2D$Transform$translation(
-							_Utils_Tuple2(r / 2, 0.0)),
-						m),
-					r / 2),
-				A2(
-					$author$project$Main$circles,
-					A2(
-						$author$project$Graphics2D$Matrix$multiply,
-						$author$project$Graphics2D$Transform$translation(
-							_Utils_Tuple2((-r) / 2, 0.0)),
-						m),
-					r / 2))) : _List_Nil;
+var $author$project$Main$branches = F3(
+	function (m, l, depth) {
+		if (l > 1) {
+			var translated = A2(
+				$author$project$Graphics2D$Matrix$multiply,
+				m,
+				$author$project$Graphics2D$Transform$translation(
+					_Utils_Tuple2(l, 0)));
+			var translatedAndRotatedLeft = A2(
+				$author$project$Graphics2D$Matrix$multiply,
+				translated,
+				$author$project$Graphics2D$Transform$rotation($elm$core$Basics$pi / 4.1));
+			var translatedAndRotatedRight = A2(
+				$author$project$Graphics2D$Matrix$multiply,
+				translated,
+				$author$project$Graphics2D$Transform$rotation((-$elm$core$Basics$pi) / 5));
+			var start = A2(
+				$author$project$Graphics2D$Transform$apply,
+				m,
+				_Utils_Tuple2(0, 0));
+			var end = A2(
+				$author$project$Graphics2D$Transform$apply,
+				m,
+				_Utils_Tuple2(l, 0));
+			return _Utils_ap(
+				_List_fromArray(
+					[
+						A2(
+						$joakin$elm_canvas$Canvas$path,
+						_Utils_Tuple2(0, 0),
+						_List_fromArray(
+							[
+								$joakin$elm_canvas$Canvas$moveTo(start),
+								$joakin$elm_canvas$Canvas$lineTo(end)
+							]))
+					]),
+				_Utils_ap(
+					A3($author$project$Main$branches, translatedAndRotatedLeft, l * 0.75, depth + 1),
+					A3($author$project$Main$branches, translatedAndRotatedRight, l * 0.60, depth + 1)));
+		} else {
+			return _List_Nil;
+		}
 	});
 var $author$project$Main$height = 800;
 var $author$project$Graphics2D$Matrix$identity = _Utils_Tuple3(
@@ -4562,6 +4603,10 @@ var $avh4$elm_color$Color$rgba = F4(
 	function (r, g, b, a) {
 		return A4($avh4$elm_color$Color$RgbaSpace, r, g, b, a);
 	});
+var $joakin$elm_canvas$Canvas$Settings$Advanced$Rotate = function (a) {
+	return {$: 'Rotate', a: a};
+};
+var $joakin$elm_canvas$Canvas$Settings$Advanced$rotate = $joakin$elm_canvas$Canvas$Settings$Advanced$Rotate;
 var $joakin$elm_canvas$Canvas$Internal$Canvas$DrawableShapes = function (a) {
 	return {$: 'DrawableShapes', a: a};
 };
@@ -4880,7 +4925,7 @@ var $joakin$elm_canvas$Canvas$Settings$Advanced$Translate = F2(
 		return {$: 'Translate', a: a, b: b};
 	});
 var $joakin$elm_canvas$Canvas$Settings$Advanced$translate = $joakin$elm_canvas$Canvas$Settings$Advanced$Translate;
-var $author$project$Main$width = 800;
+var $author$project$Main$width = 1200;
 var $author$project$Main$scene = function (shapelist) {
 	return A2(
 		$joakin$elm_canvas$Canvas$shapes,
@@ -4889,7 +4934,8 @@ var $author$project$Main$scene = function (shapelist) {
 				$joakin$elm_canvas$Canvas$Settings$Advanced$transform(
 				_List_fromArray(
 					[
-						A2($joakin$elm_canvas$Canvas$Settings$Advanced$translate, $author$project$Main$width / 2, $author$project$Main$height / 2)
+						A2($joakin$elm_canvas$Canvas$Settings$Advanced$translate, $author$project$Main$width / 3, $author$project$Main$height),
+						$joakin$elm_canvas$Canvas$Settings$Advanced$rotate((-$elm$core$Basics$pi) / 2)
 					])),
 				$joakin$elm_canvas$Canvas$Settings$stroke(
 				A4($avh4$elm_color$Color$rgba, 0, 0, 0, 1)),
@@ -4966,12 +5012,10 @@ var $joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$arc = F6(
 					$elm$json$Json$Encode$bool(anticlockwise)
 				]));
 	});
-var $elm$core$Basics$pi = _Basics_pi;
 var $joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$circle = F3(
 	function (x, y, r) {
 		return A6($joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$arc, x, y, r, 0, 2 * $elm$core$Basics$pi, false);
 	});
-var $elm$core$Basics$cos = _Basics_cos;
 var $joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$moveTo = F2(
 	function (x, y) {
 		return A2(
@@ -5107,7 +5151,6 @@ var $joakin$elm_canvas$Canvas$renderLineSegment = F2(
 					cmds);
 		}
 	});
-var $elm$core$Basics$sin = _Basics_sin;
 var $joakin$elm_canvas$Canvas$renderShape = F2(
 	function (shape, cmds) {
 		switch (shape.$) {
@@ -5604,7 +5647,7 @@ var $author$project$Main$view = A3(
 	_List_fromArray(
 		[
 			$author$project$Main$scene(
-			A2($author$project$Main$circles, $author$project$Graphics2D$Matrix$identity, $author$project$Main$width / 2))
+			A3($author$project$Main$branches, $author$project$Graphics2D$Matrix$identity, $author$project$Main$width / 5, 0))
 		]));
 var $author$project$Main$main = $author$project$Main$view;
 _Platform_export({'Main':{'init':_VirtualDom_init($author$project$Main$main)(0)(0)}});}(this));

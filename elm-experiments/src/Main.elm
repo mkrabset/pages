@@ -16,7 +16,7 @@ import Graphics2D.Transform exposing (..)
 --import Debug exposing (..) 
 
 -- Canvas size
-width=800
+width=1200
 height=800
 
 circles: Graphics2D.Matrix.Matrix -> Float -> List Canvas.Shape
@@ -30,9 +30,27 @@ circles m r = if (r>1)
               else
                 []
 
+branches: Graphics2D.Matrix.Matrix -> Float -> Float -> List Canvas.Shape
+branches m l depth =  if (l > 1)
+                then
+                    let
+                        start = (apply m (0,0))
+                        end = (apply m (l,0))
+                        translated = multiply m (translation (l,0))
+                        translatedAndRotatedLeft = (multiply translated (rotation (pi/4.1)))
+                        translatedAndRotatedRight = (multiply translated (rotation (-pi/5)))
+                    in 
+                        [path (0,0) 
+                            [moveTo start, lineTo end]
+                        ] 
+                        ++ (branches translatedAndRotatedLeft (l*0.75) (depth+1))
+                        ++ (branches translatedAndRotatedRight (l*0.60) (depth+1))
+                else 
+                    []
+
 
 scene: List Canvas.Shape -> Canvas.Renderable
-scene shapelist = shapes [ transform [translate (width/2) (height/2)]
+scene shapelist = shapes [ transform [translate (width/3) (height), rotate (-pi/2)]
                             , stroke (Color.rgba 0 0 0 1)
                             , lineWidth 1] 
                             shapelist
@@ -40,7 +58,7 @@ scene shapelist = shapes [ transform [translate (width/2) (height/2)]
 -- Creates the view for a given max-value
 view = Canvas.toHtml (width, height)
             [ style "border" "none" ]
-            ([scene (circles Graphics2D.Matrix.identity (width/2))])
+            ([scene (branches Graphics2D.Matrix.identity (width/5) 0)])
 
 main = view 
 
