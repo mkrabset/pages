@@ -1,0 +1,23 @@
+<html>
+    
+
+        <script src="https://unpkg.com/elm-canvas@2.2/elm-canvas.js"></script>
+        <script src="main.js"></script>
+
+        <script>
+            function init() {
+                Elm.Main.init({
+                    node: document.getElementById("elm-node")
+                })
+            }
+        </script>
+        <style>
+            elm-canvas {
+                border: none;
+            }
+        </style>
+
+
+    <body id="elm-node" onload="init();">
+    </body>
+</html>
