@@ -4798,28 +4798,24 @@ var $author$project$Main$scene = function (shapelist) {
 			]),
 		shapelist);
 };
-var $author$project$Main$I = {$: 'I'};
+var $author$project$Main$A = {$: 'A'};
 var $author$project$Graphics2D$Matrix$identity = _Utils_Tuple3(
 	_Utils_Tuple3(1, 0, 0),
 	_Utils_Tuple3(0, 1, 0),
 	_Utils_Tuple3(0, 0, 1));
 var $author$project$Main$initMatrix = $author$project$Graphics2D$Matrix$identity;
 var $elm$core$Basics$pow = _Basics_pow;
-var $author$project$Main$F = {$: 'F'};
-var $author$project$Main$G = {$: 'G'};
+var $author$project$Main$B = {$: 'B'};
 var $author$project$Main$M = {$: 'M'};
 var $author$project$Main$P = {$: 'P'};
 var $author$project$Main$lsystem = function (symbol) {
 	switch (symbol.$) {
-		case 'I':
+		case 'A':
 			return _List_fromArray(
-				[$author$project$Main$F, $author$project$Main$M, $author$project$Main$G, $author$project$Main$M, $author$project$Main$G]);
-		case 'F':
+				[$author$project$Main$B, $author$project$Main$M, $author$project$Main$A, $author$project$Main$M, $author$project$Main$B]);
+		case 'B':
 			return _List_fromArray(
-				[$author$project$Main$F, $author$project$Main$M, $author$project$Main$G, $author$project$Main$P, $author$project$Main$F, $author$project$Main$P, $author$project$Main$G, $author$project$Main$M, $author$project$Main$F]);
-		case 'G':
-			return _List_fromArray(
-				[$author$project$Main$G, $author$project$Main$G]);
+				[$author$project$Main$A, $author$project$Main$P, $author$project$Main$B, $author$project$Main$P, $author$project$Main$A]);
 		default:
 			var x = symbol;
 			return _List_fromArray(
@@ -4880,7 +4876,7 @@ var $author$project$Graphics2D$Transform$rotation = function (angle) {
 			0),
 		_Utils_Tuple3(0, 0, 1));
 };
-var $author$project$Main$leftRotate = $author$project$Graphics2D$Transform$rotation(($elm$core$Basics$pi * 2) / 3);
+var $author$project$Main$leftRotate = $author$project$Graphics2D$Transform$rotation($elm$core$Basics$pi / 3);
 var $joakin$elm_canvas$Canvas$Internal$Canvas$LineTo = function (a) {
 	return {$: 'LineTo', a: a};
 };
@@ -4921,11 +4917,11 @@ var $author$project$Graphics2D$Matrix$multiply = F2(
 		var c1 = _Utils_Tuple3(((a11 * b11) + (a21 * b12)) + (a31 * b13), ((a11 * b21) + (a21 * b22)) + (a31 * b23), ((a11 * b31) + (a21 * b32)) + (a31 * b33));
 		return _Utils_Tuple3(c1, c2, c3);
 	});
-var $author$project$Main$rightRotate = $author$project$Graphics2D$Transform$rotation(((-$elm$core$Basics$pi) * 2) / 3);
+var $author$project$Main$rightRotate = $author$project$Graphics2D$Transform$rotation((-$elm$core$Basics$pi) / 3);
 var $author$project$Main$toPath = F3(
 	function (l, m, symbol) {
 		switch (symbol.$) {
-			case 'F':
+			case 'A':
 				return _Utils_Tuple2(
 					A2(
 						$author$project$Graphics2D$Matrix$multiply,
@@ -4939,7 +4935,7 @@ var $author$project$Main$toPath = F3(
 								m,
 								$author$project$Main$forward(l)))
 						]));
-			case 'G':
+			case 'B':
 				return _Utils_Tuple2(
 					A2(
 						$author$project$Graphics2D$Matrix$multiply,
@@ -4957,12 +4953,10 @@ var $author$project$Main$toPath = F3(
 				return _Utils_Tuple2(
 					A2($author$project$Graphics2D$Matrix$multiply, m, $author$project$Main$leftRotate),
 					_List_Nil);
-			case 'P':
+			default:
 				return _Utils_Tuple2(
 					A2($author$project$Graphics2D$Matrix$multiply, m, $author$project$Main$rightRotate),
 					_List_Nil);
-			default:
-				return _Utils_Tuple2(m, _List_Nil);
 		}
 	});
 var $author$project$Main$toSegs = F4(
@@ -4989,9 +4983,9 @@ var $author$project$Main$segs = function (maxdepth) {
 	var _v0 = A2(
 		A2(
 			$author$project$Main$toSegs,
-			($author$project$Main$width - 20) / A2($elm$core$Basics$pow, 2, maxdepth - 1),
+			($author$project$Main$width - 20) / A2($elm$core$Basics$pow, 2, maxdepth - 0),
 			maxdepth),
-		$author$project$Main$I,
+		$author$project$Main$A,
 		_Utils_Tuple2($author$project$Main$initMatrix, _List_Nil));
 	var l = _v0.b;
 	return l;
@@ -5716,5 +5710,5 @@ var $author$project$Main$view = function (maxdepth) {
 					]))
 			]));
 };
-var $author$project$Main$main = $author$project$Main$view(8);
+var $author$project$Main$main = $author$project$Main$view(7);
 _Platform_export({'Main':{'init':_VirtualDom_init($author$project$Main$main)(0)(0)}});}(this));

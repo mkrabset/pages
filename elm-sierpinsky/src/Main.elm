@@ -22,31 +22,30 @@ height=800
 forward: Float -> Vector
 forward l = (l,0)
 
-type Sym = F | G | P | M | I
+type Sym = A | B | P | M
 
 leftRotate: Matrix
-leftRotate=rotation (pi*2/3)
+leftRotate=rotation (pi/3)
 
 rightRotate: Matrix
-rightRotate=rotation (-pi*2/3)
+rightRotate=rotation (-pi/3)
 
 forwardTranslate: Float->Matrix
 forwardTranslate l=translation (forward l)
 
 lsystem: Sym -> List Sym
 lsystem symbol = case symbol of
-                  I -> [F,M,G,M,G]
-                  F -> [F,M,G,P,F,P,G,M,F]
-                  G -> [G,G]
+                  A -> [B,M,A,M,B]
+                  B -> [A,P,B,P,A]
                   x -> [x]
 
 toPath: Float -> Matrix -> Sym -> (Matrix, List PathSegment)
 toPath l m symbol = case symbol of 
-                    F -> (multiply m (forwardTranslate l), [lineTo (apply m(forward l))])
-                    G -> (multiply m (forwardTranslate l), [lineTo (apply m(forward l))])
+                    A -> (multiply m (forwardTranslate l), [lineTo (apply m(forward l))])
+                    B -> (multiply m (forwardTranslate l), [lineTo (apply m(forward l))])
                     M -> (multiply m leftRotate,[])
                     P -> (multiply m rightRotate,[])
-                    _ -> (m,[])
+--                    _ -> (m,[])
                     
 
 
@@ -71,7 +70,7 @@ scene shapelist = shapes [ transform [translate (10) (10)]
 initMatrix=Graphics2D.Matrix.identity
 
 segs: Int -> List PathSegment
-segs maxdepth = case ((toSegs ((width-20)/(2^(toFloat (maxdepth-1)))) maxdepth) I (initMatrix, [])) of
+segs maxdepth = case ((toSegs ((width-20)/(2^(toFloat (maxdepth-0)))) maxdepth) A (initMatrix, [])) of
                                          (_,l) -> l
 
 
@@ -81,7 +80,7 @@ view maxdepth= div[][Canvas.toHtml (width, height)
             [ style "border" "none" ]
             ([scene [path (0,0) (segs maxdepth)]])]
 
-main = view 8
+main = view 7
 
 
 
