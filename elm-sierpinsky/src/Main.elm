@@ -10,6 +10,7 @@ import Html exposing (Html,text, div,button,span)
 import Html.Attributes exposing (style)
 import Html.Events exposing (onClick)
 import List exposing (..)
+import Array exposing (..)
 import Dict exposing (..)
 import Graphics2D.Matrix exposing (..)
 import Graphics2D.Vector exposing (..)
@@ -41,24 +42,24 @@ lsystem symbol = case symbol of
                   B -> [A,P,B,P,A]
                   x -> [x]
 
-toPath: Float -> Matrix -> Sym -> (Matrix, List PathSegment)
+toPath: Float -> Matrix -> Sym -> (Matrix, Array PathSegment)
 toPath l m symbol = case symbol of 
-                    A -> (multiply m (forwardTranslate l), [lineTo (apply m(forward l))])
-                    B -> (multiply m (forwardTranslate l), [lineTo (apply m(forward l))])
-                    M -> (multiply m leftRotate,[])
-                    P -> (multiply m rightRotate,[])
+                    A -> (multiply m (forwardTranslate l), Array.fromList [lineTo (apply m(forward l))])
+                    B -> (multiply m (forwardTranslate l), Array.fromList [lineTo (apply m(forward l))])
+                    M -> (multiply m leftRotate, Array.empty)
+                    P -> (multiply m rightRotate, Array.empty)
 --                    _ -> (m,[])
                     
 
 
 
-toSegs: Float -> Int ->  Sym -> (Matrix, List PathSegment) -> (Matrix, List PathSegment)
+toSegs: Float -> Int ->  Sym -> (Matrix, Array PathSegment) -> (Matrix, Array PathSegment)
 toSegs l depth symbol (m, accum) = if (depth==0)
                                     then
                                         let 
                                             (m2, newsegs)=toPath l m symbol
                                         in
-                                            (m2, accum++newsegs)
+                                            (m2, (Array.append accum newsegs))
                                     else
                                         List.foldl (toSegs l (depth-1)) (m,accum) (lsystem symbol) 
 
@@ -75,26 +76,26 @@ initMatrix maxDepth = if ((modBy 2 maxDepth)==1)
                         else
                             leftRotate
 
-segs: Int -> List PathSegment
-segs maxdepth = case ((toSegs ((width-20)/(2^(toFloat (maxdepth-0)))) maxdepth) A (initMatrix maxdepth, [])) of
+segs: Int -> Array PathSegment
+segs maxdepth = case ((toSegs ((width-20)/(2^(toFloat (maxdepth-0)))) maxdepth) A (initMatrix maxdepth, Array.empty)) of
                                          (_,l) -> l
 
 initModel= { depth=0
-           , renderable= scene [path (0,0) (segs 0)]
+           , renderable= scene [path (0,0) (Array.toList (segs 0))]
            }
 
 type Msg = Up | Down
 
 update msg model = let
                     newDepth=case msg of
-                                Up -> min 8 (model.depth+1)
+                                Up -> min 11 (model.depth+1)
                                 Down -> max 0 (model.depth-1)
                     in 
                         if (newDepth==model.depth)
                         then model
                         else
                             { depth=newDepth
-                            , renderable=scene [path (0,0) (segs newDepth)]
+                            , renderable=scene [path (0,0) (Array.toList (segs newDepth))]
                             }
 
 
