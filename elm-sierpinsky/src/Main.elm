@@ -79,36 +79,42 @@ segs: Int -> List PathSegment
 segs maxdepth = case ((toSegs ((width-20)/(2^(toFloat (maxdepth-0)))) maxdepth) A (initMatrix maxdepth, [])) of
                                          (_,l) -> l
 
+initModel= { depth=0
+           , renderable= scene [path (0,0) (segs 0)]
+           }
 
 type Msg = Up | Down
 
-update msg model = case msg of 
-                    Up -> (max 1 (model+1))
-                    Down -> (min 9 (model-1))
+update msg model = let
+                    newDepth=case msg of
+                                Up -> min 8 (model.depth+1)
+                                Down -> max 0 (model.depth-1)
+                    in 
+                        if (newDepth==model.depth)
+                        then model
+                        else
+                            { depth=newDepth
+                            , renderable=scene [path (0,0) (segs newDepth)]
+                            }
 
 
 -- Creates the view for a given max-value
 view model= div
             []
             [ button[onClick Down][Html.text "-"]
-            , span [][Html.text (String.fromInt model)] 
+            , span [][Html.text (String.fromInt model.depth)] 
             , button[onClick Up][Html.text "+"]
             ,div [][]
             , Canvas.toHtml (width, height)
                 [ style "border" "none" ]
                 [ clear (0,0) width height
-                , scene [path (0,0) (segs model)]
+                , model.renderable
                 ]
                 
             ]
 
-
 main = Browser.sandbox 
-    { init=1
+    { init=initModel
     , update=update
     , view=view 
     }
-
-
-
-
