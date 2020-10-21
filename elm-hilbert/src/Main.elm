@@ -1,13 +1,16 @@
 module Main exposing (..)
 
+import Browser
 import Canvas exposing (..)
 import Canvas.Settings exposing (..)
 import Canvas.Settings.Line exposing (..)
 import Canvas.Settings.Advanced exposing (..)
 import Color
-import Html exposing (Html,text)
+import Html exposing (Html,text, div,button,span)
 import Html.Attributes exposing (style)
+import Html.Events exposing (onClick)
 import List exposing (..)
+import Array exposing (..)
 import Dict exposing (..)
 import Graphics2D.Matrix exposing (..)
 import Graphics2D.Vector exposing (..)
@@ -39,23 +42,21 @@ lsystem symbol = case symbol of
                   B -> [P,A,F,M,B,F,B,M,F,A,P]
                   x -> [x]
 
-toPath: Float -> Matrix -> Sym -> (Matrix, List PathSegment)
+toPath: Float -> Matrix -> Sym -> (Matrix, Array PathSegment)
 toPath l m symbol = case symbol of 
-                    F -> (multiply m (forwardTranslate l), [lineTo (apply m(forward l))])
-                    M -> (multiply m leftRotate,[])
-                    P -> (multiply m rightRotate,[])
-                    _ -> (m,[])
+                    F -> (multiply m (forwardTranslate l), Array.fromList [lineTo (apply m(forward l))])
+                    M -> (multiply m leftRotate, Array.empty)
+                    P -> (multiply m rightRotate,Array.empty)
+                    _ -> (m, Array.empty)
                     
 
-
-
-toSegs: Float -> Int ->  Sym -> (Matrix, List PathSegment) -> (Matrix, List PathSegment)
+toSegs: Float -> Int ->  Sym -> (Matrix, Array PathSegment) -> (Matrix, Array PathSegment)
 toSegs l depth symbol (m, accum) = if (depth==0)
                                     then
                                         let 
                                             (m2, newsegs)=toPath l m symbol
                                         in
-                                            (m2, accum++newsegs)
+                                            (m2, (Array.append accum newsegs))
                                     else
                                         List.foldl (toSegs l (depth-1)) (m,accum) (lsystem symbol) 
 
@@ -66,20 +67,48 @@ scene shapelist = shapes [ transform [translate (10) (10)]
                             , lineWidth 1] 
                             shapelist
 
-initMatrix=Graphics2D.Matrix.identity
+initMatrix maxDepth = Graphics2D.Matrix.identity
 
-segs: Int -> List PathSegment
-segs maxdepth = case ((toSegs ((width-20)/(2^(toFloat maxdepth))) maxdepth) A (initMatrix, [])) of
+segs: Int -> Array PathSegment
+segs maxdepth = case ((toSegs ((width-20)/(2^(toFloat (maxdepth-0)))) maxdepth) A (initMatrix maxdepth, Array.empty)) of
                                          (_,l) -> l
 
+initModel= { depth=1
+           , renderable= scene [path (0,0) (Array.toList (segs 1))]
+           }
+
+type Msg = Up | Down
+
+update msg model = let
+                    newDepth=case msg of
+                                Up -> min 9 (model.depth+1)
+                                Down -> max 0 (model.depth-1)
+                    in 
+                        if (newDepth==model.depth)
+                        then model
+                        else
+                            { depth=newDepth
+                            , renderable=scene [path (0,0) (Array.toList (segs newDepth))]
+                            }
 
 
 -- Creates the view for a given max-value
-view maxdepth= Canvas.toHtml (width, height)
-            [ style "border" "none" ]
-            ([scene [path (0,0) (segs maxdepth)]])
+view model= div
+            []
+            [ button[onClick Down][Html.text "-"]
+            , span [][Html.text (String.fromInt model.depth)] 
+            , button[onClick Up][Html.text "+"]
+            ,div [][]
+            , Canvas.toHtml (width, height)
+                [ style "border" "none" ]
+                [ clear (0,0) width height
+                , model.renderable
+                ]
+                
+            ]
 
-main = view 6
-
-
-
+main = Browser.sandbox 
+    { init=initModel
+    , update=update
+    , view=view 
+    }
