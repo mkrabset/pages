@@ -1,12 +1,14 @@
 module Main exposing (..)
 
+import Browser
 import Canvas exposing (..)
 import Canvas.Settings exposing (..)
 import Canvas.Settings.Line exposing (..)
 import Canvas.Settings.Advanced exposing (..)
 import Color
-import Html exposing (Html,text, div)
+import Html exposing (Html,text, div,button,span)
 import Html.Attributes exposing (style)
+import Html.Events exposing (onClick)
 import List exposing (..)
 import Dict exposing (..)
 import Graphics2D.Matrix exposing (..)
@@ -67,20 +69,46 @@ scene shapelist = shapes [ transform [translate (10) (10)]
                             , lineWidth 1] 
                             shapelist
 
-initMatrix=Graphics2D.Matrix.identity
+initMatrix maxDepth = if ((modBy 2 maxDepth)==1) 
+                        then 
+                            Graphics2D.Matrix.identity
+                        else
+                            leftRotate
 
 segs: Int -> List PathSegment
-segs maxdepth = case ((toSegs ((width-20)/(2^(toFloat (maxdepth-0)))) maxdepth) A (initMatrix, [])) of
+segs maxdepth = case ((toSegs ((width-20)/(2^(toFloat (maxdepth-0)))) maxdepth) A (initMatrix maxdepth, [])) of
                                          (_,l) -> l
 
 
+type Msg = Up | Down
+
+update msg model = case msg of 
+                    Up -> (max 1 (model+1))
+                    Down -> (min 9 (model-1))
+
 
 -- Creates the view for a given max-value
-view maxdepth= div[][Canvas.toHtml (width, height)
-            [ style "border" "none" ]
-            ([scene [path (0,0) (segs maxdepth)]])]
+view model= div
+            []
+            [ button[onClick Down][Html.text "-"]
+            , span [][Html.text (String.fromInt model)] 
+            , button[onClick Up][Html.text "+"]
+            ,div [][]
+            , Canvas.toHtml (width, height)
+                [ style "border" "none" ]
+                [ clear (0,0) width height
+                , scene [path (0,0) (segs model)]
+                ]
+                
+            ]
 
-main = view 7
+
+main = Browser.sandbox 
+    { init=1
+    , update=update
+    , view=view 
+    }
+
 
 
 
