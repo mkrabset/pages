@@ -14,6 +14,7 @@ import Array exposing (..)
 import Dict exposing (..)
 import Debug
 import Random
+import Time
 
 -- Canvas size
 width=800
@@ -50,11 +51,18 @@ type Msg =
     | NewPoint (Float,Float)
     | Tick
 
+growCircle c = {c | r=c.r+1}
+
+grow model = {model | growingCircles=model.growingCircles |> List.map growCircle}
+
 update: Msg -> Model -> (Model,Cmd Msg)
 update msg model = case msg of 
-    NewPoint (x,y) -> ({model | growingCircles=model.growingCircles++[(circ x y 2)]}, Cmd.none)
-    Tick -> (model, Cmd.none)
-    NeedPoint -> (model, Random.generate NewPoint point)
+    NewPoint (x,y) -> 
+        ({model | growingCircles=model.growingCircles++[(circ x y 2)]}, Cmd.none)
+    Tick -> 
+        (grow model, Cmd.none)
+    NeedPoint -> 
+        (model, Random.generate NewPoint point)
 
 -- Creates the view for a given max-value
 view model= div
@@ -63,8 +71,8 @@ view model= div
             , button [onClick NeedPoint][Html.text "Add point"]
             , Canvas.toHtml (width, height)
                 []
-                [ --clear (0,0) width height
-                 shapes
+                [ clear (0,0) width height
+                , shapes
                     [transform [translate (0) (0)]
                             , stroke (Color.rgba 0 0 0 1)
                             , lineWidth 1]
@@ -72,7 +80,7 @@ view model= div
                 ]  
             ]
 
-subscriptions model = Sub.none
+subscriptions model =Time.every 50 (\t->Tick)
 
 main = Browser.element 
     { init=init
