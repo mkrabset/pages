@@ -5231,7 +5231,7 @@ var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
-		{growingCircles: _List_Nil, stuckCircles: _List_Nil},
+		{growingCircles: _List_Nil, stuckCircles: _List_Nil, tries: 0},
 		$elm$core$Platform$Cmd$none);
 };
 var $author$project$Main$Tick = {$: 'Tick'};
@@ -5653,18 +5653,76 @@ var $elm$time$Time$every = F2(
 var $author$project$Main$subscriptions = function (model) {
 	return A2(
 		$elm$time$Time$every,
-		50,
+		5,
 		function (t) {
 			return $author$project$Main$Tick;
 		});
 };
-var $author$project$Main$NewPoint = function (a) {
-	return {$: 'NewPoint', a: a};
-};
+var $elm$core$List$any = F2(
+	function (isOkay, list) {
+		any:
+		while (true) {
+			if (!list.b) {
+				return false;
+			} else {
+				var x = list.a;
+				var xs = list.b;
+				if (isOkay(x)) {
+					return true;
+				} else {
+					var $temp$isOkay = isOkay,
+						$temp$list = xs;
+					isOkay = $temp$isOkay;
+					list = $temp$list;
+					continue any;
+				}
+			}
+		}
+	});
+var $author$project$Main$collides = F2(
+	function (c1, c2) {
+		var rs = (c1.r + c2.r) + 1;
+		var dy = c1.y - c2.y;
+		var dx = c1.x - c2.x;
+		return _Utils_cmp((dx * dx) + (dy * dy), rs * rs) < 1;
+	});
+var $elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			$elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
+	});
+var $elm$core$Basics$not = _Basics_not;
+var $author$project$Main$sameCircle = F2(
+	function (c1, c2) {
+		return _Utils_eq(c1, c2);
+	});
+var $author$project$Main$anyCollisions = F2(
+	function (otherCircles, circle) {
+		return A2(
+			$elm$core$List$any,
+			function (c) {
+				return A2($author$project$Main$collides, c, circle);
+			},
+			A2(
+				$elm$core$List$filter,
+				function (c) {
+					return !A2($author$project$Main$sameCircle, c, circle);
+				},
+				otherCircles));
+	});
 var $author$project$Main$circ = F3(
 	function (x, y, r) {
 		return {r: r, x: x, y: y};
 	});
+var $author$project$Main$NewPoint = function (a) {
+	return {$: 'NewPoint', a: a};
+};
 var $elm$random$Random$Generate = function (a) {
 	return {$: 'Generate', a: a};
 };
@@ -5756,18 +5814,6 @@ var $elm$random$Random$generate = F2(
 			$elm$random$Random$Generate(
 				A2($elm$random$Random$map, tagger, generator)));
 	});
-var $author$project$Main$growCircle = function (c) {
-	return _Utils_update(
-		c,
-		{r: c.r + 1});
-};
-var $author$project$Main$grow = function (model) {
-	return _Utils_update(
-		model,
-		{
-			growingCircles: A2($elm$core$List$map, $author$project$Main$growCircle, model.growingCircles)
-		});
-};
 var $elm$core$Basics$negate = function (n) {
 	return -n;
 };
@@ -5798,7 +5844,7 @@ var $elm$random$Random$float = F2(
 					$elm$random$Random$next(seed1));
 			});
 	});
-var $author$project$Main$height = 800;
+var $author$project$Main$height = 500;
 var $elm$random$Random$map2 = F3(
 	function (func, _v0, _v1) {
 		var genA = _v0.a;
@@ -5827,11 +5873,64 @@ var $elm$random$Random$pair = F2(
 			genA,
 			genB);
 	});
-var $author$project$Main$width = 800;
+var $author$project$Main$width = 500;
 var $author$project$Main$point = A2(
 	$elm$random$Random$pair,
 	A2($elm$random$Random$float, 0, $author$project$Main$width),
 	A2($elm$random$Random$float, 0, $author$project$Main$height));
+var $author$project$Main$command = function (model) {
+	return (($elm$core$List$length(model.growingCircles) < 50) && (model.tries < 100)) ? A2($elm$random$Random$generate, $author$project$Main$NewPoint, $author$project$Main$point) : $elm$core$Platform$Cmd$none;
+};
+var $author$project$Main$edgeCollisions = function (circle) {
+	return ((circle.x - circle.r) < 1) || ((_Utils_cmp(circle.x + circle.r, $author$project$Main$width) > 0) || (((circle.y - circle.r) < 1) || (_Utils_cmp(circle.y + circle.r, $author$project$Main$height) > 0)));
+};
+var $elm$core$List$partition = F2(
+	function (pred, list) {
+		var step = F2(
+			function (x, _v0) {
+				var trues = _v0.a;
+				var falses = _v0.b;
+				return pred(x) ? _Utils_Tuple2(
+					A2($elm$core$List$cons, x, trues),
+					falses) : _Utils_Tuple2(
+					trues,
+					A2($elm$core$List$cons, x, falses));
+			});
+		return A3(
+			$elm$core$List$foldr,
+			step,
+			_Utils_Tuple2(_List_Nil, _List_Nil),
+			list);
+	});
+var $author$project$Main$evalGrow = function (model) {
+	var others = _Utils_ap(model.growingCircles, model.stuckCircles);
+	var _v0 = A2(
+		$elm$core$List$partition,
+		function (c) {
+			return $author$project$Main$edgeCollisions(c) || A2($author$project$Main$anyCollisions, others, c);
+		},
+		model.growingCircles);
+	var a = _v0.a;
+	var b = _v0.b;
+	return _Utils_update(
+		model,
+		{
+			growingCircles: b,
+			stuckCircles: _Utils_ap(model.stuckCircles, a)
+		});
+};
+var $author$project$Main$growCircle = function (c) {
+	return _Utils_update(
+		c,
+		{r: c.r + 1});
+};
+var $author$project$Main$grow = function (model) {
+	return _Utils_update(
+		model,
+		{
+			growingCircles: A2($elm$core$List$map, $author$project$Main$growCircle, model.growingCircles)
+		});
+};
 var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -5839,7 +5938,14 @@ var $author$project$Main$update = F2(
 				var _v1 = msg.a;
 				var x = _v1.a;
 				var y = _v1.b;
-				return _Utils_Tuple2(
+				return A2(
+					$author$project$Main$anyCollisions,
+					_Utils_ap(model.growingCircles, model.stuckCircles),
+					A3($author$project$Main$circ, x, y, 0)) ? _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{tries: model.tries + 1}),
+					$author$project$Main$command(model)) : _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
@@ -5848,20 +5954,22 @@ var $author$project$Main$update = F2(
 								_List_fromArray(
 									[
 										A3($author$project$Main$circ, x, y, 2)
-									]))
+									])),
+							tries: 0
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 'Tick':
+				var newGrown = $author$project$Main$grow(
+					$author$project$Main$evalGrow(model));
 				return _Utils_Tuple2(
-					$author$project$Main$grow(model),
-					$elm$core$Platform$Cmd$none);
+					$author$project$Main$grow(
+						$author$project$Main$evalGrow(model)),
+					$author$project$Main$command(newGrown));
 			default:
-				return _Utils_Tuple2(
-					model,
-					A2($elm$random$Random$generate, $author$project$Main$NewPoint, $author$project$Main$point));
+				return $author$project$Main$init(_Utils_Tuple0);
 		}
 	});
-var $author$project$Main$NeedPoint = {$: 'NeedPoint'};
+var $author$project$Main$ClearAll = {$: 'ClearAll'};
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $joakin$elm_canvas$Canvas$Internal$Canvas$Circle = F2(
 	function (a, b) {
@@ -6897,11 +7005,11 @@ var $author$project$Main$view = function (model) {
 				$elm$html$Html$button,
 				_List_fromArray(
 					[
-						$elm$html$Html$Events$onClick($author$project$Main$NeedPoint)
+						$elm$html$Html$Events$onClick($author$project$Main$ClearAll)
 					]),
 				_List_fromArray(
 					[
-						$elm$html$Html$text('Add point')
+						$elm$html$Html$text('Reset')
 					])),
 				A3(
 				$joakin$elm_canvas$Canvas$toHtml,
@@ -6935,7 +7043,7 @@ var $author$project$Main$view = function (model) {
 									_Utils_Tuple2(c.x, c.y),
 									c.r);
 							},
-							model.growingCircles))
+							_Utils_ap(model.growingCircles, model.stuckCircles)))
 					]))
 			]));
 };
