@@ -24,10 +24,13 @@ import QuadTree.QuadTree
 import QuadTree.QuadTree
 
 timeDeltaMillis=10
+maxSpeed = 100
 
 -- Canvas size
-width=700
+width=1200
 height=700
+
+bubblesAddedForEachClick=50
 
 type alias MouseDownData = 
     { offsetX : Int
@@ -48,26 +51,25 @@ type alias Bubble=
     }
 
 type alias Model= 
-    { bubbles: List Bubble,
-      toAdd: Int
+    { bubbles: List Bubble
     }
 
 -- Initial model: empty bubble list and no command
 init: ()-> (Model, Cmd Msg)
-init _= ( {bubbles=[], toAdd=0}
+init _= ( {bubbles=[]}
         , Cmd.none
         )
 
 randomPosVel: Random.Generator ( ( Float, Float ), ( Float, Float ) )
-randomPosVel = Random.pair (Random.pair (Random.float 0 width) (Random.float 0 height)) (Random.pair (Random.float -30 30) (Random.float -30 30))
+randomPosVel = Random.pair (Random.pair (Random.float 0 width) (Random.float 0 height)) (Random.pair (Random.float -maxSpeed maxSpeed) (Random.float -maxSpeed maxSpeed))
 
 type Msg = 
     ClearAll
-    | NewBubble ((Float,Float),(Float,Float))
+    | NewBubble Int ((Float,Float),(Float,Float))
     | Tick
     | MouseDown MouseDownData
 
-newRandomBubbleCommand = Random.generate NewBubble randomPosVel
+newRandomBubbleCommand num = Random.generate (NewBubble num) randomPosVel
 
 modval mod v = if (v>mod) then v-mod
                 else if (v<0) then v+mod
@@ -86,18 +88,15 @@ update msg model = case msg of
     ClearAll -> init () 
 
     Tick -> 
-        let
-            newBubbles =  model.bubbles |> List.map updateBubble
-            cmd=if (model.toAdd>0)
-                then newRandomBubbleCommand
-                else Cmd.none
-        in 
-            ({model | bubbles=newBubbles, toAdd=Basics.max 0 model.toAdd-1}, cmd)
+        ({model | bubbles=(model.bubbles |> List.map updateBubble)}, Cmd.none)
 
-    NewBubble (pos,vel) ->
-        ({model | bubbles=({pos=pos,vel=vel,radius=5,crash=False})::model.bubbles}, Cmd.none)
+    NewBubble num (pos,vel) ->
+        if (num>0) then
+            ({model | bubbles=({pos=pos,vel=vel,radius=5,crash=False})::model.bubbles}, newRandomBubbleCommand (num-1))
+        else 
+            (model, Cmd.none)
     
-    MouseDown data -> ({model| toAdd=model.toAdd+26}, Cmd.none)
+    MouseDown data -> (model, newRandomBubbleCommand bubblesAddedForEachClick)
 
 bubbleBounds: Bubble -> Box
 bubbleBounds b = ((QuadTree.Vec2d.add b.pos (-b.radius,-b.radius)),(QuadTree.Vec2d.add b.pos (b.radius,b.radius)))
@@ -121,7 +120,7 @@ treeGrids node = case node of
 
 gridShapes tree = shapes
                     [transform [translate (0) (0)]
-                            , stroke (Color.rgba 0 0 0 1)
+                            , stroke (Color.rgba 0.8 0.8 0.8 1)
                             , lineWidth 1
                     ]
                     [path (0,0) (treeGrids tree)]
@@ -133,33 +132,39 @@ bubbleCollision b1 b2 =
     in
         distSq<=maxDistSq
 
-toBubbleShape tree bubble = 
-    case tree of
-        Nothing -> []
-        Just n -> 
-            let
-                anycollisions=QuadTree.QuadTree.collisions n (toShape bubble) 
-                                |> List.filter (\s -> s.data/=bubble)
-                                |> List.any (\s -> bubbleCollision bubble s.data)
-                color=if (anycollisions) 
-                        then (Color.rgba 255 0 0 1)
-                        else (Color.rgba 0 0 0 1)
-            in
-                [shapes
-                    [transform [translate (0) (0)]
-                            , stroke (Color.rgba 0 0 0 1)
-                            , lineWidth 1
-                            , fill color
-                    ]
-                    [circle bubble.pos bubble.radius]
-                ]
-                
+anyCollision: QuadTree.QuadTree.Node Bubble -> QuadTree.QuadTree.Shape Bubble -> Bool                
+anyCollision tree bubbleShape = QuadTree.QuadTree.collisions tree bubbleShape 
+                                |> List.filter (\s -> s.data/=bubbleShape.data)
+                                |> List.any (\s -> bubbleCollision bubbleShape.data s.data)
 
 -- Creates the view for a given max-value
 view model= 
     let
         bubbleShapes=(model.bubbles |> List.map toShape)
         tree=QuadTree.QuadTree.create 3 bubbleShapes
+
+        collisionTest=case tree of 
+            Nothing-> (\_->False)
+            Just n -> anyCollision n
+
+        (collisionBubbles, nonCollisionBubbles)=List.partition collisionTest bubbleShapes
+
+        clearRenderable=clear (0,0) width height
+        gridRenderable = gridShapes tree
+        colBub = shapes
+                    [transform [translate (0) (0)]
+                            , stroke (Color.rgba 0 0 0 1)
+                            , lineWidth 1
+                            , fill (Color.rgba 1 0 0 1)
+                    ]
+                    (collisionBubbles |> List.map (\bs -> circle bs.data.pos bs.data.radius))
+        nonColBub = shapes
+                    [transform [translate (0) (0)]
+                            , stroke (Color.rgba 0 0 0 1)
+                            , lineWidth 1
+                            , fill (Color.rgba 0 1 0 1)
+                    ]
+                    (nonCollisionBubbles |> List.map (\bs -> circle bs.data.pos bs.data.radius))          
     in
         div
             []
@@ -168,17 +173,13 @@ view model=
             , Canvas.toHtml (width, height)
                 [on "mousedown" (Json.Decode.map MouseDown decoder)]
                 (
-                    [ clear (0,0) width height]
-                    ++
-                    [(gridShapes tree)]
-                    ++
-                    List.concat (model.bubbles |> List.map (toBubbleShape tree)) 
+                    [clearRenderable, gridRenderable, colBub, nonColBub]
                 )
             , div[][Html.text ("Bubbles:"++(String.fromInt (List.length model.bubbles)))]
             , div[][Html.text ("Click mouse to add bubbles")]
             ]
 
-subscriptions model =Time.every 5 (\t->Tick)
+subscriptions model =Time.every 25 (\t->Tick)
 
 main = Browser.element 
     { init=init
