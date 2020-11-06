@@ -57,7 +57,7 @@ type alias Model=
 -- Initial model: empty bubble list and no command
 init: ()-> (Model, Cmd Msg)
 init _= ( {bubbles=[]}
-        , Cmd.none
+        , newRandomBubbleCommand 10
         )
 
 randomPosVel: Random.Generator ( ( Float, Float ), ( Float, Float ) )
@@ -120,7 +120,7 @@ treeGrids node = case node of
 
 gridShapes tree = shapes
                     [transform [translate (0) (0)]
-                            , stroke (Color.rgba 0.8 0.8 0.8 1)
+                            , stroke (Color.rgba 0.9 0.9 0.9 1)
                             , lineWidth 1
                     ]
                     [path (0,0) (treeGrids tree)]
@@ -176,7 +176,7 @@ view model=
                     [clearRenderable, gridRenderable, colBub, nonColBub]
                 )
             , div[][Html.text ("Bubbles:"++(String.fromInt (List.length model.bubbles)))]
-            , div[][Html.text ("Click mouse to add bubbles")]
+            , div[][Html.text ("Click mouse to add some more bubbles")]
             ]
 
 subscriptions model =Time.every 25 (\t->Tick)
