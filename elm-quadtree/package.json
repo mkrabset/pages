@@ -1,0 +1,16 @@
+{
+  "name": "elm-hilbert",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "elm-format": "^0.8.4",
+    "elm-test": "^0.19.1-revision4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
