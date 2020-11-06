@@ -5844,7 +5844,7 @@ var $elm$random$Random$float = F2(
 					$elm$random$Random$next(seed1));
 			});
 	});
-var $author$project$Main$height = 500;
+var $author$project$Main$height = 700;
 var $elm$random$Random$map2 = F3(
 	function (func, _v0, _v1) {
 		var genA = _v0.a;
@@ -5873,13 +5873,13 @@ var $elm$random$Random$pair = F2(
 			genA,
 			genB);
 	});
-var $author$project$Main$width = 500;
+var $author$project$Main$width = 700;
 var $author$project$Main$point = A2(
 	$elm$random$Random$pair,
 	A2($elm$random$Random$float, 0, $author$project$Main$width),
 	A2($elm$random$Random$float, 0, $author$project$Main$height));
 var $author$project$Main$command = function (model) {
-	return (($elm$core$List$length(model.growingCircles) < 50) && (model.tries < 100)) ? A2($elm$random$Random$generate, $author$project$Main$NewPoint, $author$project$Main$point) : $elm$core$Platform$Cmd$none;
+	return (($elm$core$List$length(model.growingCircles) < 30) && (model.tries < 50)) ? A2($elm$random$Random$generate, $author$project$Main$NewPoint, $author$project$Main$point) : $elm$core$Platform$Cmd$none;
 };
 var $author$project$Main$edgeCollisions = function (circle) {
 	return ((circle.x - circle.r) < 1) || ((_Utils_cmp(circle.x + circle.r, $author$project$Main$width) > 0) || (((circle.y - circle.r) < 1) || (_Utils_cmp(circle.y + circle.r, $author$project$Main$height) > 0)));
@@ -5970,6 +5970,40 @@ var $author$project$Main$update = F2(
 		}
 	});
 var $author$project$Main$ClearAll = {$: 'ClearAll'};
+var $author$project$Main$circComp = F2(
+	function (c1, c2) {
+		return (_Utils_cmp(c1.x, c2.x) < 0) ? $elm$core$Basics$LT : ((_Utils_cmp(c1.x, c2.x) > 0) ? $elm$core$Basics$GT : ((_Utils_cmp(c1.y, c2.y) < 0) ? $elm$core$Basics$LT : ((_Utils_cmp(c1.y, c2.y) > 0) ? $elm$core$Basics$GT : $elm$core$Basics$EQ)));
+	});
+var $author$project$Main$pw = 200.0;
+var $author$project$Main$gcodefactor = $author$project$Main$pw / $author$project$Main$width;
+var $elm$core$String$fromFloat = _String_fromNumber;
+var $author$project$Main$ij = F2(
+	function (i, j) {
+		return 'i' + ($elm$core$String$fromFloat(i) + (' j' + $elm$core$String$fromFloat(j)));
+	});
+var $author$project$Main$xy = F2(
+	function (x, y) {
+		return 'x' + ($elm$core$String$fromFloat(x) + (' y' + $elm$core$String$fromFloat(y)));
+	});
+var $author$project$Main$gcode = F2(
+	function (c, txt) {
+		return 'm5 \n' + ('g0 ' + (A2($author$project$Main$xy, (c.x - c.r) * $author$project$Main$gcodefactor, c.y * $author$project$Main$gcodefactor) + ('\n' + ('m3 \n' + ('g2 ' + (A2($author$project$Main$xy, (c.x + c.r) * $author$project$Main$gcodefactor, c.y * $author$project$Main$gcodefactor) + (' ' + (A2($author$project$Main$ij, c.r * $author$project$Main$gcodefactor, 0) + ('\n' + ('g2 ' + (A2($author$project$Main$xy, (c.x - c.r) * $author$project$Main$gcodefactor, c.y * $author$project$Main$gcodefactor) + (' ' + (A2($author$project$Main$ij, (-c.r) * $author$project$Main$gcodefactor, 0) + ('\n' + ('m5 \n' + txt)))))))))))))));
+	});
+var $elm$core$List$sortWith = _List_sortWith;
+var $author$project$Main$allGcode = function (model) {
+	var _v0 = model.growingCircles;
+	if (_v0.b) {
+		var h = _v0.a;
+		var t = _v0.b;
+		return '';
+	} else {
+		return A3(
+			$elm$core$List$foldl,
+			$author$project$Main$gcode,
+			'',
+			A2($elm$core$List$sortWith, $author$project$Main$circComp, model.stuckCircles));
+	}
+};
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $joakin$elm_canvas$Canvas$Internal$Canvas$Circle = F2(
 	function (a, b) {
@@ -6056,6 +6090,7 @@ var $elm$html$Html$Events$onClick = function (msg) {
 		'click',
 		$elm$json$Json$Decode$succeed(msg));
 };
+var $elm$html$Html$pre = _VirtualDom_node('pre');
 var $avh4$elm_color$Color$RgbaSpace = F4(
 	function (a, b, c, d) {
 		return {$: 'RgbaSpace', a: a, b: b, c: c, d: d};
@@ -6523,7 +6558,6 @@ var $joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$fill = function (fil
 var $elm$core$String$concat = function (strings) {
 	return A2($elm$core$String$join, '', strings);
 };
-var $elm$core$String$fromFloat = _String_fromNumber;
 var $elm$core$Basics$round = _Basics_round;
 var $avh4$elm_color$Color$toCssString = function (_v0) {
 	var r = _v0.a;
@@ -7044,6 +7078,14 @@ var $author$project$Main$view = function (model) {
 									c.r);
 							},
 							_Utils_ap(model.growingCircles, model.stuckCircles)))
+					])),
+				A2(
+				$elm$html$Html$pre,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						$author$project$Main$allGcode(model))
 					]))
 			]));
 };

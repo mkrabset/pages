@@ -6,7 +6,7 @@ import Canvas.Settings exposing (..)
 import Canvas.Settings.Line exposing (..)
 import Canvas.Settings.Advanced exposing (..)
 import Color
-import Html exposing (Html,text, div,button,span)
+import Html exposing (Html,text, div,button,span, pre)
 import Html.Attributes exposing (style)
 import Html.Events exposing (onClick)
 import List exposing (..)
@@ -18,8 +18,12 @@ import Time
 import Html exposing (a)
 
 -- Canvas size
-width=500
-height=500
+width=700
+height=700
+
+pw=200.0
+
+gcodefactor=pw/width
 
 type alias Circ=
     { x: Float
@@ -87,7 +91,7 @@ evalGrow model =
                     }
 
 
-command model = if ((List.length model.growingCircles) < 50 && model.tries<100)
+command model = if ((List.length model.growingCircles) < 30 && model.tries<50)
                 then Random.generate NewPoint point
                 else Cmd.none
 
@@ -109,6 +113,41 @@ update msg model = case msg of
 
     ClearAll -> init () 
 
+
+circComp c1 c2 =    if (c1.x<c2.x)  
+                        then Basics.LT
+                    else if (c1.x>c2.x)
+                        then Basics.GT
+                    else
+                        if (c1.y<c2.y)  
+                            then Basics.LT
+                        else if (c1.y>c2.y)
+                            then Basics.GT
+                        else 
+                            Basics.EQ
+                        
+
+xy: Float -> Float -> String
+xy x y = "x"++(String.fromFloat x)++" y"++(String.fromFloat y)
+
+ij: Float -> Float -> String
+ij i j = "i"++(String.fromFloat i)++" j"++(String.fromFloat j)
+
+gcode: Circ -> String -> String
+gcode c txt =   "m5 \n"++
+                "g0 "++(xy ((c.x-c.r)*gcodefactor) (c.y*gcodefactor))++"\n"++
+                "m3 \n"++
+                "g2 "++(xy ((c.x+c.r)*gcodefactor) (c.y*gcodefactor))++" "++(ij (c.r*gcodefactor) 0)++"\n"++
+                "g2 "++(xy ((c.x-c.r)*gcodefactor) (c.y*gcodefactor))++" "++(ij (-(c.r)*gcodefactor) 0)++"\n"++
+                "m5 \n"++
+                txt
+
+allGcode: Model -> String
+allGcode model = case model.growingCircles of
+                h::t -> ""
+                _ -> List.foldl gcode "" (List.sortWith circComp model.stuckCircles) 
+
+
 -- Creates the view for a given max-value
 view model= div
             []
@@ -123,6 +162,7 @@ view model= div
                             , lineWidth 1]
                     ((model.growingCircles++model.stuckCircles) |> List.map (\c->(circle (c.x, c.y) c.r)))
                 ]  
+            , pre [][Html.text (allGcode model)]
             ]
 
 subscriptions model =Time.every 5 (\t->Tick)
