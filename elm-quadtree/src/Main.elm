@@ -175,6 +175,7 @@ view model=
                     List.concat (model.bubbles |> List.map (toBubbleShape tree)) 
                 )
             , div[][Html.text ("Bubbles:"++(String.fromInt (List.length model.bubbles)))]
+            , div[][Html.text ("Click mouse to add bubbles")]
             ]
 
 subscriptions model =Time.every 5 (\t->Tick)

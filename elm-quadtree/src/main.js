@@ -7516,6 +7516,13 @@ var $author$project$Main$view = function (model) {
 						$elm$html$Html$text(
 						'Bubbles:' + $elm$core$String$fromInt(
 							$elm$core$List$length(model.bubbles)))
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Click mouse to add bubbles')
 					]))
 			]));
 };
