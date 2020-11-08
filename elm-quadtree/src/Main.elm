@@ -23,6 +23,10 @@ import QuadTree.Vector2d exposing (Vector2d,multiply,add,toPair,fromPair,sqLengt
 import QuadTree.Renderables exposing (gridShapes, bubbleShapes)
 import QuadTree.Bubble exposing (Bubble)
 
+initialNumberOfBubbles=50
+
+bubbleRadius=5
+
 -- Time delta for each step
 timeDeltaMillis=10
 
@@ -56,7 +60,7 @@ type alias Model=
 -- Initial model: empty bubble list and no command
 init: ()-> (Model, Cmd Msg)
 init _= ( {bubbles=[]}
-        , newRandomBubbleCommand 10
+        , newRandomBubbleCommand initialNumberOfBubbles
         )
 
 -- Generator for random position and velocity
@@ -110,7 +114,7 @@ update msg model = case msg of
     NewBubble num (pos,vel) ->
         if (num>0) then
             let
-                newBubble = { pos = (fromPair pos), vel=(fromPair vel), radius=5}
+                newBubble = { pos = (fromPair pos), vel=(fromPair vel), radius=bubbleRadius}
             in
                 ({model | bubbles=newBubble::model.bubbles}, newRandomBubbleCommand (num-1))
         else 

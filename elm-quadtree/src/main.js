@@ -5227,6 +5227,7 @@ var $elm$core$Task$perform = F2(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$element = _Browser_element;
+var $author$project$Main$initialNumberOfBubbles = 50;
 var $author$project$Main$NewBubble = F2(
 	function (a, b) {
 		return {$: 'NewBubble', a: a, b: b};
@@ -5418,7 +5419,7 @@ var $author$project$Main$newRandomBubbleCommand = function (num) {
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
 		{bubbles: _List_Nil},
-		$author$project$Main$newRandomBubbleCommand(10));
+		$author$project$Main$newRandomBubbleCommand($author$project$Main$initialNumberOfBubbles));
 };
 var $author$project$Main$Tick = {$: 'Tick'};
 var $elm$time$Time$Every = F2(
@@ -5828,6 +5829,7 @@ var $author$project$Main$subscriptions = function (model) {
 			return $author$project$Main$Tick;
 		});
 };
+var $author$project$Main$bubbleRadius = 5;
 var $author$project$Main$bubblesAddedForEachClick = 50;
 var $author$project$QuadTree$Vector2d$fromPair = function (_v0) {
 	var x = _v0.a;
@@ -5877,7 +5879,7 @@ var $author$project$Main$update = F2(
 				if (num > 0) {
 					var newBubble = {
 						pos: $author$project$QuadTree$Vector2d$fromPair(pos),
-						radius: 5,
+						radius: $author$project$Main$bubbleRadius,
 						vel: $author$project$QuadTree$Vector2d$fromPair(vel)
 					};
 					return _Utils_Tuple2(
