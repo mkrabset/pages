@@ -18,10 +18,11 @@ import Time
 import Html exposing (a)
 import Json.Decode exposing (Decoder, int, at, map)
 import QuadTree.Bounds exposing (Bounds)
-import QuadTree.QuadTree
+import QuadTree.QuadTree exposing (collisions)
 import QuadTree.Vector2d exposing (Vector2d,multiply,add,toPair,fromPair,sqLength,subtract)
 import QuadTree.Renderables exposing (gridShapes, bubbleShapes)
 import QuadTree.Bubble exposing (Bubble)
+import QuadTree.Bubble exposing (nextCollision)
 
 initialNumberOfBubbles=50
 
@@ -29,6 +30,7 @@ bubbleRadius=5
 
 -- Time delta for each step
 timeDeltaMillis=10
+tickTime=timeDeltaMillis/1000
 
 -- Maximum initial axial bubble speed
 maxSpeed = 200
@@ -39,6 +41,8 @@ height=700
 
 -- Number of bubbles added for each mouse-click
 bubblesAddedForEachClick=50
+
+type alias BS = QuadTree.QuadTree.Shape Bubble
 
 -- Mouse click event data (and decoder)
 type alias MouseDownData = 
@@ -108,7 +112,7 @@ update msg model = case msg of
     ClearAll -> init () 
 
     Tick -> 
-        ({model | bubbles=(model.bubbles |> List.map (updateBubble (timeDeltaMillis/1000)))}, Cmd.none)
+        ({model | bubbles=(model.bubbles |> List.map (updateBubble (tickTime)))}, Cmd.none)
  
     NewBubble num (pos,vel) ->
         if (num>0) then
@@ -122,18 +126,37 @@ update msg model = case msg of
     MouseDown data -> (model, newRandomBubbleCommand bubblesAddedForEachClick)
 
 
+-- Takes a quadtree, a time deadline, an aggregated collision, and a bubble
+-- finds the first collision for the given bubble, compares with the aggregated collision, and returns the one occuring first
+collisionAggregator: QuadTree.QuadTree.Node Bubble -> Float -> BS -> Maybe (Float, BS, BS) -> Maybe (Float, BS, BS)
+collisionAggregator qtree deadline bs aggregator = 
+    let 
+        bCollisions = collisions qtree bs  -- todo: extend boundary according to vel-vector
+                        |> List.map (\cand -> (nextCollision deadline bs.data cand.data |> Maybe.map (\t -> (t,cand,bs))))       
+    in
+        aggregator::bCollisions 
+            |> List.filterMap identity
+            |> List.sortBy (\(time,b1,b2)->time)
+            |> List.head
+     
+
 -- TODO
 runTick: Float -> Model -> Model
 runTick remainingTickTime model = 
-    case QuadTree.QuadTree.create 3 (List.map toShape model.bubbles) of 
-        Nothing -> {model | bubbles=(model.bubbles |> List.map (updateBubble remainingTickTime))}
-        Just qTree ->
-            let
-                -- Todo: find next collission
-                dummy=0
-                -- Run runTick recursively until no more collisions occurs
-            in
-                model
+    let
+        bubbleShapes = List.map toShape model.bubbles
+    in
+        case QuadTree.QuadTree.create 3 bubbleShapes of -- todo: extend boundary according to vel-vector
+            Nothing -> {model | bubbles=(model.bubbles |> List.map (updateBubble remainingTickTime))}
+            Just qtree ->
+                let
+                    -- Todo: find next collission
+                    nextCollision = List.foldl (collisionAggregator qtree remainingTickTime) Nothing bubbleShapes
+                in
+                    case nextCollision of 
+                        Nothing -> {model | bubbles=(model.bubbles |> List.map (updateBubble remainingTickTime))}
+                        Just (t, b1, b2) ->
+                            {model | bubbles=(model.bubbles |> List.map (updateBubble t))}
 
 
 
@@ -167,7 +190,6 @@ bubbleCollision b1 b2 =
 
 anyCollision: QuadTree.QuadTree.Node Bubble -> QuadTree.QuadTree.Shape Bubble -> Bool                
 anyCollision tree bubbleShape = QuadTree.QuadTree.collisions tree bubbleShape 
-                                |> List.filter (\s -> s.data/=bubbleShape.data)
                                 |> List.any (\s -> bubbleCollision bubbleShape.data s.data)
 
 -- Creates the view for a given max-value

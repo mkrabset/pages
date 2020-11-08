@@ -12,14 +12,13 @@ type alias Bubble=
     , radius: Float
     }
 
--- Takes a value for remainingTickTime and two bubbles and returns a value between 0 and 1 for the time of the next collision
+-- Takes a value for remainingTickTime and two bubbles and returns the time of the next collision, if it's below remainingTickTime
 -- , or Nothing if no collision will happend
--- result is scaled such that 0 means collision immediatly, value 1 means collision at the end of the tick
 nextCollision: Float -> Bubble -> Bubble -> Maybe Float
 nextCollision remainingTickTime b1 b2 =
     let
         relPos = subtract b1.pos b2.pos
-        relVel = multiply remainingTickTime (subtract b1.vel b2.vel)
+        relVel = subtract b1.vel b2.vel
         dist=b1.radius+b2.radius
         
         q=sqLength relVel

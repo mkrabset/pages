@@ -99,10 +99,11 @@ create nodeCapacity shapes =
 collisions: Node d -> Shape d -> List (Shape d)
 collisions node shape = case node of 
     Leaf l ->
-        l.items |> List.filter (\s -> overlap shape.bounds s.bounds)
+        l.items |> List.filter (\s -> (s.data/=shape.data) && (overlap shape.bounds s.bounds))
     NonLeaf nl -> 
         let
-            directCollisions= nl.items |> List.filter (\s -> overlap shape.bounds s.bounds)
+            directCollisions= nl.items 
+                |> List.filter (\s -> (s.data/=shape.data) && (overlap shape.bounds s.bounds) )
         in
             case (whichQuadrant nl.bounds shape.bounds) of
                 Just NW -> directCollisions++(collisions nl.nw shape)

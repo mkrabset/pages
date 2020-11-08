@@ -5839,6 +5839,7 @@ var $author$project$QuadTree$Vector2d$fromPair = function (_v0) {
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Main$timeDeltaMillis = 10;
+var $author$project$Main$tickTime = $author$project$Main$timeDeltaMillis / 1000;
 var $author$project$Main$updateBubble = F2(
 	function (dt, bubble) {
 		var ny = bubble.pos.y + (dt * bubble.vel.y);
@@ -5870,7 +5871,7 @@ var $author$project$Main$update = F2(
 						{
 							bubbles: A2(
 								$elm$core$List$map,
-								$author$project$Main$updateBubble($author$project$Main$timeDeltaMillis / 1000),
+								$author$project$Main$updateBubble($author$project$Main$tickTime),
 								model.bubbles)
 						}),
 					$elm$core$Platform$Cmd$none);
@@ -5967,6 +5968,7 @@ var $elm$core$List$filter = F2(
 			_List_Nil,
 			list);
 	});
+var $elm$core$Basics$neq = _Utils_notEqual;
 var $author$project$QuadTree$Bounds$overlap = F2(
 	function (b1, b2) {
 		return (_Utils_cmp(b1.center.x + b1.rx, b2.center.x - b2.rx) < 0) ? false : ((_Utils_cmp(b1.center.x - b1.rx, b2.center.x + b2.rx) > 0) ? false : ((_Utils_cmp(b1.center.y + b1.ry, b2.center.y - b2.ry) < 0) ? false : ((_Utils_cmp(b1.center.y - b1.ry, b2.center.y + b2.ry) > 0) ? false : true)));
@@ -5986,7 +5988,7 @@ var $author$project$QuadTree$QuadTree$collisions = F2(
 			return A2(
 				$elm$core$List$filter,
 				function (s) {
-					return A2($author$project$QuadTree$Bounds$overlap, shape.bounds, s.bounds);
+					return (!_Utils_eq(s.data, shape.data)) && A2($author$project$QuadTree$Bounds$overlap, shape.bounds, s.bounds);
 				},
 				l.items);
 		} else {
@@ -5994,7 +5996,7 @@ var $author$project$QuadTree$QuadTree$collisions = F2(
 			var directCollisions = A2(
 				$elm$core$List$filter,
 				function (s) {
-					return A2($author$project$QuadTree$Bounds$overlap, shape.bounds, s.bounds);
+					return (!_Utils_eq(s.data, shape.data)) && A2($author$project$QuadTree$Bounds$overlap, shape.bounds, s.bounds);
 				},
 				nl.items);
 			var _v1 = A2($author$project$QuadTree$QuadTree$whichQuadrant, nl.bounds, shape.bounds);
@@ -6034,7 +6036,6 @@ var $author$project$QuadTree$QuadTree$collisions = F2(
 			}
 		}
 	});
-var $elm$core$Basics$neq = _Utils_notEqual;
 var $author$project$Main$anyCollision = F2(
 	function (tree, bubbleShape) {
 		return A2(
@@ -6042,12 +6043,7 @@ var $author$project$Main$anyCollision = F2(
 			function (s) {
 				return A2($author$project$Main$bubbleCollision, bubbleShape.data, s.data);
 			},
-			A2(
-				$elm$core$List$filter,
-				function (s) {
-					return !_Utils_eq(s.data, bubbleShape.data);
-				},
-				A2($author$project$QuadTree$QuadTree$collisions, tree, bubbleShape)));
+			A2($author$project$QuadTree$QuadTree$collisions, tree, bubbleShape));
 	});
 var $joakin$elm_canvas$Canvas$Internal$Canvas$Circle = F2(
 	function (a, b) {
