@@ -27,7 +27,7 @@ import QuadTree.Bubble exposing (Bubble)
 timeDeltaMillis=10
 
 -- Maximum initial axial bubble speed
-maxSpeed = 100
+maxSpeed = 200
 
 -- Canvas size
 width=1200
@@ -82,11 +82,21 @@ modval mod v = if (v>mod) then v-mod
 updateBubble: Bubble -> Bubble
 updateBubble bubble = 
     let 
-        delta=multiply (timeDeltaMillis/1000.0) bubble.vel
-        newPos=add bubble.pos delta
-        (x,y)=(modval width newPos.x, modval height newPos.y)
-    in
-        {bubble | pos={x = x, y = y}}
+        dt = timeDeltaMillis/1000
+        nx=bubble.pos.x + dt*bubble.vel.x
+        ny=bubble.pos.y + dt*bubble.vel.y
+        (px,vx)=
+            if (nx>(width-bubble.radius)) then (2*(width-bubble.radius)-nx, -bubble.vel.x)
+            else if (nx<bubble.radius) then (2*bubble.radius-nx, -bubble.vel.x)
+            else (nx, bubble.vel.x)
+        (py,vy)=
+            if (ny>(height-bubble.radius)) then (2*(height-bubble.radius)-ny, -bubble.vel.y)
+            else if (ny<bubble.radius) then (2*bubble.radius-ny, 2*bubble.radius-bubble.vel.y)
+            else (ny, bubble.vel.y)
+        newPos = (px,py)
+        newVel = (vx,vy)
+        in
+            {bubble | pos=(fromPair newPos), vel = (fromPair newVel)}
 
 
 -- Main model update function
@@ -96,7 +106,7 @@ update msg model = case msg of
 
     Tick -> 
         ({model | bubbles=(model.bubbles |> List.map updateBubble)}, Cmd.none)
-
+ 
     NewBubble num (pos,vel) ->
         if (num>0) then
             let
