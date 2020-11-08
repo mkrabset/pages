@@ -13,25 +13,30 @@ import List exposing (..)
 import Array exposing (..)
 import Dict exposing (..)
 import Debug
-import Random
+import Random 
 import Time
 import Html exposing (a)
-import QuadTree.Vec2d exposing (..)
 import Json.Decode exposing (Decoder, int, at, map)
-import QuadTree.Box exposing (Box)
+import QuadTree.Bounds exposing (Bounds)
 import QuadTree.QuadTree
-import QuadTree.QuadTree
-import QuadTree.QuadTree
+import QuadTree.Vector2d exposing (Vector2d,multiply,add,toPair,fromPair,sqLength,subtract)
+import QuadTree.Renderables exposing (gridShapes, bubbleShapes)
+import QuadTree.Bubble exposing (Bubble)
 
+-- Time delta for each step
 timeDeltaMillis=10
+
+-- Maximum initial axial bubble speed
 maxSpeed = 100
 
 -- Canvas size
 width=1200
 height=700
 
+-- Number of bubbles added for each mouse-click
 bubblesAddedForEachClick=50
 
+-- Mouse click event data (and decoder)
 type alias MouseDownData = 
     { offsetX : Int
     , offsetY : Int
@@ -43,13 +48,7 @@ decoder =
         (at [ "offsetX" ] int)
         (at [ "offsetY" ] int)
 
-type alias Bubble=
-    { pos: Vec2d
-    , vel: Vec2d
-    , radius: Float
-    , crash: Bool
-    }
-
+-- Model consisting of a list of bubbles
 type alias Model= 
     { bubbles: List Bubble
     }
@@ -60,29 +59,37 @@ init _= ( {bubbles=[]}
         , newRandomBubbleCommand 10
         )
 
+-- Generator for random position and velocity
 randomPosVel: Random.Generator ( ( Float, Float ), ( Float, Float ) )
 randomPosVel = Random.pair (Random.pair (Random.float 0 width) (Random.float 0 height)) (Random.pair (Random.float -maxSpeed maxSpeed) (Random.float -maxSpeed maxSpeed))
 
+-- Msg type
 type Msg = 
     ClearAll
     | NewBubble Int ((Float,Float),(Float,Float))
     | Tick
     | MouseDown MouseDownData
 
+-- Command for generating a number of new bubbles
 newRandomBubbleCommand num = Random.generate (NewBubble num) randomPosVel
 
+-- Applies modulo on number, used for keeping the bubbles on-screen
 modval mod v = if (v>mod) then v-mod
                 else if (v<0) then v+mod
                 else v
 
+-- Updates bubble position
 updateBubble: Bubble -> Bubble
 updateBubble bubble = 
     let 
-        (x,y)=QuadTree.Vec2d.add bubble.pos (QuadTree.Vec2d.mul (timeDeltaMillis/1000.0) bubble.vel)
-        adjPos=(modval width x, modval height y)
+        delta=multiply (timeDeltaMillis/1000.0) bubble.vel
+        newPos=add bubble.pos delta
+        (x,y)=(modval width newPos.x, modval height newPos.y)
     in
-        {bubble | pos=adjPos}
+        {bubble | pos={x = x, y = y}}
 
+
+-- Main model update function
 update: Msg -> Model -> (Model,Cmd Msg)
 update msg model = case msg of 
     ClearAll -> init () 
@@ -92,43 +99,34 @@ update msg model = case msg of
 
     NewBubble num (pos,vel) ->
         if (num>0) then
-            ({model | bubbles=({pos=pos,vel=vel,radius=5,crash=False})::model.bubbles}, newRandomBubbleCommand (num-1))
+            let
+                newBubble = { pos = (fromPair pos), vel=(fromPair vel), radius=5}
+            in
+                ({model | bubbles=newBubble::model.bubbles}, newRandomBubbleCommand (num-1))
         else 
             (model, Cmd.none)
     
     MouseDown data -> (model, newRandomBubbleCommand bubblesAddedForEachClick)
 
-bubbleBounds: Bubble -> Box
-bubbleBounds b = ((QuadTree.Vec2d.add b.pos (-b.radius,-b.radius)),(QuadTree.Vec2d.add b.pos (b.radius,b.radius)))
 
+-- Create bounds for a bubble
+bubbleBounds: Bubble -> Bounds
+bubbleBounds b = 
+    { center = b.pos
+    , rx = b.radius
+    , ry = b.radius
+    }
+
+
+-- Wrap bubble in Shape
 toShape: Bubble -> QuadTree.QuadTree.Shape Bubble
-toShape bubble = {bounds=(bubbleBounds bubble), data=bubble}
+toShape bubble = { bounds = (bubbleBounds bubble), data=bubble}
 
-treeGrids: Maybe (QuadTree.QuadTree.Node Bubble) -> List PathSegment
-treeGrids node = case node of 
-    Just (QuadTree.QuadTree.Leaf l) -> []
-    Just (QuadTree.QuadTree.NonLeaf l) ->
-        let
-            ((x1,y1),(x2,y2))=l.bounds
-            mx=(x1+x2)/2
-            my=(y1+y2)/2
-            childGrids=[Just l.nw, Just l.ne, Just l.sw, Just l.se] |> List.map treeGrids
-        in
-            [moveTo (mx,y2), lineTo (mx,y1), moveTo (x1,my), lineTo(x2,my)]++(List.concat childGrids)
-    Nothing -> []
-
-
-gridShapes tree = shapes
-                    [transform [translate (0) (0)]
-                            , stroke (Color.rgba 0.9 0.9 0.9 1)
-                            , lineWidth 1
-                    ]
-                    [path (0,0) (treeGrids tree)]
 
 bubbleCollision b1 b2 = 
     let
-        maxDistSq=(b1.radius+b2.radius)*(b1.radius+b2.radius)
-        distSq=QuadTree.Vec2d.distSq b1.pos b2.pos
+        maxDistSq=(b1.radius + b2.radius)*(b1.radius + b2.radius)
+        distSq=sqLength (subtract b1.pos b2.pos)
     in
         distSq<=maxDistSq
 
@@ -140,31 +138,19 @@ anyCollision tree bubbleShape = QuadTree.QuadTree.collisions tree bubbleShape
 -- Creates the view for a given max-value
 view model= 
     let
-        bubbleShapes=(model.bubbles |> List.map toShape)
-        tree=QuadTree.QuadTree.create 3 bubbleShapes
+        bShapes=(model.bubbles |> List.map toShape)
+        tree=QuadTree.QuadTree.create 3 bShapes
 
         collisionTest=case tree of 
             Nothing-> (\_->False)
             Just n -> anyCollision n
 
-        (collisionBubbles, nonCollisionBubbles)=List.partition collisionTest bubbleShapes
+        (collisionBubbles, nonCollisionBubbles)=List.partition collisionTest bShapes
 
         clearRenderable=clear (0,0) width height
         gridRenderable = gridShapes tree
-        colBub = shapes
-                    [transform [translate (0) (0)]
-                            , stroke (Color.rgba 0 0 0 1)
-                            , lineWidth 1
-                            , fill (Color.rgba 1 0 0 1)
-                    ]
-                    (collisionBubbles |> List.map (\bs -> circle bs.data.pos bs.data.radius))
-        nonColBub = shapes
-                    [transform [translate (0) (0)]
-                            , stroke (Color.rgba 0 0 0 1)
-                            , lineWidth 1
-                            , fill (Color.rgba 0 1 0 1)
-                    ]
-                    (nonCollisionBubbles |> List.map (\bs -> circle bs.data.pos bs.data.radius))          
+        colBub = bubbleShapes collisionBubbles True
+        nonColBub = bubbleShapes nonCollisionBubbles False  
     in
         div
             []

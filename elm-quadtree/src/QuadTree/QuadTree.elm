@@ -1,10 +1,41 @@
 module QuadTree.QuadTree exposing (..)
-import QuadTree.Box exposing (..)
+import QuadTree.Bounds exposing (..)
 import List exposing (..)
+
+-- Quadrant type
+type Quadrant = NW | NE | SW | SE
+
+whichQuadrant: Bounds -> Bounds -> Maybe Quadrant
+whichQuadrant outer b = 
+    if (b.center.x + b.rx < outer.center.x) then                   --left
+        if (b.center.y + b.ry < outer.center.y) then Just SW       --bottom
+        else if (b.center.y - b.ry > outer.center.y) then Just NW  --top
+        else Nothing
+    else if (b.center.x - b.rx > outer.center.x) then              --right
+        if (b.center.y + b.ry < outer.center.y) then Just SE       --bottom
+        else if (b.center.y - b.ry > outer.center.y) then Just NE  --top
+        else Nothing
+    else Nothing
+
+quadrant: Bounds -> Quadrant -> Bounds
+quadrant b q = 
+    let
+        dx=b.rx/2
+        dy=b.ry/2
+        xwest=b.center.x - dx
+        xeast=b.center.x + dx
+        ysouth=b.center.y - dy
+        ynorth=b.center.y + dy
+    in
+        case q of
+            NW -> { center = { x = xwest, y = ynorth}, rx = dx, ry = dy}
+            NE -> { center = { x = xeast, y = ynorth}, rx = dx, ry = dy}
+            SW -> { center = { x = xwest, y = ysouth}, rx = dx, ry = dy}
+            SE -> { center = { x = xeast, y = ysouth}, rx = dx, ry = dy}
 
 -- Generic type for shape with given rectangular bounds
 type alias Shape d = 
-    { bounds: Box
+    { bounds: Bounds
     , data: d
     }
 
@@ -12,11 +43,11 @@ type alias Shape d =
 type Node d = 
     Leaf 
         { capacity: Int
-        , bounds: Box
+        , bounds: Bounds
         , items: List (Shape d)
         } 
     | NonLeaf
-        { bounds: Box
+        { bounds: Bounds
         , nw: Node d
         , ne: Node d
         , sw: Node d
@@ -31,25 +62,21 @@ add shape node = case node of
     Leaf l -> 
         if (l.capacity > (List.length l.items))
         then Leaf {l | items=(shape::l.items)}
-        else case l.bounds of 
-            ((sx,sy),(ex,ey)) ->
-                let
-                    mx=(sx+ex)/2
-                    my=(sy+ey)/2
-
-                    nl= NonLeaf 
-                        { bounds=l.bounds
-                        , nw = Leaf {l | bounds=((sx,my),(mx,ey)),items=[]}
-                        , ne = Leaf {l | bounds=((mx,my),(ex,ey)),items=[]}
-                        , sw = Leaf {l | bounds=((sx,sy),(mx,my)),items=[]}
-                        , se = Leaf {l | bounds=((mx,sy),(ex,my)),items=[]}
-                        , items=[]
-                        }
+        else 
+            let
+                quad = quadrant l.bounds
+                nl= NonLeaf 
+                    { bounds=l.bounds
+                    , nw = Leaf {l | bounds=(quad NW),items=[]}
+                    , ne = Leaf {l | bounds=(quad NE),items=[]}
+                    , sw = Leaf {l | bounds=(quad SW),items=[]}
+                    , se = Leaf {l | bounds=(quad SE),items=[]}
+                    , items=[]
+                    }
                 in
                     List.foldr add nl (shape::l.items)
-
     NonLeaf nl -> 
-        case quadrant nl.bounds shape.bounds of
+        case (whichQuadrant nl.bounds shape.bounds) of
             Just NW -> NonLeaf {nl | nw=(add shape nl.nw)}
             Just NE -> NonLeaf {nl | ne=(add shape nl.ne)}
             Just SW -> NonLeaf {nl | sw=(add shape nl.sw)}
@@ -61,7 +88,7 @@ add shape node = case node of
 create: Int -> (List (Shape d)) -> Maybe (Node d)
 create nodeCapacity shapes = 
     let
-        bounds = shapes |> List.map (\s -> s.bounds) |> QuadTree.Box.bounds
+        bounds = shapes |> List.map (\s -> s.bounds) |> merge
     in
         case bounds of 
             Nothing -> Nothing
@@ -77,7 +104,7 @@ collisions node shape = case node of
         let
             directCollisions= nl.items |> List.filter (\s -> overlap shape.bounds s.bounds)
         in
-            case quadrant nl.bounds shape.bounds of
+            case (whichQuadrant nl.bounds shape.bounds) of
                 Just NW -> directCollisions++(collisions nl.nw shape)
                 Just NE -> directCollisions++(collisions nl.ne shape)
                 Just SW -> directCollisions++(collisions nl.sw shape)
