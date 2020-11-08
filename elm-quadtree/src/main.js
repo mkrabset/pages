@@ -5839,25 +5839,25 @@ var $author$project$QuadTree$Vector2d$fromPair = function (_v0) {
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Main$timeDeltaMillis = 10;
-var $author$project$Main$updateBubble = function (bubble) {
-	var dt = $author$project$Main$timeDeltaMillis / 1000;
-	var nx = bubble.pos.x + (dt * bubble.vel.x);
-	var ny = bubble.pos.y + (dt * bubble.vel.y);
-	var _v0 = (_Utils_cmp(ny, $author$project$Main$height - bubble.radius) > 0) ? _Utils_Tuple2((2 * ($author$project$Main$height - bubble.radius)) - ny, -bubble.vel.y) : ((_Utils_cmp(ny, bubble.radius) < 0) ? _Utils_Tuple2((2 * bubble.radius) - ny, (2 * bubble.radius) - bubble.vel.y) : _Utils_Tuple2(ny, bubble.vel.y));
-	var py = _v0.a;
-	var vy = _v0.b;
-	var _v1 = (_Utils_cmp(nx, $author$project$Main$width - bubble.radius) > 0) ? _Utils_Tuple2((2 * ($author$project$Main$width - bubble.radius)) - nx, -bubble.vel.x) : ((_Utils_cmp(nx, bubble.radius) < 0) ? _Utils_Tuple2((2 * bubble.radius) - nx, -bubble.vel.x) : _Utils_Tuple2(nx, bubble.vel.x));
-	var px = _v1.a;
-	var vx = _v1.b;
-	var newPos = _Utils_Tuple2(px, py);
-	var newVel = _Utils_Tuple2(vx, vy);
-	return _Utils_update(
-		bubble,
-		{
-			pos: $author$project$QuadTree$Vector2d$fromPair(newPos),
-			vel: $author$project$QuadTree$Vector2d$fromPair(newVel)
-		});
-};
+var $author$project$Main$updateBubble = F2(
+	function (dt, bubble) {
+		var ny = bubble.pos.y + (dt * bubble.vel.y);
+		var nx = bubble.pos.x + (dt * bubble.vel.x);
+		var _v0 = (_Utils_cmp(ny, $author$project$Main$height - bubble.radius) > 0) ? _Utils_Tuple2((2 * ($author$project$Main$height - bubble.radius)) - ny, -bubble.vel.y) : ((_Utils_cmp(ny, bubble.radius) < 0) ? _Utils_Tuple2((2 * bubble.radius) - ny, (2 * bubble.radius) - bubble.vel.y) : _Utils_Tuple2(ny, bubble.vel.y));
+		var py = _v0.a;
+		var vy = _v0.b;
+		var _v1 = (_Utils_cmp(nx, $author$project$Main$width - bubble.radius) > 0) ? _Utils_Tuple2((2 * ($author$project$Main$width - bubble.radius)) - nx, -bubble.vel.x) : ((_Utils_cmp(nx, bubble.radius) < 0) ? _Utils_Tuple2((2 * bubble.radius) - nx, -bubble.vel.x) : _Utils_Tuple2(nx, bubble.vel.x));
+		var px = _v1.a;
+		var vx = _v1.b;
+		var newPos = _Utils_Tuple2(px, py);
+		var newVel = _Utils_Tuple2(vx, vy);
+		return _Utils_update(
+			bubble,
+			{
+				pos: $author$project$QuadTree$Vector2d$fromPair(newPos),
+				vel: $author$project$QuadTree$Vector2d$fromPair(newVel)
+			});
+	});
 var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -5868,7 +5868,10 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							bubbles: A2($elm$core$List$map, $author$project$Main$updateBubble, model.bubbles)
+							bubbles: A2(
+								$elm$core$List$map,
+								$author$project$Main$updateBubble($author$project$Main$timeDeltaMillis / 1000),
+								model.bubbles)
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 'NewBubble':

@@ -83,10 +83,9 @@ modval mod v = if (v>mod) then v-mod
                 else v
 
 -- Updates bubble position
-updateBubble: Bubble -> Bubble
-updateBubble bubble = 
+updateBubble: Float -> Bubble -> Bubble
+updateBubble dt bubble = 
     let 
-        dt = timeDeltaMillis/1000
         nx=bubble.pos.x + dt*bubble.vel.x
         ny=bubble.pos.y + dt*bubble.vel.y
         (px,vx)=
@@ -109,7 +108,7 @@ update msg model = case msg of
     ClearAll -> init () 
 
     Tick -> 
-        ({model | bubbles=(model.bubbles |> List.map updateBubble)}, Cmd.none)
+        ({model | bubbles=(model.bubbles |> List.map (updateBubble (timeDeltaMillis/1000)))}, Cmd.none)
  
     NewBubble num (pos,vel) ->
         if (num>0) then
@@ -121,6 +120,28 @@ update msg model = case msg of
             (model, Cmd.none)
     
     MouseDown data -> (model, newRandomBubbleCommand bubblesAddedForEachClick)
+
+
+-- TODO
+runTick: Float -> Model -> Model
+runTick remainingTickTime model = 
+    case QuadTree.QuadTree.create 3 (List.map toShape model.bubbles) of 
+        Nothing -> {model | bubbles=(model.bubbles |> List.map (updateBubble remainingTickTime))}
+        Just qTree ->
+            let
+                -- Todo: find next collission
+                dummy=0
+                -- Run runTick recursively until no more collisions occurs
+            in
+                model
+
+
+
+
+
+
+
+
 
 
 -- Create bounds for a bubble
