@@ -22,3 +22,7 @@ distSq p1 p2 =
         (x2,y2)=p2
     in
         (x2-x1)*(x2-x1)+(y2-y1)*(y2-y1)
+
+
+sum: List Vec2d -> Vec2d
+sum l = List.foldl add (0,0) l
