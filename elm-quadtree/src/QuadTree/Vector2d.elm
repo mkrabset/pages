@@ -37,7 +37,7 @@ add v1 v2 =
 subtract: Vector2d -> Vector2d -> Vector2d
 subtract v2 v1 = 
     { x = v1.x - v2.x
-    , y = v1.x - v2.x
+    , y = v1.y - v2.y
     }
 
 multiply: Float -> Vector2d -> Vector2d
@@ -61,3 +61,5 @@ cross v1 v2 =
 sqLength: Vector2d -> Float
 sqLength v = dot v v
 
+norm: Vector2d -> Vector2d
+norm v = multiply (1/(sqrt(sqLength v))) v

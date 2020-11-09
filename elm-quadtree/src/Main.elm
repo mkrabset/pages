@@ -19,17 +19,17 @@ import Html exposing (a)
 import Json.Decode exposing (Decoder, int, at, map)
 import QuadTree.Bounds exposing (Bounds)
 import QuadTree.QuadTree exposing (collisions)
-import QuadTree.Vector2d exposing (Vector2d,multiply,add,toPair,fromPair,sqLength,subtract)
+import QuadTree.Vector2d exposing (Vector2d,multiply,add,toPair,fromPair,sqLength,subtract,dot,norm,neg)
 import QuadTree.Renderables exposing (gridShapes, bubbleShapes)
 import QuadTree.Bubble exposing (Bubble)
 import QuadTree.Bubble exposing (nextCollision)
 
-initialNumberOfBubbles=50
+initialNumberOfBubbles=5
 
-bubbleRadius=5
+bubbleRadius=20
 
 -- Time delta for each step
-timeDeltaMillis=10
+timeDeltaMillis=5
 tickTime=timeDeltaMillis/1000
 
 -- Maximum initial axial bubble speed
@@ -75,6 +75,7 @@ randomPosVel = Random.pair (Random.pair (Random.float 0 width) (Random.float 0 h
 type Msg = 
     ClearAll
     | NewBubble Int ((Float,Float),(Float,Float))
+    | NextCollision
     | Tick
     | MouseDown MouseDownData
 
@@ -98,7 +99,7 @@ updateBubble dt bubble =
             else (nx, bubble.vel.x)
         (py,vy)=
             if (ny>(height-bubble.radius)) then (2*(height-bubble.radius)-ny, -bubble.vel.y)
-            else if (ny<bubble.radius) then (2*bubble.radius-ny, 2*bubble.radius-bubble.vel.y)
+            else if (ny<bubble.radius) then (2*bubble.radius-ny, -bubble.vel.y)
             else (ny, bubble.vel.y)
         newPos = (px,py)
         newVel = (vx,vy)
@@ -112,8 +113,13 @@ update msg model = case msg of
     ClearAll -> init () 
 
     Tick -> 
-        ({model | bubbles=(model.bubbles |> List.map (updateBubble (tickTime)))}, Cmd.none)
- 
+--      ({model | bubbles=(model.bubbles |> List.map (updateBubble (tickTime)))}, Cmd.none)
+      (runTick tickTime model, Cmd.none)
+--        (model, Cmd.none)
+
+    NextCollision ->
+        (runTick tickTime model, Cmd.none)
+
     NewBubble num (pos,vel) ->
         if (num>0) then
             let
@@ -132,7 +138,7 @@ collisionAggregator: QuadTree.QuadTree.Node Bubble -> Float -> BS -> Maybe (Floa
 collisionAggregator qtree deadline bs aggregator = 
     let 
         bCollisions = collisions qtree bs  -- todo: extend boundary according to vel-vector
-                        |> List.map (\cand -> (nextCollision deadline bs.data cand.data |> Maybe.map (\t -> (t,cand,bs))))       
+                        |> List.map (\cand -> (nextCollision deadline bs.data cand.data |> Maybe.map (\t -> (t,cand,bs))))  
     in
         aggregator::bCollisions 
             |> List.filterMap identity
@@ -144,21 +150,41 @@ collisionAggregator qtree deadline bs aggregator =
 runTick: Float -> Model -> Model
 runTick remainingTickTime model = 
     let
-        bubbleShapes = List.map toShape model.bubbles
+        bubbleShapes = List.map (toShape remainingTickTime) model.bubbles 
     in
-        case QuadTree.QuadTree.create 3 bubbleShapes of -- todo: extend boundary according to vel-vector
+        case QuadTree.QuadTree.create 1 bubbleShapes  of -- todo: extend boundary according to vel-vector
             Nothing -> {model | bubbles=(model.bubbles |> List.map (updateBubble remainingTickTime))}
             Just qtree ->
                 let
                     -- Todo: find next collission
-                    nextCollision = List.foldl (collisionAggregator qtree remainingTickTime) Nothing bubbleShapes
+                    nextCollision = List.foldl (collisionAggregator qtree remainingTickTime) Nothing bubbleShapes 
                 in
                     case nextCollision of 
                         Nothing -> {model | bubbles=(model.bubbles |> List.map (updateBubble remainingTickTime))}
                         Just (t, b1, b2) ->
-                            {model | bubbles=(model.bubbles |> List.map (updateBubble t))}
+                            let
+                                u1=updateBubble t b1.data
+                                u2=updateBubble t b2.data
 
+                                otherBubbles = model.bubbles 
+                                    |> List.filter (\b -> b/=b1.data && b/=b2.data) 
+                                    |> List.map (updateBubble t)
 
+                                (crashedb1,crashedb2) = collide u1 u2
+                                allNewBubbles = crashedb1::(crashedb2::otherBubbles)
+                            in
+                                {model | bubbles=allNewBubbles}
+
+-- Apply collision to bubbles
+collide: Bubble -> Bubble -> (Bubble,Bubble)
+collide b1 b2 = 
+    let
+        relVel=subtract b1.vel b2.vel
+        normRelVel=norm relVel
+        normRelPos=norm (subtract b1.pos b2.pos)
+        velChange=multiply (dot normRelVel normRelPos) relVel 
+    in
+    ({b1| vel = add b1.vel (neg velChange)},{b2 | vel = add b2.vel velChange})
 
 
 
@@ -168,17 +194,21 @@ runTick remainingTickTime model =
 
 
 -- Create bounds for a bubble
-bubbleBounds: Bubble -> Bounds
-bubbleBounds b = 
-    { center = b.pos
-    , rx = b.radius
-    , ry = b.radius
-    }
+bubbleBounds: Float -> Bubble -> Bounds
+bubbleBounds dt b = 
+    let
+        dx = b.vel.x * dt
+        dy = b.vel.y * dt
+    in
+        { center = { x = b.pos.x + dx/2, y = b.pos.y + dy / 2}
+        , rx = b.radius + (abs dx/2)
+        , ry = b.radius + (abs dy/2)
+        }
 
 
 -- Wrap bubble in Shape
-toShape: Bubble -> QuadTree.QuadTree.Shape Bubble
-toShape bubble = { bounds = (bubbleBounds bubble), data=bubble}
+toShape: Float -> Bubble -> QuadTree.QuadTree.Shape Bubble
+toShape dt bubble = { bounds = (bubbleBounds dt bubble), data=bubble}
 
 
 bubbleCollision b1 b2 = 
@@ -195,8 +225,8 @@ anyCollision tree bubbleShape = QuadTree.QuadTree.collisions tree bubbleShape
 -- Creates the view for a given max-value
 view model= 
     let
-        bShapes=(model.bubbles |> List.map toShape)
-        tree=QuadTree.QuadTree.create 3 bShapes
+        bShapes=(model.bubbles |> List.map (toShape 0))
+        tree=QuadTree.QuadTree.create 1 bShapes
 
         collisionTest=case tree of 
             Nothing-> (\_->False)
@@ -213,6 +243,7 @@ view model=
             []
             [ div [][]
             , button [onClick ClearAll][Html.text "Reset"]
+            , button [onClick NextCollision][Html.text "NextCollision"]
             , Canvas.toHtml (width, height)
                 [on "mousedown" (Json.Decode.map MouseDown decoder)]
                 (
@@ -222,7 +253,7 @@ view model=
             , div[][Html.text ("Click mouse to add some more bubbles")]
             ]
 
-subscriptions model =Time.every 25 (\t->Tick)
+subscriptions model =Time.every timeDeltaMillis (\t->Tick)
 
 main = Browser.element 
     { init=init
