@@ -46,3 +46,11 @@ bubbleShapes bubbles colliding =
             , fill color
             ]
             (bubbles |> List.map (\bs -> circle (toPair bs.data.pos) bs.data.radius))
+
+border width height =
+    shapes
+        [transform [translate (0) (0)]
+        , stroke (Color.rgba 0.9 0.9 0.9 1)
+        , lineWidth 4
+        ]
+        [path (0,0) [moveTo (0,0), lineTo(0,height), lineTo(width,height), lineTo(width,0), lineTo(0,0)]]

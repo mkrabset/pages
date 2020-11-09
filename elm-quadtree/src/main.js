@@ -5419,7 +5419,7 @@ var $author$project$Main$newRandomBubbleCommand = function (num) {
 var $author$project$Main$startBubbles = _List_Nil;
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
-		{bubbles: $author$project$Main$startBubbles},
+		{bubbles: $author$project$Main$startBubbles, showQTree: false},
 		$author$project$Main$newRandomBubbleCommand($author$project$Main$initialNumberOfBubbles));
 };
 var $author$project$Main$Tick = {$: 'Tick'};
@@ -5840,6 +5840,7 @@ var $author$project$QuadTree$Vector2d$fromPair = function (_v0) {
 };
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
+var $elm$core$Basics$not = _Basics_not;
 var $author$project$QuadTree$Vector2d$add = F2(
 	function (v1, v2) {
 		return {x: v1.x + v2.x, y: v1.y + v2.y};
@@ -6025,7 +6026,6 @@ var $elm$core$Maybe$map = F2(
 		}
 	});
 var $elm$core$Basics$ge = _Utils_ge;
-var $elm$core$Basics$not = _Basics_not;
 var $author$project$QuadTree$Bubble$nextCollision = F3(
 	function (deadline, b1, b2) {
 		if (A2(
@@ -6409,17 +6409,24 @@ var $author$project$Main$update = F2(
 				} else {
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
-			default:
+			case 'MouseDown':
 				var data = msg.a;
 				return _Utils_Tuple2(
 					model,
 					$author$project$Main$newRandomBubbleCommand($author$project$Main$bubblesAddedForEachClick));
+			default:
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{showQTree: !model.showQTree}),
+					$elm$core$Platform$Cmd$none);
 		}
 	});
 var $author$project$Main$ClearAll = {$: 'ClearAll'};
 var $author$project$Main$MouseDown = function (a) {
 	return {$: 'MouseDown', a: a};
 };
+var $author$project$Main$ToggleShowQTree = {$: 'ToggleShowQTree'};
 var $elm$core$List$any = F2(
 	function (isOkay, list) {
 		any:
@@ -6457,23 +6464,11 @@ var $author$project$Main$anyCollision = F2(
 			},
 			A2($author$project$QuadTree$QuadTree$collisions, tree, bubbleShape));
 	});
-var $joakin$elm_canvas$Canvas$Internal$Canvas$Circle = F2(
-	function (a, b) {
-		return {$: 'Circle', a: a, b: b};
-	});
-var $joakin$elm_canvas$Canvas$circle = F2(
-	function (pos, radius) {
-		return A2($joakin$elm_canvas$Canvas$Internal$Canvas$Circle, pos, radius);
-	});
-var $joakin$elm_canvas$Canvas$Internal$Canvas$Fill = function (a) {
-	return {$: 'Fill', a: a};
+var $joakin$elm_canvas$Canvas$Internal$Canvas$LineTo = function (a) {
+	return {$: 'LineTo', a: a};
 };
-var $joakin$elm_canvas$Canvas$Internal$Canvas$SettingDrawOp = function (a) {
-	return {$: 'SettingDrawOp', a: a};
-};
-var $joakin$elm_canvas$Canvas$Settings$fill = function (color) {
-	return $joakin$elm_canvas$Canvas$Internal$Canvas$SettingDrawOp(
-		$joakin$elm_canvas$Canvas$Internal$Canvas$Fill(color));
+var $joakin$elm_canvas$Canvas$lineTo = function (point) {
+	return $joakin$elm_canvas$Canvas$Internal$Canvas$LineTo(point);
 };
 var $joakin$elm_canvas$Canvas$Internal$Canvas$SettingCommand = function (a) {
 	return {$: 'SettingCommand', a: a};
@@ -6517,6 +6512,20 @@ var $joakin$elm_canvas$Canvas$Settings$Line$lineWidth = function (width) {
 	return $joakin$elm_canvas$Canvas$Internal$Canvas$SettingCommand(
 		$joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$lineWidth(width));
 };
+var $joakin$elm_canvas$Canvas$Internal$Canvas$MoveTo = function (a) {
+	return {$: 'MoveTo', a: a};
+};
+var $joakin$elm_canvas$Canvas$moveTo = function (point) {
+	return $joakin$elm_canvas$Canvas$Internal$Canvas$MoveTo(point);
+};
+var $joakin$elm_canvas$Canvas$Internal$Canvas$Path = F2(
+	function (a, b) {
+		return {$: 'Path', a: a, b: b};
+	});
+var $joakin$elm_canvas$Canvas$path = F2(
+	function (startingPoint, segments) {
+		return A2($joakin$elm_canvas$Canvas$Internal$Canvas$Path, startingPoint, segments);
+	});
 var $avh4$elm_color$Color$RgbaSpace = F4(
 	function (a, b, c, d) {
 		return {$: 'RgbaSpace', a: a, b: b, c: c, d: d};
@@ -6531,6 +6540,9 @@ var $joakin$elm_canvas$Canvas$Internal$Canvas$DrawableShapes = function (a) {
 var $joakin$elm_canvas$Canvas$Internal$Canvas$NotSpecified = {$: 'NotSpecified'};
 var $joakin$elm_canvas$Canvas$Renderable = function (a) {
 	return {$: 'Renderable', a: a};
+};
+var $joakin$elm_canvas$Canvas$Internal$Canvas$Fill = function (a) {
+	return {$: 'Fill', a: a};
 };
 var $joakin$elm_canvas$Canvas$Internal$Canvas$FillAndStroke = F2(
 	function (a, b) {
@@ -6653,12 +6665,12 @@ var $joakin$elm_canvas$Canvas$shapes = F2(
 					drawable: $joakin$elm_canvas$Canvas$Internal$Canvas$DrawableShapes(ss)
 				}));
 	});
+var $joakin$elm_canvas$Canvas$Internal$Canvas$SettingDrawOp = function (a) {
+	return {$: 'SettingDrawOp', a: a};
+};
 var $joakin$elm_canvas$Canvas$Settings$stroke = function (color) {
 	return $joakin$elm_canvas$Canvas$Internal$Canvas$SettingDrawOp(
 		$joakin$elm_canvas$Canvas$Internal$Canvas$Stroke(color));
-};
-var $author$project$QuadTree$Vector2d$toPair = function (v) {
-	return _Utils_Tuple2(v.x, v.y);
 };
 var $joakin$elm_canvas$Canvas$Internal$Canvas$SettingCommands = function (a) {
 	return {$: 'SettingCommands', a: a};
@@ -6768,6 +6780,56 @@ var $joakin$elm_canvas$Canvas$Settings$Advanced$Translate = F2(
 		return {$: 'Translate', a: a, b: b};
 	});
 var $joakin$elm_canvas$Canvas$Settings$Advanced$translate = $joakin$elm_canvas$Canvas$Settings$Advanced$Translate;
+var $author$project$QuadTree$Renderables$border = F2(
+	function (width, height) {
+		return A2(
+			$joakin$elm_canvas$Canvas$shapes,
+			_List_fromArray(
+				[
+					$joakin$elm_canvas$Canvas$Settings$Advanced$transform(
+					_List_fromArray(
+						[
+							A2($joakin$elm_canvas$Canvas$Settings$Advanced$translate, 0, 0)
+						])),
+					$joakin$elm_canvas$Canvas$Settings$stroke(
+					A4($avh4$elm_color$Color$rgba, 0.9, 0.9, 0.9, 1)),
+					$joakin$elm_canvas$Canvas$Settings$Line$lineWidth(4)
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$joakin$elm_canvas$Canvas$path,
+					_Utils_Tuple2(0, 0),
+					_List_fromArray(
+						[
+							$joakin$elm_canvas$Canvas$moveTo(
+							_Utils_Tuple2(0, 0)),
+							$joakin$elm_canvas$Canvas$lineTo(
+							_Utils_Tuple2(0, height)),
+							$joakin$elm_canvas$Canvas$lineTo(
+							_Utils_Tuple2(width, height)),
+							$joakin$elm_canvas$Canvas$lineTo(
+							_Utils_Tuple2(width, 0)),
+							$joakin$elm_canvas$Canvas$lineTo(
+							_Utils_Tuple2(0, 0))
+						]))
+				]));
+	});
+var $joakin$elm_canvas$Canvas$Internal$Canvas$Circle = F2(
+	function (a, b) {
+		return {$: 'Circle', a: a, b: b};
+	});
+var $joakin$elm_canvas$Canvas$circle = F2(
+	function (pos, radius) {
+		return A2($joakin$elm_canvas$Canvas$Internal$Canvas$Circle, pos, radius);
+	});
+var $joakin$elm_canvas$Canvas$Settings$fill = function (color) {
+	return $joakin$elm_canvas$Canvas$Internal$Canvas$SettingDrawOp(
+		$joakin$elm_canvas$Canvas$Internal$Canvas$Fill(color));
+};
+var $author$project$QuadTree$Vector2d$toPair = function (v) {
+	return _Utils_Tuple2(v.x, v.y);
+};
 var $author$project$QuadTree$Renderables$bubbleShapes = F2(
 	function (bubbles, colliding) {
 		var color = colliding ? A4($avh4$elm_color$Color$rgba, 1, 0, 0, 1) : A4($avh4$elm_color$Color$rgba, 0.4, 1, 0.4, 1);
@@ -6900,26 +6962,6 @@ var $author$project$Main$genText = function (bubbleShape) {
 		_Utils_Tuple2(bubbleShape.data.pos.x, bubbleShape.data.pos.y + (bubbleShape.data.radius / 3)),
 		$elm$core$String$fromInt(bubbleShape.data.collisions));
 };
-var $joakin$elm_canvas$Canvas$Internal$Canvas$Path = F2(
-	function (a, b) {
-		return {$: 'Path', a: a, b: b};
-	});
-var $joakin$elm_canvas$Canvas$path = F2(
-	function (startingPoint, segments) {
-		return A2($joakin$elm_canvas$Canvas$Internal$Canvas$Path, startingPoint, segments);
-	});
-var $joakin$elm_canvas$Canvas$Internal$Canvas$LineTo = function (a) {
-	return {$: 'LineTo', a: a};
-};
-var $joakin$elm_canvas$Canvas$lineTo = function (point) {
-	return $joakin$elm_canvas$Canvas$Internal$Canvas$LineTo(point);
-};
-var $joakin$elm_canvas$Canvas$Internal$Canvas$MoveTo = function (a) {
-	return {$: 'MoveTo', a: a};
-};
-var $joakin$elm_canvas$Canvas$moveTo = function (point) {
-	return $joakin$elm_canvas$Canvas$Internal$Canvas$MoveTo(point);
-};
 var $author$project$QuadTree$Renderables$treeGrids = function (node) {
 	if (node.$ === 'Just') {
 		if (node.a.$ === 'Leaf') {
@@ -6983,6 +7025,8 @@ var $author$project$QuadTree$Renderables$gridShapes = function (tree) {
 				$author$project$QuadTree$Renderables$treeGrids(tree))
 			]));
 };
+var $elm$html$Html$input = _VirtualDom_node('input');
+var $elm$html$Html$label = _VirtualDom_node('label');
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 'Normal', a: a};
 };
@@ -7018,6 +7062,8 @@ var $elm$core$List$partition = F2(
 			_Utils_Tuple2(_List_Nil, _List_Nil),
 			list);
 	});
+var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
+var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $elm$html$Html$canvas = _VirtualDom_node('canvas');
@@ -7642,8 +7688,6 @@ var $elm$html$Html$Attributes$src = function (url) {
 		'src',
 		_VirtualDom_noJavaScriptOrHtmlUri(url));
 };
-var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
-var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
 var $joakin$elm_canvas$Canvas$renderTextureSource = function (textureSource) {
 	var url = textureSource.a;
 	var onLoad = textureSource.b;
@@ -7705,6 +7749,7 @@ var $joakin$elm_canvas$Canvas$toHtml = F3(
 			attrs,
 			entities);
 	});
+var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
 var $author$project$Main$view = function (model) {
 	var clearRenderable = A3(
 		$joakin$elm_canvas$Canvas$clear,
@@ -7727,7 +7772,7 @@ var $author$project$Main$view = function (model) {
 			return $author$project$Main$anyCollision(n);
 		}
 	}();
-	var gridRenderable = $author$project$QuadTree$Renderables$gridShapes(tree);
+	var gridRenderable = model.showQTree ? $author$project$QuadTree$Renderables$gridShapes(tree) : $author$project$QuadTree$Renderables$gridShapes($elm$core$Maybe$Nothing);
 	var _v0 = A2($elm$core$List$partition, collisionTest, bShapes);
 	var collisionBubbles = _v0.a;
 	var nonCollisionBubbles = _v0.b;
@@ -7761,7 +7806,13 @@ var $author$project$Main$view = function (model) {
 					]),
 				_Utils_ap(
 					_List_fromArray(
-						[clearRenderable, gridRenderable, colBub, nonColBub]),
+						[
+							clearRenderable,
+							A2($author$project$QuadTree$Renderables$border, $author$project$Main$width, $author$project$Main$height),
+							gridRenderable,
+							colBub,
+							nonColBub
+						]),
 					bubbleText)),
 				A2(
 				$elm$html$Html$div,
@@ -7777,7 +7828,26 @@ var $author$project$Main$view = function (model) {
 				_List_Nil,
 				_List_fromArray(
 					[
-						$elm$html$Html$text('Click mouse to add some more bubbles')
+						$elm$html$Html$text('Click mouse in canvas to add some more bubbles')
+					])),
+				A2($elm$html$Html$div, _List_Nil, _List_Nil),
+				A2(
+				$elm$html$Html$label,
+				_List_fromArray(
+					[
+						A2($elm$html$Html$Attributes$style, 'padding', '20px')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$input,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$type_('checkbox'),
+								$elm$html$Html$Events$onClick($author$project$Main$ToggleShowQTree)
+							]),
+						_List_Nil),
+						$elm$html$Html$text('Show QuadTree partitioning')
 					]))
 			]));
 };

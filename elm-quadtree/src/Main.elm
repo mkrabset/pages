@@ -7,8 +7,8 @@ import Canvas.Settings.Line exposing (..)
 import Canvas.Settings.Advanced exposing (..)
 import Canvas.Settings.Text exposing (..)
 import Color
-import Html exposing (Html,text, div,button,span, pre)
-import Html.Attributes exposing (style)
+import Html exposing (Html,text, div,button,span, pre,input, label)
+import Html.Attributes exposing (style,type_)
 import Html.Events exposing (onClick,on)
 import List exposing (..)
 import Array exposing (..)
@@ -21,7 +21,7 @@ import Json.Decode exposing (Decoder, int, at, map)
 import QuadTree.Bounds exposing (Bounds)
 import QuadTree.QuadTree exposing (collisions)
 import QuadTree.Vector2d exposing (Vector2d,multiply,add,toPair,fromPair,sqLength,subtract,dot,neg)
-import QuadTree.Renderables exposing (gridShapes, bubbleShapes)
+import QuadTree.Renderables exposing (gridShapes, bubbleShapes,border)
 import QuadTree.Bubble exposing (Bubble,nextCollision,bubbleCollision,collide)
 
 qtreeNodeCapacity = 5
@@ -65,12 +65,13 @@ decoder =
 
 -- Model consisting of a list of bubbles
 type alias Model= 
-    { bubbles: List Bubble
+    { bubbles: List Bubble,
+      showQTree: Bool
     }
 
 -- Initial model: empty bubble list and no command
 init: ()-> (Model, Cmd Msg)
-init _= ( {bubbles=startBubbles}
+init _= ( {bubbles=startBubbles, showQTree=False}
         , newRandomBubbleCommand initialNumberOfBubbles
         )
 
@@ -85,6 +86,7 @@ type Msg =
     | NextCollision
     | Tick
     | MouseDown MouseDownData
+    | ToggleShowQTree
 
 -- Command for generating a number of new bubbles
 newRandomBubbleCommand num = Random.generate (NewBubble num) randomPosVel
@@ -133,6 +135,8 @@ update msg model = case msg of
             (model, Cmd.none)
     
     MouseDown data -> (model, newRandomBubbleCommand bubblesAddedForEachClick)
+
+    ToggleShowQTree -> ({model | showQTree = not model.showQTree}, Cmd.none)
 
 
 -- Takes a quadtree, a time deadline, an aggregated collision, and a bubble
@@ -224,7 +228,11 @@ view model=
         (collisionBubbles, nonCollisionBubbles)=List.partition collisionTest bShapes
 
         clearRenderable=clear (0,0) width height
-        gridRenderable = gridShapes tree
+        
+        gridRenderable = 
+            if (model.showQTree) then gridShapes tree
+            else gridShapes Nothing
+
         colBub = bubbleShapes collisionBubbles True
         nonColBub = bubbleShapes nonCollisionBubbles False  
         bubbleText = bShapes |> List.map genText
@@ -237,10 +245,14 @@ view model=
             , Canvas.toHtml (width, height)
                 [on "mousedown" (Json.Decode.map MouseDown decoder)]
                 (
-                    [clearRenderable, gridRenderable, colBub, nonColBub]++bubbleText
+                    [clearRenderable, (border width height), gridRenderable, colBub, nonColBub]++bubbleText
                 )
             , div[][Html.text ("Bubbles:"++(String.fromInt (List.length model.bubbles)))]
-            , div[][Html.text ("Click mouse to add some more bubbles")]
+            , div[][Html.text ("Click mouse in canvas to add some more bubbles")]
+            , div[][]
+            , label
+                [ style "padding" "20px" ]
+                [ input [ type_ "checkbox", onClick ToggleShowQTree ][],Html.text "Show QuadTree partitioning" ]
             ]
 
 subscriptions model =Time.every timeDeltaMillis (\t->Tick)
