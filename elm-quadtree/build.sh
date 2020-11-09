@@ -1,1 +1,1 @@
-elm make src/Main.elm --output src/main.js
+elm make src/Main.elm --optimize --output src/main.js

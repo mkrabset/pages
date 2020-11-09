@@ -77,7 +77,7 @@ function A9(fun, a, b, c, d, e, f, g, h, i) {
   return fun.a === 9 ? fun.f(a, b, c, d, e, f, g, h, i) : fun(a)(b)(c)(d)(e)(f)(g)(h)(i);
 }
 
-console.warn('Compiled in DEV mode. Follow the advice at https://elm-lang.org/0.19.1/optimize for better performance and smaller assets.');
+
 
 
 // EQUALITY
@@ -113,7 +113,7 @@ function _Utils_eqHelp(x, y, depth, stack)
 		return true;
 	}
 
-	/**/
+	/**_UNUSED/
 	if (x.$ === 'Set_elm_builtin')
 	{
 		x = $elm$core$Set$toList(x);
@@ -126,7 +126,7 @@ function _Utils_eqHelp(x, y, depth, stack)
 	}
 	//*/
 
-	/**_UNUSED/
+	/**/
 	if (x.$ < 0)
 	{
 		x = $elm$core$Dict$toList(x);
@@ -161,7 +161,7 @@ function _Utils_cmp(x, y, ord)
 		return x === y ? /*EQ*/ 0 : x < y ? /*LT*/ -1 : /*GT*/ 1;
 	}
 
-	/**/
+	/**_UNUSED/
 	if (x instanceof String)
 	{
 		var a = x.valueOf();
@@ -170,10 +170,10 @@ function _Utils_cmp(x, y, ord)
 	}
 	//*/
 
-	/**_UNUSED/
+	/**/
 	if (typeof x.$ === 'undefined')
 	//*/
-	/**/
+	/**_UNUSED/
 	if (x.$[0] === '#')
 	//*/
 	{
@@ -203,17 +203,17 @@ var _Utils_compare = F2(function(x, y)
 
 // COMMON VALUES
 
-var _Utils_Tuple0_UNUSED = 0;
-var _Utils_Tuple0 = { $: '#0' };
+var _Utils_Tuple0 = 0;
+var _Utils_Tuple0_UNUSED = { $: '#0' };
 
-function _Utils_Tuple2_UNUSED(a, b) { return { a: a, b: b }; }
-function _Utils_Tuple2(a, b) { return { $: '#2', a: a, b: b }; }
+function _Utils_Tuple2(a, b) { return { a: a, b: b }; }
+function _Utils_Tuple2_UNUSED(a, b) { return { $: '#2', a: a, b: b }; }
 
-function _Utils_Tuple3_UNUSED(a, b, c) { return { a: a, b: b, c: c }; }
-function _Utils_Tuple3(a, b, c) { return { $: '#3', a: a, b: b, c: c }; }
+function _Utils_Tuple3(a, b, c) { return { a: a, b: b, c: c }; }
+function _Utils_Tuple3_UNUSED(a, b, c) { return { $: '#3', a: a, b: b, c: c }; }
 
-function _Utils_chr_UNUSED(c) { return c; }
-function _Utils_chr(c) { return new String(c); }
+function _Utils_chr(c) { return c; }
+function _Utils_chr_UNUSED(c) { return new String(c); }
 
 
 // RECORDS
@@ -264,11 +264,11 @@ function _Utils_ap(xs, ys)
 
 
 
-var _List_Nil_UNUSED = { $: 0 };
-var _List_Nil = { $: '[]' };
+var _List_Nil = { $: 0 };
+var _List_Nil_UNUSED = { $: '[]' };
 
-function _List_Cons_UNUSED(hd, tl) { return { $: 1, a: hd, b: tl }; }
-function _List_Cons(hd, tl) { return { $: '::', a: hd, b: tl }; }
+function _List_Cons(hd, tl) { return { $: 1, a: hd, b: tl }; }
+function _List_Cons_UNUSED(hd, tl) { return { $: '::', a: hd, b: tl }; }
 
 
 var _List_cons = F2(_List_Cons);
@@ -499,12 +499,12 @@ var _JsArray_appendN = F3(function(n, dest, source)
 
 // LOG
 
-var _Debug_log_UNUSED = F2(function(tag, value)
+var _Debug_log = F2(function(tag, value)
 {
 	return value;
 });
 
-var _Debug_log = F2(function(tag, value)
+var _Debug_log_UNUSED = F2(function(tag, value)
 {
 	console.log(tag + ': ' + _Debug_toString(value));
 	return value;
@@ -530,12 +530,12 @@ function _Debug_todoCase(moduleName, region, value)
 
 // TO STRING
 
-function _Debug_toString_UNUSED(value)
+function _Debug_toString(value)
 {
 	return '<internals>';
 }
 
-function _Debug_toString(value)
+function _Debug_toString_UNUSED(value)
 {
 	return _Debug_toAnsiString(false, value);
 }
@@ -720,13 +720,13 @@ function _Debug_toHexDigit(n)
 // CRASH
 
 
-function _Debug_crash_UNUSED(identifier)
+function _Debug_crash(identifier)
 {
 	throw new Error('https://github.com/elm/core/blob/1.0.0/hints/' + identifier + '.md');
 }
 
 
-function _Debug_crash(identifier, fact1, fact2, fact3, fact4)
+function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 {
 	switch(identifier)
 	{
@@ -784,11 +784,11 @@ function _Debug_crash(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.start.line === region.end.line)
+	if (region.ad.L === region.an.L)
 	{
-		return 'on line ' + region.start.line;
+		return 'on line ' + region.ad.L;
 	}
-	return 'on lines ' + region.start.line + ' through ' + region.end.line;
+	return 'on lines ' + region.ad.L + ' through ' + region.an.L;
 }
 
 
@@ -1212,7 +1212,7 @@ function _Char_toLocaleLower(char)
 
 
 
-/**/
+/**_UNUSED/
 function _Json_errorToString(error)
 {
 	return $elm$json$Json$Decode$errorToString(error);
@@ -1616,11 +1616,11 @@ var _Json_encode = F2(function(indentLevel, value)
 	return JSON.stringify(_Json_unwrap(value), null, indentLevel) + '';
 });
 
-function _Json_wrap(value) { return { $: 0, a: value }; }
-function _Json_unwrap(value) { return value.a; }
+function _Json_wrap_UNUSED(value) { return { $: 0, a: value }; }
+function _Json_unwrap_UNUSED(value) { return value.a; }
 
-function _Json_wrap_UNUSED(value) { return value; }
-function _Json_unwrap_UNUSED(value) { return value; }
+function _Json_wrap(value) { return value; }
+function _Json_unwrap(value) { return value; }
 
 function _Json_emptyArray() { return []; }
 function _Json_emptyObject() { return {}; }
@@ -1857,9 +1857,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.init,
-		impl.update,
-		impl.subscriptions,
+		impl.a3,
+		impl.bl,
+		impl.bj,
 		function() { return function() {} }
 	);
 });
@@ -1872,7 +1872,7 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 function _Platform_initialize(flagDecoder, args, init, update, subscriptions, stepperBuilder)
 {
 	var result = A2(_Json_run, flagDecoder, _Json_wrap(args ? args['flags'] : undefined));
-	$elm$core$Result$isOk(result) || _Debug_crash(2 /**/, _Json_errorToString(result.a) /**/);
+	$elm$core$Result$isOk(result) || _Debug_crash(2 /**_UNUSED/, _Json_errorToString(result.a) /**/);
 	var managers = {};
 	var initPair = init(result.a);
 	var model = initPair.a;
@@ -2316,7 +2316,7 @@ function _Platform_setupIncomingPort(name, sendToApp)
 //
 
 
-function _Platform_export_UNUSED(exports)
+function _Platform_export(exports)
 {
 	scope['Elm']
 		? _Platform_mergeExportsProd(scope['Elm'], exports)
@@ -2337,7 +2337,7 @@ function _Platform_mergeExportsProd(obj, exports)
 }
 
 
-function _Platform_export(exports)
+function _Platform_export_UNUSED(exports)
 {
 	scope['Elm']
 		? _Platform_mergeExportsDebug('Elm', scope['Elm'], exports)
@@ -2377,10 +2377,10 @@ var _VirtualDom_init = F4(function(virtualNode, flagDecoder, debugMetadata, args
 {
 	// NOTE: this function needs _Platform_export available to work
 
-	/**_UNUSED/
+	/**/
 	var node = args['node'];
 	//*/
-	/**/
+	/**_UNUSED/
 	var node = args && args['node'] ? args['node'] : _Debug_crash(0);
 	//*/
 
@@ -2635,24 +2635,24 @@ function _VirtualDom_noInnerHtmlOrFormAction(key)
 	return key == 'innerHTML' || key == 'formAction' ? 'data-' + key : key;
 }
 
-function _VirtualDom_noJavaScriptUri_UNUSED(value)
+function _VirtualDom_noJavaScriptUri(value)
 {
 	return /^javascript:/i.test(value.replace(/\s/g,'')) ? '' : value;
 }
 
-function _VirtualDom_noJavaScriptUri(value)
+function _VirtualDom_noJavaScriptUri_UNUSED(value)
 {
 	return /^javascript:/i.test(value.replace(/\s/g,''))
 		? 'javascript:alert("This is an XSS vector. Please use ports or web components instead.")'
 		: value;
 }
 
-function _VirtualDom_noJavaScriptOrHtmlUri_UNUSED(value)
+function _VirtualDom_noJavaScriptOrHtmlUri(value)
 {
 	return /^\s*(javascript:|data:text\/html)/i.test(value) ? '' : value;
 }
 
-function _VirtualDom_noJavaScriptOrHtmlUri(value)
+function _VirtualDom_noJavaScriptOrHtmlUri_UNUSED(value)
 {
 	return /^\s*(javascript:|data:text\/html)/i.test(value)
 		? 'javascript:alert("This is an XSS vector. Please use ports or web components instead.")'
@@ -2704,9 +2704,9 @@ var _VirtualDom_mapEventTuple = F2(function(func, tuple)
 var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
-		message: func(record.message),
-		stopPropagation: record.stopPropagation,
-		preventDefault: record.preventDefault
+		v: func(record.v),
+		ae: record.ae,
+		aa: record.aa
 	}
 });
 
@@ -2974,11 +2974,11 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		// 3 = Custom
 
 		var value = result.a;
-		var message = !tag ? value : tag < 3 ? value.a : value.message;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.stopPropagation;
+		var message = !tag ? value : tag < 3 ? value.a : value.v;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.ae;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.preventDefault) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.aa) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3928,15 +3928,15 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.init,
-		impl.update,
-		impl.subscriptions,
+		impl.a3,
+		impl.bl,
+		impl.bj,
 		function(sendToApp, initialModel) {
-			var view = impl.view;
-			/**_UNUSED/
+			var view = impl.bm;
+			/**/
 			var domNode = args['node'];
 			//*/
-			/**/
+			/**_UNUSED/
 			var domNode = args && args['node'] ? args['node'] : _Debug_crash(0);
 			//*/
 			var currNode = _VirtualDom_virtualize(domNode);
@@ -3964,12 +3964,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.init,
-		impl.update,
-		impl.subscriptions,
+		impl.a3,
+		impl.bl,
+		impl.bj,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.setup && impl.setup(sendToApp)
-			var view = impl.view;
+			var divertHrefToApp = impl.ac && impl.ac(sendToApp)
+			var view = impl.bm;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -3977,12 +3977,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.body);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.aQ);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.title) && (_VirtualDom_doc.title = title = doc.title);
+				(title !== doc.bk) && (_VirtualDom_doc.title = title = doc.bk);
 			});
 		}
 	);
@@ -4038,12 +4038,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.onUrlChange;
-	var onUrlRequest = impl.onUrlRequest;
+	var onUrlChange = impl.bb;
+	var onUrlRequest = impl.bc;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		setup: function(sendToApp)
+		ac: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4059,9 +4059,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.protocol === next.protocol
-							&& curr.host === next.host
-							&& curr.port_.a === next.port_.a
+							&& curr.aD === next.aD
+							&& curr.ar === next.ar
+							&& curr.aA.a === next.aA.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4069,13 +4069,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		init: function(flags)
+		a3: function(flags)
 		{
-			return A3(impl.init, flags, _Browser_getUrl(), key);
+			return A3(impl.a3, flags, _Browser_getUrl(), key);
 		},
-		view: impl.view,
-		update: impl.update,
-		subscriptions: impl.subscriptions
+		bm: impl.bm,
+		bl: impl.bl,
+		bj: impl.bj
 	});
 }
 
@@ -4141,17 +4141,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { hidden: 'hidden', change: 'visibilitychange' }
+		? { a1: 'hidden', aT: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { hidden: 'mozHidden', change: 'mozvisibilitychange' }
+		? { a1: 'mozHidden', aT: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { hidden: 'msHidden', change: 'msvisibilitychange' }
+		? { a1: 'msHidden', aT: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { hidden: 'webkitHidden', change: 'webkitvisibilitychange' }
-		: { hidden: 'hidden', change: 'visibilitychange' };
+		? { a1: 'webkitHidden', aT: 'webkitvisibilitychange' }
+		: { a1: 'hidden', aT: 'visibilitychange' };
 }
 
 
@@ -4232,12 +4232,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		scene: _Browser_getScene(),
-		viewport: {
-			x: _Browser_window.pageXOffset,
-			y: _Browser_window.pageYOffset,
-			width: _Browser_doc.documentElement.clientWidth,
-			height: _Browser_doc.documentElement.clientHeight
+		aI: _Browser_getScene(),
+		aM: {
+			n: _Browser_window.pageXOffset,
+			o: _Browser_window.pageYOffset,
+			aN: _Browser_doc.documentElement.clientWidth,
+			aq: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4247,8 +4247,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		width: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		height: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		aN: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		aq: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4271,15 +4271,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			scene: {
-				width: node.scrollWidth,
-				height: node.scrollHeight
+			aI: {
+				aN: node.scrollWidth,
+				aq: node.scrollHeight
 			},
-			viewport: {
-				x: node.scrollLeft,
-				y: node.scrollTop,
-				width: node.clientWidth,
-				height: node.clientHeight
+			aM: {
+				n: node.scrollLeft,
+				o: node.scrollTop,
+				aN: node.clientWidth,
+				aq: node.clientHeight
 			}
 		};
 	});
@@ -4309,18 +4309,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			scene: _Browser_getScene(),
-			viewport: {
-				x: x,
-				y: y,
-				width: _Browser_doc.documentElement.clientWidth,
-				height: _Browser_doc.documentElement.clientHeight
+			aI: _Browser_getScene(),
+			aM: {
+				n: x,
+				o: y,
+				aN: _Browser_doc.documentElement.clientWidth,
+				aq: _Browser_doc.documentElement.clientHeight
 			},
-			element: {
-				x: x + rect.left,
-				y: y + rect.top,
-				width: rect.width,
-				height: rect.height
+			aY: {
+				n: x + rect.left,
+				o: y + rect.top,
+				aN: rect.width,
+				aq: rect.height
 			}
 		};
 	});
@@ -4438,15 +4438,15 @@ function _Time_getZoneName()
 		callback(_Scheduler_succeed(name));
 	});
 }
-var $elm$core$Basics$EQ = {$: 'EQ'};
-var $elm$core$Basics$GT = {$: 'GT'};
-var $elm$core$Basics$LT = {$: 'LT'};
+var $elm$core$Basics$EQ = 1;
+var $elm$core$Basics$GT = 2;
+var $elm$core$Basics$LT = 0;
 var $elm$core$List$cons = _List_cons;
 var $elm$core$Dict$foldr = F3(
 	function (func, acc, t) {
 		foldr:
 		while (true) {
-			if (t.$ === 'RBEmpty_elm_builtin') {
+			if (t.$ === -2) {
 				return acc;
 			} else {
 				var key = t.b;
@@ -4491,7 +4491,7 @@ var $elm$core$Dict$keys = function (dict) {
 		dict);
 };
 var $elm$core$Set$toList = function (_v0) {
-	var dict = _v0.a;
+	var dict = _v0;
 	return $elm$core$Dict$keys(dict);
 };
 var $elm$core$Elm$JsArray$foldr = _JsArray_foldr;
@@ -4501,7 +4501,7 @@ var $elm$core$Array$foldr = F3(
 		var tail = _v0.d;
 		var helper = F2(
 			function (node, acc) {
-				if (node.$ === 'SubTree') {
+				if (!node.$) {
 					var subTree = node.a;
 					return A3($elm$core$Elm$JsArray$foldr, helper, acc, subTree);
 				} else {
@@ -4519,32 +4519,32 @@ var $elm$core$Array$toList = function (array) {
 	return A3($elm$core$Array$foldr, $elm$core$List$cons, _List_Nil, array);
 };
 var $elm$core$Result$Err = function (a) {
-	return {$: 'Err', a: a};
+	return {$: 1, a: a};
 };
 var $elm$json$Json$Decode$Failure = F2(
 	function (a, b) {
-		return {$: 'Failure', a: a, b: b};
+		return {$: 3, a: a, b: b};
 	});
 var $elm$json$Json$Decode$Field = F2(
 	function (a, b) {
-		return {$: 'Field', a: a, b: b};
+		return {$: 0, a: a, b: b};
 	});
 var $elm$json$Json$Decode$Index = F2(
 	function (a, b) {
-		return {$: 'Index', a: a, b: b};
+		return {$: 1, a: a, b: b};
 	});
 var $elm$core$Result$Ok = function (a) {
-	return {$: 'Ok', a: a};
+	return {$: 0, a: a};
 };
 var $elm$json$Json$Decode$OneOf = function (a) {
-	return {$: 'OneOf', a: a};
+	return {$: 2, a: a};
 };
-var $elm$core$Basics$False = {$: 'False'};
+var $elm$core$Basics$False = 1;
 var $elm$core$Basics$add = _Basics_add;
 var $elm$core$Maybe$Just = function (a) {
-	return {$: 'Just', a: a};
+	return {$: 0, a: a};
 };
-var $elm$core$Maybe$Nothing = {$: 'Nothing'};
+var $elm$core$Maybe$Nothing = {$: 1};
 var $elm$core$String$all = _String_all;
 var $elm$core$Basics$and = _Basics_and;
 var $elm$core$Basics$append = _Utils_append;
@@ -4669,12 +4669,12 @@ var $elm$json$Json$Decode$errorToStringHelp = F2(
 		errorToStringHelp:
 		while (true) {
 			switch (error.$) {
-				case 'Field':
+				case 0:
 					var f = error.a;
 					var err = error.b;
 					var isSimple = function () {
 						var _v1 = $elm$core$String$uncons(f);
-						if (_v1.$ === 'Nothing') {
+						if (_v1.$ === 1) {
 							return false;
 						} else {
 							var _v2 = _v1.a;
@@ -4689,7 +4689,7 @@ var $elm$json$Json$Decode$errorToStringHelp = F2(
 					error = $temp$error;
 					context = $temp$context;
 					continue errorToStringHelp;
-				case 'Index':
+				case 1:
 					var i = error.a;
 					var err = error.b;
 					var indexName = '[' + ($elm$core$String$fromInt(i) + ']');
@@ -4698,7 +4698,7 @@ var $elm$json$Json$Decode$errorToStringHelp = F2(
 					error = $temp$error;
 					context = $temp$context;
 					continue errorToStringHelp;
-				case 'OneOf':
+				case 2:
 					var errors = error.a;
 					if (!errors.b) {
 						return 'Ran into a Json.Decode.oneOf with no possibilities' + function () {
@@ -4762,7 +4762,7 @@ var $elm$json$Json$Decode$errorToStringHelp = F2(
 var $elm$core$Array$branchFactor = 32;
 var $elm$core$Array$Array_elm_builtin = F4(
 	function (a, b, c, d) {
-		return {$: 'Array_elm_builtin', a: a, b: b, c: c, d: d};
+		return {$: 0, a: a, b: b, c: c, d: d};
 	});
 var $elm$core$Elm$JsArray$empty = _JsArray_empty;
 var $elm$core$Basics$ceiling = _Basics_ceiling;
@@ -4777,7 +4777,7 @@ var $elm$core$Array$shiftStep = $elm$core$Basics$ceiling(
 var $elm$core$Array$empty = A4($elm$core$Array$Array_elm_builtin, 0, $elm$core$Array$shiftStep, $elm$core$Elm$JsArray$empty, $elm$core$Elm$JsArray$empty);
 var $elm$core$Elm$JsArray$initialize = _JsArray_initialize;
 var $elm$core$Array$Leaf = function (a) {
-	return {$: 'Leaf', a: a};
+	return {$: 1, a: a};
 };
 var $elm$core$Basics$apL = F2(
 	function (f, x) {
@@ -4797,7 +4797,7 @@ var $elm$core$Basics$max = F2(
 	});
 var $elm$core$Basics$mul = _Basics_mul;
 var $elm$core$Array$SubTree = function (a) {
-	return {$: 'SubTree', a: a};
+	return {$: 0, a: a};
 };
 var $elm$core$Elm$JsArray$initializeFromList = _JsArray_initializeFromList;
 var $elm$core$Array$compressNodes = F2(
@@ -4844,25 +4844,25 @@ var $elm$core$Array$treeFromBuilder = F2(
 	});
 var $elm$core$Array$builderToArray = F2(
 	function (reverseNodeList, builder) {
-		if (!builder.nodeListSize) {
+		if (!builder.a) {
 			return A4(
 				$elm$core$Array$Array_elm_builtin,
-				$elm$core$Elm$JsArray$length(builder.tail),
+				$elm$core$Elm$JsArray$length(builder.c),
 				$elm$core$Array$shiftStep,
 				$elm$core$Elm$JsArray$empty,
-				builder.tail);
+				builder.c);
 		} else {
-			var treeLen = builder.nodeListSize * $elm$core$Array$branchFactor;
+			var treeLen = builder.a * $elm$core$Array$branchFactor;
 			var depth = $elm$core$Basics$floor(
 				A2($elm$core$Basics$logBase, $elm$core$Array$branchFactor, treeLen - 1));
-			var correctNodeList = reverseNodeList ? $elm$core$List$reverse(builder.nodeList) : builder.nodeList;
-			var tree = A2($elm$core$Array$treeFromBuilder, correctNodeList, builder.nodeListSize);
+			var correctNodeList = reverseNodeList ? $elm$core$List$reverse(builder.d) : builder.d;
+			var tree = A2($elm$core$Array$treeFromBuilder, correctNodeList, builder.a);
 			return A4(
 				$elm$core$Array$Array_elm_builtin,
-				$elm$core$Elm$JsArray$length(builder.tail) + treeLen,
+				$elm$core$Elm$JsArray$length(builder.c) + treeLen,
 				A2($elm$core$Basics$max, 5, depth * $elm$core$Array$shiftStep),
 				tree,
-				builder.tail);
+				builder.c);
 		}
 	});
 var $elm$core$Basics$idiv = _Basics_idiv;
@@ -4875,7 +4875,7 @@ var $elm$core$Array$initializeHelp = F5(
 				return A2(
 					$elm$core$Array$builderToArray,
 					false,
-					{nodeList: nodeList, nodeListSize: (len / $elm$core$Array$branchFactor) | 0, tail: tail});
+					{d: nodeList, a: (len / $elm$core$Array$branchFactor) | 0, c: tail});
 			} else {
 				var leaf = $elm$core$Array$Leaf(
 					A3($elm$core$Elm$JsArray$initialize, $elm$core$Array$branchFactor, fromIndex, fn));
@@ -4905,9 +4905,9 @@ var $elm$core$Array$initialize = F2(
 			return A5($elm$core$Array$initializeHelp, fn, initialFromIndex, len, _List_Nil, tail);
 		}
 	});
-var $elm$core$Basics$True = {$: 'True'};
+var $elm$core$Basics$True = 0;
 var $elm$core$Result$isOk = function (result) {
-	if (result.$ === 'Ok') {
+	if (!result.$) {
 		return true;
 	} else {
 		return false;
@@ -4918,33 +4918,31 @@ var $elm$json$Json$Decode$map2 = _Json_map2;
 var $elm$json$Json$Decode$succeed = _Json_succeed;
 var $elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
 	switch (handler.$) {
-		case 'Normal':
+		case 0:
 			return 0;
-		case 'MayStopPropagation':
+		case 1:
 			return 1;
-		case 'MayPreventDefault':
+		case 2:
 			return 2;
 		default:
 			return 3;
 	}
 };
 var $elm$browser$Browser$External = function (a) {
-	return {$: 'External', a: a};
+	return {$: 1, a: a};
 };
 var $elm$browser$Browser$Internal = function (a) {
-	return {$: 'Internal', a: a};
+	return {$: 0, a: a};
 };
 var $elm$core$Basics$identity = function (x) {
 	return x;
 };
-var $elm$browser$Browser$Dom$NotFound = function (a) {
-	return {$: 'NotFound', a: a};
-};
-var $elm$url$Url$Http = {$: 'Http'};
-var $elm$url$Url$Https = {$: 'Https'};
+var $elm$browser$Browser$Dom$NotFound = $elm$core$Basics$identity;
+var $elm$url$Url$Http = 0;
+var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {fragment: fragment, host: host, path: path, port_: port_, protocol: protocol, query: query};
+		return {ap: fragment, ar: host, ax: path, aA: port_, aD: protocol, aE: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -4980,7 +4978,7 @@ var $elm$url$Url$chompBeforePath = F5(
 					var i = _v0.a;
 					var _v1 = $elm$core$String$toInt(
 						A2($elm$core$String$dropLeft, i + 1, str));
-					if (_v1.$ === 'Nothing') {
+					if (_v1.$ === 1) {
 						return $elm$core$Maybe$Nothing;
 					} else {
 						var port_ = _v1;
@@ -5063,26 +5061,24 @@ var $elm$core$String$startsWith = _String_startsWith;
 var $elm$url$Url$fromString = function (str) {
 	return A2($elm$core$String$startsWith, 'http://', str) ? A2(
 		$elm$url$Url$chompAfterProtocol,
-		$elm$url$Url$Http,
+		0,
 		A2($elm$core$String$dropLeft, 7, str)) : (A2($elm$core$String$startsWith, 'https://', str) ? A2(
 		$elm$url$Url$chompAfterProtocol,
-		$elm$url$Url$Https,
+		1,
 		A2($elm$core$String$dropLeft, 8, str)) : $elm$core$Maybe$Nothing);
 };
 var $elm$core$Basics$never = function (_v0) {
 	never:
 	while (true) {
-		var nvr = _v0.a;
+		var nvr = _v0;
 		var $temp$_v0 = nvr;
 		_v0 = $temp$_v0;
 		continue never;
 	}
 };
-var $elm$core$Task$Perform = function (a) {
-	return {$: 'Perform', a: a};
-};
+var $elm$core$Task$Perform = $elm$core$Basics$identity;
 var $elm$core$Task$succeed = _Scheduler_succeed;
-var $elm$core$Task$init = $elm$core$Task$succeed(_Utils_Tuple0);
+var $elm$core$Task$init = $elm$core$Task$succeed(0);
 var $elm$core$List$foldrHelper = F4(
 	function (fn, acc, ctr, ls) {
 		if (!ls.b) {
@@ -5188,7 +5184,7 @@ var $elm$core$Task$sequence = function (tasks) {
 var $elm$core$Platform$sendToApp = _Platform_sendToApp;
 var $elm$core$Task$spawnCmd = F2(
 	function (router, _v0) {
-		var task = _v0.a;
+		var task = _v0;
 		return _Scheduler_spawn(
 			A2(
 				$elm$core$Task$andThen,
@@ -5200,7 +5196,7 @@ var $elm$core$Task$onEffects = F3(
 		return A2(
 			$elm$core$Task$map,
 			function (_v0) {
-				return _Utils_Tuple0;
+				return 0;
 			},
 			$elm$core$Task$sequence(
 				A2(
@@ -5210,34 +5206,30 @@ var $elm$core$Task$onEffects = F3(
 	});
 var $elm$core$Task$onSelfMsg = F3(
 	function (_v0, _v1, _v2) {
-		return $elm$core$Task$succeed(_Utils_Tuple0);
+		return $elm$core$Task$succeed(0);
 	});
 var $elm$core$Task$cmdMap = F2(
 	function (tagger, _v0) {
-		var task = _v0.a;
-		return $elm$core$Task$Perform(
-			A2($elm$core$Task$map, tagger, task));
+		var task = _v0;
+		return A2($elm$core$Task$map, tagger, task);
 	});
 _Platform_effectManagers['Task'] = _Platform_createManager($elm$core$Task$init, $elm$core$Task$onEffects, $elm$core$Task$onSelfMsg, $elm$core$Task$cmdMap);
 var $elm$core$Task$command = _Platform_leaf('Task');
 var $elm$core$Task$perform = F2(
 	function (toMessage, task) {
 		return $elm$core$Task$command(
-			$elm$core$Task$Perform(
-				A2($elm$core$Task$map, toMessage, task)));
+			A2($elm$core$Task$map, toMessage, task));
 	});
 var $elm$browser$Browser$element = _Browser_element;
 var $author$project$Main$initialNumberOfBubbles = 10;
 var $author$project$Main$NewBubble = F2(
 	function (a, b) {
-		return {$: 'NewBubble', a: a, b: b};
+		return {$: 1, a: a, b: b};
 	});
-var $elm$random$Random$Generate = function (a) {
-	return {$: 'Generate', a: a};
-};
+var $elm$random$Random$Generate = $elm$core$Basics$identity;
 var $elm$random$Random$Seed = F2(
 	function (a, b) {
-		return {$: 'Seed', a: a, b: b};
+		return {$: 0, a: a, b: b};
 	});
 var $elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
 var $elm$random$Random$next = function (_v0) {
@@ -5255,23 +5247,21 @@ var $elm$random$Random$initialSeed = function (x) {
 		A2($elm$random$Random$Seed, state2, incr));
 };
 var $elm$time$Time$Name = function (a) {
-	return {$: 'Name', a: a};
+	return {$: 0, a: a};
 };
 var $elm$time$Time$Offset = function (a) {
-	return {$: 'Offset', a: a};
+	return {$: 1, a: a};
 };
 var $elm$time$Time$Zone = F2(
 	function (a, b) {
-		return {$: 'Zone', a: a, b: b};
+		return {$: 0, a: a, b: b};
 	});
 var $elm$time$Time$customZone = $elm$time$Time$Zone;
-var $elm$time$Time$Posix = function (a) {
-	return {$: 'Posix', a: a};
-};
-var $elm$time$Time$millisToPosix = $elm$time$Time$Posix;
+var $elm$time$Time$Posix = $elm$core$Basics$identity;
+var $elm$time$Time$millisToPosix = $elm$core$Basics$identity;
 var $elm$time$Time$now = _Time_now($elm$time$Time$millisToPosix);
 var $elm$time$Time$posixToMillis = function (_v0) {
-	var millis = _v0.a;
+	var millis = _v0;
 	return millis;
 };
 var $elm$random$Random$init = A2(
@@ -5284,7 +5274,7 @@ var $elm$random$Random$init = A2(
 	$elm$time$Time$now);
 var $elm$random$Random$step = F2(
 	function (_v0, seed) {
-		var generator = _v0.a;
+		var generator = _v0;
 		return generator(seed);
 	});
 var $elm$random$Random$onEffects = F3(
@@ -5292,7 +5282,7 @@ var $elm$random$Random$onEffects = F3(
 		if (!commands.b) {
 			return $elm$core$Task$succeed(seed);
 		} else {
-			var generator = commands.a.a;
+			var generator = commands.a;
 			var rest = commands.b;
 			var _v1 = A2($elm$random$Random$step, generator, seed);
 			var value = _v1.a;
@@ -5309,35 +5299,30 @@ var $elm$random$Random$onSelfMsg = F3(
 	function (_v0, _v1, seed) {
 		return $elm$core$Task$succeed(seed);
 	});
-var $elm$random$Random$Generator = function (a) {
-	return {$: 'Generator', a: a};
-};
+var $elm$random$Random$Generator = $elm$core$Basics$identity;
 var $elm$random$Random$map = F2(
 	function (func, _v0) {
-		var genA = _v0.a;
-		return $elm$random$Random$Generator(
-			function (seed0) {
-				var _v1 = genA(seed0);
-				var a = _v1.a;
-				var seed1 = _v1.b;
-				return _Utils_Tuple2(
-					func(a),
-					seed1);
-			});
+		var genA = _v0;
+		return function (seed0) {
+			var _v1 = genA(seed0);
+			var a = _v1.a;
+			var seed1 = _v1.b;
+			return _Utils_Tuple2(
+				func(a),
+				seed1);
+		};
 	});
 var $elm$random$Random$cmdMap = F2(
 	function (func, _v0) {
-		var generator = _v0.a;
-		return $elm$random$Random$Generate(
-			A2($elm$random$Random$map, func, generator));
+		var generator = _v0;
+		return A2($elm$random$Random$map, func, generator);
 	});
 _Platform_effectManagers['Random'] = _Platform_createManager($elm$random$Random$init, $elm$random$Random$onEffects, $elm$random$Random$onSelfMsg, $elm$random$Random$cmdMap);
 var $elm$random$Random$command = _Platform_leaf('Random');
 var $elm$random$Random$generate = F2(
 	function (tagger, generator) {
 		return $elm$random$Random$command(
-			$elm$random$Random$Generate(
-				A2($elm$random$Random$map, tagger, generator)));
+			A2($elm$random$Random$map, tagger, generator));
 	});
 var $elm$core$Basics$negate = function (n) {
 	return -n;
@@ -5354,39 +5339,37 @@ var $elm$random$Random$peel = function (_v0) {
 };
 var $elm$random$Random$float = F2(
 	function (a, b) {
-		return $elm$random$Random$Generator(
-			function (seed0) {
-				var seed1 = $elm$random$Random$next(seed0);
-				var range = $elm$core$Basics$abs(b - a);
-				var n1 = $elm$random$Random$peel(seed1);
-				var n0 = $elm$random$Random$peel(seed0);
-				var lo = (134217727 & n1) * 1.0;
-				var hi = (67108863 & n0) * 1.0;
-				var val = ((hi * 134217728.0) + lo) / 9007199254740992.0;
-				var scaled = (val * range) + a;
-				return _Utils_Tuple2(
-					scaled,
-					$elm$random$Random$next(seed1));
-			});
+		return function (seed0) {
+			var seed1 = $elm$random$Random$next(seed0);
+			var range = $elm$core$Basics$abs(b - a);
+			var n1 = $elm$random$Random$peel(seed1);
+			var n0 = $elm$random$Random$peel(seed0);
+			var lo = (134217727 & n1) * 1.0;
+			var hi = (67108863 & n0) * 1.0;
+			var val = ((hi * 134217728.0) + lo) / 9007199254740992.0;
+			var scaled = (val * range) + a;
+			return _Utils_Tuple2(
+				scaled,
+				$elm$random$Random$next(seed1));
+		};
 	});
 var $author$project$Main$height = 700;
 var $author$project$Main$maxSpeed = 400;
 var $elm$random$Random$map2 = F3(
 	function (func, _v0, _v1) {
-		var genA = _v0.a;
-		var genB = _v1.a;
-		return $elm$random$Random$Generator(
-			function (seed0) {
-				var _v2 = genA(seed0);
-				var a = _v2.a;
-				var seed1 = _v2.b;
-				var _v3 = genB(seed1);
-				var b = _v3.a;
-				var seed2 = _v3.b;
-				return _Utils_Tuple2(
-					A2(func, a, b),
-					seed2);
-			});
+		var genA = _v0;
+		var genB = _v1;
+		return function (seed0) {
+			var _v2 = genA(seed0);
+			var a = _v2.a;
+			var seed1 = _v2.b;
+			var _v3 = genB(seed1);
+			var b = _v3.a;
+			var seed2 = _v3.b;
+			return _Utils_Tuple2(
+				A2(func, a, b),
+				seed2);
+		};
 	});
 var $elm$random$Random$pair = F2(
 	function (genA, genB) {
@@ -5419,19 +5402,19 @@ var $author$project$Main$newRandomBubbleCommand = function (num) {
 var $author$project$Main$startBubbles = _List_Nil;
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
-		{bubbles: $author$project$Main$startBubbles, showQTree: false},
+		{h: $author$project$Main$startBubbles, P: false},
 		$author$project$Main$newRandomBubbleCommand($author$project$Main$initialNumberOfBubbles));
 };
-var $author$project$Main$Tick = {$: 'Tick'};
+var $author$project$Main$Tick = {$: 3};
 var $elm$time$Time$Every = F2(
 	function (a, b) {
-		return {$: 'Every', a: a, b: b};
+		return {$: 0, a: a, b: b};
 	});
 var $elm$time$Time$State = F2(
 	function (taggers, processes) {
-		return {processes: processes, taggers: taggers};
+		return {aC: processes, aK: taggers};
 	});
-var $elm$core$Dict$RBEmpty_elm_builtin = {$: 'RBEmpty_elm_builtin'};
+var $elm$core$Dict$RBEmpty_elm_builtin = {$: -2};
 var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
 var $elm$time$Time$init = $elm$core$Task$succeed(
 	A2($elm$time$Time$State, $elm$core$Dict$empty, $elm$core$Dict$empty));
@@ -5440,7 +5423,7 @@ var $elm$core$Dict$get = F2(
 	function (targetKey, dict) {
 		get:
 		while (true) {
-			if (dict.$ === 'RBEmpty_elm_builtin') {
+			if (dict.$ === -2) {
 				return $elm$core$Maybe$Nothing;
 			} else {
 				var key = dict.b;
@@ -5448,14 +5431,14 @@ var $elm$core$Dict$get = F2(
 				var left = dict.d;
 				var right = dict.e;
 				var _v1 = A2($elm$core$Basics$compare, targetKey, key);
-				switch (_v1.$) {
-					case 'LT':
+				switch (_v1) {
+					case 0:
 						var $temp$targetKey = targetKey,
 							$temp$dict = left;
 						targetKey = $temp$targetKey;
 						dict = $temp$dict;
 						continue get;
-					case 'EQ':
+					case 1:
 						return $elm$core$Maybe$Just(value);
 					default:
 						var $temp$targetKey = targetKey,
@@ -5467,21 +5450,21 @@ var $elm$core$Dict$get = F2(
 			}
 		}
 	});
-var $elm$core$Dict$Black = {$: 'Black'};
+var $elm$core$Dict$Black = 1;
 var $elm$core$Dict$RBNode_elm_builtin = F5(
 	function (a, b, c, d, e) {
-		return {$: 'RBNode_elm_builtin', a: a, b: b, c: c, d: d, e: e};
+		return {$: -1, a: a, b: b, c: c, d: d, e: e};
 	});
-var $elm$core$Dict$Red = {$: 'Red'};
+var $elm$core$Dict$Red = 0;
 var $elm$core$Dict$balance = F5(
 	function (color, key, value, left, right) {
-		if ((right.$ === 'RBNode_elm_builtin') && (right.a.$ === 'Red')) {
+		if ((right.$ === -1) && (!right.a)) {
 			var _v1 = right.a;
 			var rK = right.b;
 			var rV = right.c;
 			var rLeft = right.d;
 			var rRight = right.e;
-			if ((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) {
+			if ((left.$ === -1) && (!left.a)) {
 				var _v3 = left.a;
 				var lK = left.b;
 				var lV = left.c;
@@ -5489,22 +5472,22 @@ var $elm$core$Dict$balance = F5(
 				var lRight = left.e;
 				return A5(
 					$elm$core$Dict$RBNode_elm_builtin,
-					$elm$core$Dict$Red,
+					0,
 					key,
 					value,
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, lK, lV, lLeft, lRight),
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, rK, rV, rLeft, rRight));
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, lK, lV, lLeft, lRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, rK, rV, rLeft, rRight));
 			} else {
 				return A5(
 					$elm$core$Dict$RBNode_elm_builtin,
 					color,
 					rK,
 					rV,
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Red, key, value, left, rLeft),
+					A5($elm$core$Dict$RBNode_elm_builtin, 0, key, value, left, rLeft),
 					rRight);
 			}
 		} else {
-			if ((((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) && (left.d.$ === 'RBNode_elm_builtin')) && (left.d.a.$ === 'Red')) {
+			if ((((left.$ === -1) && (!left.a)) && (left.d.$ === -1)) && (!left.d.a)) {
 				var _v5 = left.a;
 				var lK = left.b;
 				var lV = left.c;
@@ -5517,11 +5500,11 @@ var $elm$core$Dict$balance = F5(
 				var lRight = left.e;
 				return A5(
 					$elm$core$Dict$RBNode_elm_builtin,
-					$elm$core$Dict$Red,
+					0,
 					lK,
 					lV,
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, llK, llV, llLeft, llRight),
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, key, value, lRight, right));
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, llK, llV, llLeft, llRight),
+					A5($elm$core$Dict$RBNode_elm_builtin, 1, key, value, lRight, right));
 			} else {
 				return A5($elm$core$Dict$RBNode_elm_builtin, color, key, value, left, right);
 			}
@@ -5529,8 +5512,8 @@ var $elm$core$Dict$balance = F5(
 	});
 var $elm$core$Dict$insertHelp = F3(
 	function (key, value, dict) {
-		if (dict.$ === 'RBEmpty_elm_builtin') {
-			return A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Red, key, value, $elm$core$Dict$RBEmpty_elm_builtin, $elm$core$Dict$RBEmpty_elm_builtin);
+		if (dict.$ === -2) {
+			return A5($elm$core$Dict$RBNode_elm_builtin, 0, key, value, $elm$core$Dict$RBEmpty_elm_builtin, $elm$core$Dict$RBEmpty_elm_builtin);
 		} else {
 			var nColor = dict.a;
 			var nKey = dict.b;
@@ -5538,8 +5521,8 @@ var $elm$core$Dict$insertHelp = F3(
 			var nLeft = dict.d;
 			var nRight = dict.e;
 			var _v1 = A2($elm$core$Basics$compare, key, nKey);
-			switch (_v1.$) {
-				case 'LT':
+			switch (_v1) {
+				case 0:
 					return A5(
 						$elm$core$Dict$balance,
 						nColor,
@@ -5547,7 +5530,7 @@ var $elm$core$Dict$insertHelp = F3(
 						nValue,
 						A3($elm$core$Dict$insertHelp, key, value, nLeft),
 						nRight);
-				case 'EQ':
+				case 1:
 					return A5($elm$core$Dict$RBNode_elm_builtin, nColor, nKey, value, nLeft, nRight);
 				default:
 					return A5(
@@ -5563,13 +5546,13 @@ var $elm$core$Dict$insertHelp = F3(
 var $elm$core$Dict$insert = F3(
 	function (key, value, dict) {
 		var _v0 = A3($elm$core$Dict$insertHelp, key, value, dict);
-		if ((_v0.$ === 'RBNode_elm_builtin') && (_v0.a.$ === 'Red')) {
+		if ((_v0.$ === -1) && (!_v0.a)) {
 			var _v1 = _v0.a;
 			var k = _v0.b;
 			var v = _v0.c;
 			var l = _v0.d;
 			var r = _v0.e;
-			return A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, k, v, l, r);
+			return A5($elm$core$Dict$RBNode_elm_builtin, 1, k, v, l, r);
 		} else {
 			var x = _v0;
 			return x;
@@ -5580,7 +5563,7 @@ var $elm$time$Time$addMySub = F2(
 		var interval = _v0.a;
 		var tagger = _v0.b;
 		var _v1 = A2($elm$core$Dict$get, interval, state);
-		if (_v1.$ === 'Nothing') {
+		if (_v1.$ === 1) {
 			return A3(
 				$elm$core$Dict$insert,
 				interval,
@@ -5601,7 +5584,7 @@ var $elm$core$Dict$foldl = F3(
 	function (func, acc, dict) {
 		foldl:
 		while (true) {
-			if (dict.$ === 'RBEmpty_elm_builtin') {
+			if (dict.$ === -2) {
 				return acc;
 			} else {
 				var key = dict.b;
@@ -5710,7 +5693,7 @@ var $elm$time$Time$spawnHelp = F3(
 	});
 var $elm$time$Time$onEffects = F3(
 	function (router, subs, _v0) {
-		var processes = _v0.processes;
+		var processes = _v0.aC;
 		var rightStep = F3(
 			function (_v6, id, _v7) {
 				var spawns = _v7.a;
@@ -5757,7 +5740,7 @@ var $elm$time$Time$onEffects = F3(
 			_Utils_Tuple3(
 				_List_Nil,
 				$elm$core$Dict$empty,
-				$elm$core$Task$succeed(_Utils_Tuple0)));
+				$elm$core$Task$succeed(0)));
 		var spawnList = _v1.a;
 		var existingDict = _v1.b;
 		var killTask = _v1.c;
@@ -5776,8 +5759,8 @@ var $elm$time$Time$onEffects = F3(
 	});
 var $elm$time$Time$onSelfMsg = F3(
 	function (router, interval, state) {
-		var _v0 = A2($elm$core$Dict$get, interval, state.taggers);
-		if (_v0.$ === 'Nothing') {
+		var _v0 = A2($elm$core$Dict$get, interval, state.aK);
+		if (_v0.$ === 1) {
 			return $elm$core$Task$succeed(state);
 		} else {
 			var taggers = _v0.a;
@@ -5836,25 +5819,25 @@ var $author$project$Main$bubblesAddedForEachClick = 10;
 var $author$project$QuadTree$Vector2d$fromPair = function (_v0) {
 	var x = _v0.a;
 	var y = _v0.b;
-	return {x: x, y: y};
+	return {n: x, o: y};
 };
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $elm$core$Basics$not = _Basics_not;
 var $author$project$QuadTree$Vector2d$add = F2(
 	function (v1, v2) {
-		return {x: v1.x + v2.x, y: v1.y + v2.y};
+		return {n: v1.n + v2.n, o: v1.o + v2.o};
 	});
 var $author$project$QuadTree$Vector2d$dot = F2(
 	function (v1, v2) {
-		return (v1.x * v2.x) + (v1.y * v2.y);
+		return (v1.n * v2.n) + (v1.o * v2.o);
 	});
 var $author$project$QuadTree$Vector2d$multiply = F2(
 	function (scalar, v) {
-		return {x: v.x * scalar, y: v.y * scalar};
+		return {n: v.n * scalar, o: v.o * scalar};
 	});
 var $author$project$QuadTree$Vector2d$neg = function (v) {
-	return {x: -v.x, y: -v.y};
+	return {n: -v.n, o: -v.o};
 };
 var $author$project$QuadTree$Vector2d$sqLength = function (v) {
 	return A2($author$project$QuadTree$Vector2d$dot, v, v);
@@ -5869,12 +5852,12 @@ var $author$project$QuadTree$Vector2d$norm = function (v) {
 };
 var $author$project$QuadTree$Vector2d$subtract = F2(
 	function (v2, v1) {
-		return {x: v1.x - v2.x, y: v1.y - v2.y};
+		return {n: v1.n - v2.n, o: v1.o - v2.o};
 	});
 var $author$project$QuadTree$Bubble$collide = F2(
 	function (b1, b2) {
-		var relVel = A2($author$project$QuadTree$Vector2d$subtract, b1.vel, b2.vel);
-		var relPos = A2($author$project$QuadTree$Vector2d$subtract, b1.pos, b2.pos);
+		var relVel = A2($author$project$QuadTree$Vector2d$subtract, b1.e, b2.e);
+		var relPos = A2($author$project$QuadTree$Vector2d$subtract, b1.x, b2.x);
 		var normRelVel = $author$project$QuadTree$Vector2d$norm(relVel);
 		var normRelPos = $author$project$QuadTree$Vector2d$norm(relPos);
 		var velChange = A2(
@@ -5885,16 +5868,16 @@ var $author$project$QuadTree$Bubble$collide = F2(
 			_Utils_update(
 				b1,
 				{
-					collisions: b1.collisions + 1,
-					vel: A2($author$project$QuadTree$Vector2d$add, b1.vel, velChange)
+					ak: b1.ak + 1,
+					e: A2($author$project$QuadTree$Vector2d$add, b1.e, velChange)
 				}),
 			_Utils_update(
 				b2,
 				{
-					collisions: b2.collisions + 1,
-					vel: A2(
+					ak: b2.ak + 1,
+					e: A2(
 						$author$project$QuadTree$Vector2d$add,
-						b2.vel,
+						b2.e,
 						$author$project$QuadTree$Vector2d$neg(velChange))
 				}));
 	});
@@ -5923,57 +5906,57 @@ var $elm$core$List$filter = F2(
 var $elm$core$Basics$neq = _Utils_notEqual;
 var $author$project$QuadTree$Bounds$overlap = F2(
 	function (b1, b2) {
-		return (_Utils_cmp(b1.center.x + b1.rx, b2.center.x - b2.rx) < 0) ? false : ((_Utils_cmp(b1.center.x - b1.rx, b2.center.x + b2.rx) > 0) ? false : ((_Utils_cmp(b1.center.y + b1.ry, b2.center.y - b2.ry) < 0) ? false : ((_Utils_cmp(b1.center.y - b1.ry, b2.center.y + b2.ry) > 0) ? false : true)));
+		return (_Utils_cmp(b1.aS.n + b1.bf, b2.aS.n - b2.bf) < 0) ? false : ((_Utils_cmp(b1.aS.n - b1.bf, b2.aS.n + b2.bf) > 0) ? false : ((_Utils_cmp(b1.aS.o + b1.bg, b2.aS.o - b2.bg) < 0) ? false : ((_Utils_cmp(b1.aS.o - b1.bg, b2.aS.o + b2.bg) > 0) ? false : true)));
 	});
-var $author$project$QuadTree$QuadTree$NE = {$: 'NE'};
-var $author$project$QuadTree$QuadTree$NW = {$: 'NW'};
-var $author$project$QuadTree$QuadTree$SE = {$: 'SE'};
-var $author$project$QuadTree$QuadTree$SW = {$: 'SW'};
+var $author$project$QuadTree$QuadTree$NE = 1;
+var $author$project$QuadTree$QuadTree$NW = 0;
+var $author$project$QuadTree$QuadTree$SE = 3;
+var $author$project$QuadTree$QuadTree$SW = 2;
 var $author$project$QuadTree$QuadTree$whichQuadrant = F2(
 	function (outer, b) {
-		return (_Utils_cmp(b.center.x + b.rx, outer.center.x) < 0) ? ((_Utils_cmp(b.center.y + b.ry, outer.center.y) < 0) ? $elm$core$Maybe$Just($author$project$QuadTree$QuadTree$SW) : ((_Utils_cmp(b.center.y - b.ry, outer.center.y) > 0) ? $elm$core$Maybe$Just($author$project$QuadTree$QuadTree$NW) : $elm$core$Maybe$Nothing)) : ((_Utils_cmp(b.center.x - b.rx, outer.center.x) > 0) ? ((_Utils_cmp(b.center.y + b.ry, outer.center.y) < 0) ? $elm$core$Maybe$Just($author$project$QuadTree$QuadTree$SE) : ((_Utils_cmp(b.center.y - b.ry, outer.center.y) > 0) ? $elm$core$Maybe$Just($author$project$QuadTree$QuadTree$NE) : $elm$core$Maybe$Nothing)) : $elm$core$Maybe$Nothing);
+		return (_Utils_cmp(b.aS.n + b.bf, outer.aS.n) < 0) ? ((_Utils_cmp(b.aS.o + b.bg, outer.aS.o) < 0) ? $elm$core$Maybe$Just(2) : ((_Utils_cmp(b.aS.o - b.bg, outer.aS.o) > 0) ? $elm$core$Maybe$Just(0) : $elm$core$Maybe$Nothing)) : ((_Utils_cmp(b.aS.n - b.bf, outer.aS.n) > 0) ? ((_Utils_cmp(b.aS.o + b.bg, outer.aS.o) < 0) ? $elm$core$Maybe$Just(3) : ((_Utils_cmp(b.aS.o - b.bg, outer.aS.o) > 0) ? $elm$core$Maybe$Just(1) : $elm$core$Maybe$Nothing)) : $elm$core$Maybe$Nothing);
 	});
 var $author$project$QuadTree$QuadTree$collisions = F2(
 	function (node, shape) {
-		if (node.$ === 'Leaf') {
+		if (!node.$) {
 			var l = node.a;
 			return A2(
 				$elm$core$List$filter,
 				function (s) {
-					return (!_Utils_eq(s.data, shape.data)) && A2($author$project$QuadTree$Bounds$overlap, shape.bounds, s.bounds);
+					return (!_Utils_eq(s.i, shape.i)) && A2($author$project$QuadTree$Bounds$overlap, shape.aR, s.aR);
 				},
-				l.items);
+				l.g);
 		} else {
 			var nl = node.a;
 			var directCollisions = A2(
 				$elm$core$List$filter,
 				function (s) {
-					return (!_Utils_eq(s.data, shape.data)) && A2($author$project$QuadTree$Bounds$overlap, shape.bounds, s.bounds);
+					return (!_Utils_eq(s.i, shape.i)) && A2($author$project$QuadTree$Bounds$overlap, shape.aR, s.aR);
 				},
-				nl.items);
-			var _v1 = A2($author$project$QuadTree$QuadTree$whichQuadrant, nl.bounds, shape.bounds);
-			if (_v1.$ === 'Just') {
-				switch (_v1.a.$) {
-					case 'NW':
+				nl.g);
+			var _v1 = A2($author$project$QuadTree$QuadTree$whichQuadrant, nl.aR, shape.aR);
+			if (!_v1.$) {
+				switch (_v1.a) {
+					case 0:
 						var _v2 = _v1.a;
 						return _Utils_ap(
 							directCollisions,
-							A2($author$project$QuadTree$QuadTree$collisions, nl.nw, shape));
-					case 'NE':
+							A2($author$project$QuadTree$QuadTree$collisions, nl.N, shape));
+					case 1:
 						var _v3 = _v1.a;
 						return _Utils_ap(
 							directCollisions,
-							A2($author$project$QuadTree$QuadTree$collisions, nl.ne, shape));
-					case 'SW':
+							A2($author$project$QuadTree$QuadTree$collisions, nl.M, shape));
+					case 2:
 						var _v4 = _v1.a;
 						return _Utils_ap(
 							directCollisions,
-							A2($author$project$QuadTree$QuadTree$collisions, nl.sw, shape));
+							A2($author$project$QuadTree$QuadTree$collisions, nl.Q, shape));
 					default:
 						var _v5 = _v1.a;
 						return _Utils_ap(
 							directCollisions,
-							A2($author$project$QuadTree$QuadTree$collisions, nl.se, shape));
+							A2($author$project$QuadTree$QuadTree$collisions, nl.O, shape));
 				}
 			} else {
 				var collisionsInQuadrants = $elm$core$List$concat(
@@ -5983,7 +5966,7 @@ var $author$project$QuadTree$QuadTree$collisions = F2(
 							return A2($author$project$QuadTree$QuadTree$collisions, qn, shape);
 						},
 						_List_fromArray(
-							[nl.nw, nl.ne, nl.sw, nl.se])));
+							[nl.N, nl.M, nl.Q, nl.O])));
 				return _Utils_ap(directCollisions, collisionsInQuadrants);
 			}
 		}
@@ -5991,7 +5974,7 @@ var $author$project$QuadTree$QuadTree$collisions = F2(
 var $elm$core$List$maybeCons = F3(
 	function (f, mx, xs) {
 		var _v0 = f(mx);
-		if (_v0.$ === 'Just') {
+		if (!_v0.$) {
 			var x = _v0.a;
 			return A2($elm$core$List$cons, x, xs);
 		} else {
@@ -6017,7 +6000,7 @@ var $elm$core$List$head = function (list) {
 };
 var $elm$core$Maybe$map = F2(
 	function (f, maybe) {
-		if (maybe.$ === 'Just') {
+		if (!maybe.$) {
 			var value = maybe.a;
 			return $elm$core$Maybe$Just(
 				f(value));
@@ -6030,16 +6013,16 @@ var $author$project$QuadTree$Bubble$nextCollision = F3(
 	function (deadline, b1, b2) {
 		if (A2(
 			$author$project$QuadTree$Vector2d$dot,
-			A2($author$project$QuadTree$Vector2d$subtract, b1.vel, b2.vel),
-			A2($author$project$QuadTree$Vector2d$subtract, b1.pos, b2.pos)) >= 0) {
+			A2($author$project$QuadTree$Vector2d$subtract, b1.e, b2.e),
+			A2($author$project$QuadTree$Vector2d$subtract, b1.x, b2.x)) >= 0) {
 			return $elm$core$Maybe$Nothing;
 		} else {
-			var relVel = A2($author$project$QuadTree$Vector2d$subtract, b1.vel, b2.vel);
-			var relPos = A2($author$project$QuadTree$Vector2d$subtract, b1.pos, b2.pos);
-			var r = 2 * ((relPos.x * relVel.x) + (relPos.y * relVel.y));
+			var relVel = A2($author$project$QuadTree$Vector2d$subtract, b1.e, b2.e);
+			var relPos = A2($author$project$QuadTree$Vector2d$subtract, b1.x, b2.x);
+			var r = 2 * ((relPos.n * relVel.n) + (relPos.o * relVel.o));
 			var q = $author$project$QuadTree$Vector2d$sqLength(relVel);
 			var margin = 0.000000001;
-			var dist = b1.radius + b2.radius;
+			var dist = b1.y + b2.y;
 			var s = $author$project$QuadTree$Vector2d$sqLength(relPos) - (dist * dist);
 			var det = (r * r) - ((4 * q) * s);
 			if (det > 0) {
@@ -6063,7 +6046,7 @@ var $author$project$Main$collisionAggregator = F4(
 					function (t) {
 						return _Utils_Tuple3(t, cand, bs);
 					},
-					A3($author$project$QuadTree$Bubble$nextCollision, deadline, bs.data, cand.data));
+					A3($author$project$QuadTree$Bubble$nextCollision, deadline, bs.i, cand.i));
 			},
 			A2($author$project$QuadTree$QuadTree$collisions, qtree, bs));
 		return $elm$core$List$head(
@@ -6081,128 +6064,128 @@ var $author$project$Main$collisionAggregator = F4(
 					A2($elm$core$List$cons, aggregator, bCollisions))));
 	});
 var $author$project$QuadTree$QuadTree$Leaf = function (a) {
-	return {$: 'Leaf', a: a};
+	return {$: 0, a: a};
 };
 var $author$project$QuadTree$QuadTree$NonLeaf = function (a) {
-	return {$: 'NonLeaf', a: a};
+	return {$: 1, a: a};
 };
 var $author$project$QuadTree$QuadTree$quadrant = F2(
 	function (b, q) {
-		var dy = b.ry / 2;
-		var ynorth = b.center.y + dy;
-		var ysouth = b.center.y - dy;
-		var dx = b.rx / 2;
-		var xeast = b.center.x + dx;
-		var xwest = b.center.x - dx;
-		switch (q.$) {
-			case 'NW':
+		var dy = b.bg / 2;
+		var ynorth = b.aS.o + dy;
+		var ysouth = b.aS.o - dy;
+		var dx = b.bf / 2;
+		var xeast = b.aS.n + dx;
+		var xwest = b.aS.n - dx;
+		switch (q) {
+			case 0:
 				return {
-					center: {x: xwest, y: ynorth},
-					rx: dx,
-					ry: dy
+					aS: {n: xwest, o: ynorth},
+					bf: dx,
+					bg: dy
 				};
-			case 'NE':
+			case 1:
 				return {
-					center: {x: xeast, y: ynorth},
-					rx: dx,
-					ry: dy
+					aS: {n: xeast, o: ynorth},
+					bf: dx,
+					bg: dy
 				};
-			case 'SW':
+			case 2:
 				return {
-					center: {x: xwest, y: ysouth},
-					rx: dx,
-					ry: dy
+					aS: {n: xwest, o: ysouth},
+					bf: dx,
+					bg: dy
 				};
 			default:
 				return {
-					center: {x: xeast, y: ysouth},
-					rx: dx,
-					ry: dy
+					aS: {n: xeast, o: ysouth},
+					bf: dx,
+					bg: dy
 				};
 		}
 	});
 var $author$project$QuadTree$QuadTree$add = F2(
 	function (shape, node) {
-		if (node.$ === 'Leaf') {
+		if (!node.$) {
 			var l = node.a;
 			if (_Utils_cmp(
-				l.capacity,
-				$elm$core$List$length(l.items)) > 0) {
+				l.ai,
+				$elm$core$List$length(l.g)) > 0) {
 				return $author$project$QuadTree$QuadTree$Leaf(
 					_Utils_update(
 						l,
 						{
-							items: A2($elm$core$List$cons, shape, l.items)
+							g: A2($elm$core$List$cons, shape, l.g)
 						}));
 			} else {
-				var quad = $author$project$QuadTree$QuadTree$quadrant(l.bounds);
+				var quad = $author$project$QuadTree$QuadTree$quadrant(l.aR);
 				var nl = $author$project$QuadTree$QuadTree$NonLeaf(
 					{
-						bounds: l.bounds,
-						items: _List_Nil,
-						ne: $author$project$QuadTree$QuadTree$Leaf(
+						aR: l.aR,
+						g: _List_Nil,
+						M: $author$project$QuadTree$QuadTree$Leaf(
 							_Utils_update(
 								l,
 								{
-									bounds: quad($author$project$QuadTree$QuadTree$NE),
-									items: _List_Nil
+									aR: quad(1),
+									g: _List_Nil
 								})),
-						nw: $author$project$QuadTree$QuadTree$Leaf(
+						N: $author$project$QuadTree$QuadTree$Leaf(
 							_Utils_update(
 								l,
 								{
-									bounds: quad($author$project$QuadTree$QuadTree$NW),
-									items: _List_Nil
+									aR: quad(0),
+									g: _List_Nil
 								})),
-						se: $author$project$QuadTree$QuadTree$Leaf(
+						O: $author$project$QuadTree$QuadTree$Leaf(
 							_Utils_update(
 								l,
 								{
-									bounds: quad($author$project$QuadTree$QuadTree$SE),
-									items: _List_Nil
+									aR: quad(3),
+									g: _List_Nil
 								})),
-						sw: $author$project$QuadTree$QuadTree$Leaf(
+						Q: $author$project$QuadTree$QuadTree$Leaf(
 							_Utils_update(
 								l,
 								{
-									bounds: quad($author$project$QuadTree$QuadTree$SW),
-									items: _List_Nil
+									aR: quad(2),
+									g: _List_Nil
 								}))
 					});
 				return A3(
 					$elm$core$List$foldr,
 					$author$project$QuadTree$QuadTree$add,
 					nl,
-					A2($elm$core$List$cons, shape, l.items));
+					A2($elm$core$List$cons, shape, l.g));
 			}
 		} else {
 			var nl = node.a;
-			var _v1 = A2($author$project$QuadTree$QuadTree$whichQuadrant, nl.bounds, shape.bounds);
-			if (_v1.$ === 'Just') {
-				switch (_v1.a.$) {
-					case 'NW':
+			var _v1 = A2($author$project$QuadTree$QuadTree$whichQuadrant, nl.aR, shape.aR);
+			if (!_v1.$) {
+				switch (_v1.a) {
+					case 0:
 						var _v2 = _v1.a;
 						return $author$project$QuadTree$QuadTree$NonLeaf(
 							_Utils_update(
 								nl,
 								{
-									nw: A2($author$project$QuadTree$QuadTree$add, shape, nl.nw)
+									N: A2($author$project$QuadTree$QuadTree$add, shape, nl.N)
 								}));
-					case 'NE':
+					case 1:
 						var _v3 = _v1.a;
 						return $author$project$QuadTree$QuadTree$NonLeaf(
 							_Utils_update(
 								nl,
 								{
-									ne: A2($author$project$QuadTree$QuadTree$add, shape, nl.ne)
+									M: A2($author$project$QuadTree$QuadTree$add, shape, nl.M)
 								}));
-					case 'SW':
+					case 2:
 						var _v4 = _v1.a;
 						return $author$project$QuadTree$QuadTree$NonLeaf(
 							_Utils_update(
 								nl,
 								{
-									sw: A2($author$project$QuadTree$QuadTree$add, shape, nl.sw)
+									Q: A2($author$project$QuadTree$QuadTree$add, shape, nl.Q)
 								}));
 					default:
 						var _v5 = _v1.a;
@@ -6210,7 +6193,7 @@ var $author$project$QuadTree$QuadTree$add = F2(
 							_Utils_update(
 								nl,
 								{
-									se: A2($author$project$QuadTree$QuadTree$add, shape, nl.se)
+									O: A2($author$project$QuadTree$QuadTree$add, shape, nl.O)
 								}));
 				}
 			} else {
@@ -6218,7 +6201,7 @@ var $author$project$QuadTree$QuadTree$add = F2(
 					_Utils_update(
 						nl,
 						{
-							items: A2($elm$core$List$cons, shape, nl.items)
+							g: A2($elm$core$List$cons, shape, nl.g)
 						}));
 			}
 		}
@@ -6229,12 +6212,12 @@ var $elm$core$Basics$min = F2(
 	});
 var $author$project$QuadTree$Bounds$mergePair = F2(
 	function (b1, b2) {
-		var miny = A2($elm$core$Basics$min, b1.center.y - b1.ry, b2.center.y - b2.ry);
-		var minx = A2($elm$core$Basics$min, b1.center.x - b1.rx, b2.center.x - b2.rx);
-		var maxy = A2($elm$core$Basics$max, b1.center.y + b1.ry, b2.center.y + b2.ry);
-		var maxx = A2($elm$core$Basics$max, b1.center.x + b1.rx, b2.center.x + b2.rx);
-		var center = {x: (minx + maxx) / 2, y: (miny + maxy) / 2};
-		return {center: center, rx: (maxx - minx) / 2, ry: (maxy - miny) / 2};
+		var miny = A2($elm$core$Basics$min, b1.aS.o - b1.bg, b2.aS.o - b2.bg);
+		var minx = A2($elm$core$Basics$min, b1.aS.n - b1.bf, b2.aS.n - b2.bf);
+		var maxy = A2($elm$core$Basics$max, b1.aS.o + b1.bg, b2.aS.o + b2.bg);
+		var maxx = A2($elm$core$Basics$max, b1.aS.n + b1.bf, b2.aS.n + b2.bf);
+		var center = {n: (minx + maxx) / 2, o: (miny + maxy) / 2};
+		return {aS: center, bf: (maxx - minx) / 2, bg: (maxy - miny) / 2};
 	});
 var $author$project$QuadTree$Bounds$merge = function (lb) {
 	if (!lb.b) {
@@ -6252,10 +6235,10 @@ var $author$project$QuadTree$QuadTree$create = F2(
 			A2(
 				$elm$core$List$map,
 				function (s) {
-					return s.bounds;
+					return s.aR;
 				},
 				shapes));
-		if (bounds.$ === 'Nothing') {
+		if (bounds.$ === 1) {
 			return $elm$core$Maybe$Nothing;
 		} else {
 			var b = bounds.a;
@@ -6264,36 +6247,36 @@ var $author$project$QuadTree$QuadTree$create = F2(
 					$elm$core$List$foldr,
 					$author$project$QuadTree$QuadTree$add,
 					$author$project$QuadTree$QuadTree$Leaf(
-						{bounds: b, capacity: nodeCapacity, items: _List_Nil}),
+						{aR: b, ai: nodeCapacity, g: _List_Nil}),
 					shapes));
 		}
 	});
 var $author$project$Main$qtreeNodeCapacity = 5;
 var $author$project$Main$bubbleBounds = F2(
 	function (dt, b) {
-		var dy = b.vel.y * dt;
-		var dx = b.vel.x * dt;
+		var dy = b.e.o * dt;
+		var dx = b.e.n * dt;
 		return {
-			center: {x: b.pos.x + (dx / 2), y: b.pos.y + (dy / 2)},
-			rx: b.radius + ($elm$core$Basics$abs(dx) / 2),
-			ry: b.radius + ($elm$core$Basics$abs(dy) / 2)
+			aS: {n: b.x.n + (dx / 2), o: b.x.o + (dy / 2)},
+			bf: b.y + ($elm$core$Basics$abs(dx) / 2),
+			bg: b.y + ($elm$core$Basics$abs(dy) / 2)
 		};
 	});
 var $author$project$Main$toShape = F2(
 	function (dt, bubble) {
 		return {
-			bounds: A2($author$project$Main$bubbleBounds, dt, bubble),
-			data: bubble
+			aR: A2($author$project$Main$bubbleBounds, dt, bubble),
+			i: bubble
 		};
 	});
 var $author$project$Main$updateBubble = F2(
 	function (dt, bubble) {
-		var ny = bubble.pos.y + (dt * bubble.vel.y);
-		var nx = bubble.pos.x + (dt * bubble.vel.x);
-		var _v0 = ((_Utils_cmp(ny, $author$project$Main$height - bubble.radius) > 0) && (bubble.vel.y > 0)) ? _Utils_Tuple2(ny, -bubble.vel.y) : (((_Utils_cmp(ny, bubble.radius) < 0) && (bubble.vel.y < 0)) ? _Utils_Tuple2(ny, -bubble.vel.y) : _Utils_Tuple2(ny, bubble.vel.y));
+		var ny = bubble.x.o + (dt * bubble.e.o);
+		var nx = bubble.x.n + (dt * bubble.e.n);
+		var _v0 = ((_Utils_cmp(ny, $author$project$Main$height - bubble.y) > 0) && (bubble.e.o > 0)) ? _Utils_Tuple2(ny, -bubble.e.o) : (((_Utils_cmp(ny, bubble.y) < 0) && (bubble.e.o < 0)) ? _Utils_Tuple2(ny, -bubble.e.o) : _Utils_Tuple2(ny, bubble.e.o));
 		var py = _v0.a;
 		var vy = _v0.b;
-		var _v1 = ((_Utils_cmp(nx, $author$project$Main$width - bubble.radius) > 0) && (bubble.vel.x > 0)) ? _Utils_Tuple2(nx, -bubble.vel.x) : (((_Utils_cmp(nx, bubble.radius) < 0) && (bubble.vel.x < 0)) ? _Utils_Tuple2(nx, -bubble.vel.x) : _Utils_Tuple2(nx, bubble.vel.x));
+		var _v1 = ((_Utils_cmp(nx, $author$project$Main$width - bubble.y) > 0) && (bubble.e.n > 0)) ? _Utils_Tuple2(nx, -bubble.e.n) : (((_Utils_cmp(nx, bubble.y) < 0) && (bubble.e.n < 0)) ? _Utils_Tuple2(nx, -bubble.e.n) : _Utils_Tuple2(nx, bubble.e.n));
 		var px = _v1.a;
 		var vx = _v1.b;
 		var newPos = _Utils_Tuple2(px, py);
@@ -6301,8 +6284,8 @@ var $author$project$Main$updateBubble = F2(
 		return _Utils_update(
 			bubble,
 			{
-				pos: $author$project$QuadTree$Vector2d$fromPair(newPos),
-				vel: $author$project$QuadTree$Vector2d$fromPair(newVel)
+				x: $author$project$QuadTree$Vector2d$fromPair(newPos),
+				e: $author$project$QuadTree$Vector2d$fromPair(newVel)
 			});
 	});
 var $author$project$Main$runTick = F2(
@@ -6312,16 +6295,16 @@ var $author$project$Main$runTick = F2(
 			var bubbleShapes = A2(
 				$elm$core$List$map,
 				$author$project$Main$toShape(remainingTickTime),
-				model.bubbles);
+				model.h);
 			var _v0 = A2($author$project$QuadTree$QuadTree$create, $author$project$Main$qtreeNodeCapacity, bubbleShapes);
-			if (_v0.$ === 'Nothing') {
+			if (_v0.$ === 1) {
 				return _Utils_update(
 					model,
 					{
-						bubbles: A2(
+						h: A2(
 							$elm$core$List$map,
 							$author$project$Main$updateBubble(remainingTickTime),
-							model.bubbles)
+							model.h)
 					});
 			} else {
 				var qtree = _v0.a;
@@ -6330,31 +6313,31 @@ var $author$project$Main$runTick = F2(
 					A2($author$project$Main$collisionAggregator, qtree, remainingTickTime),
 					$elm$core$Maybe$Nothing,
 					bubbleShapes);
-				if (nextCollision.$ === 'Nothing') {
+				if (nextCollision.$ === 1) {
 					return _Utils_update(
 						model,
 						{
-							bubbles: A2(
+							h: A2(
 								$elm$core$List$map,
 								$author$project$Main$updateBubble(remainingTickTime),
-								model.bubbles)
+								model.h)
 						});
 				} else {
 					var _v2 = nextCollision.a;
 					var t = _v2.a;
 					var b1 = _v2.b;
 					var b2 = _v2.c;
-					var u2 = A2($author$project$Main$updateBubble, t, b2.data);
-					var u1 = A2($author$project$Main$updateBubble, t, b1.data);
+					var u2 = A2($author$project$Main$updateBubble, t, b2.i);
+					var u1 = A2($author$project$Main$updateBubble, t, b1.i);
 					var otherBubbles = A2(
 						$elm$core$List$map,
 						$author$project$Main$updateBubble(t),
 						A2(
 							$elm$core$List$filter,
 							function (b) {
-								return (!_Utils_eq(b, b1.data)) && (!_Utils_eq(b, b2.data));
+								return (!_Utils_eq(b, b1.i)) && (!_Utils_eq(b, b2.i));
 							},
-							model.bubbles));
+							model.h));
 					var _v3 = A2($author$project$QuadTree$Bubble$collide, u1, u2);
 					var crashedb1 = _v3.a;
 					var crashedb2 = _v3.b;
@@ -6365,7 +6348,7 @@ var $author$project$Main$runTick = F2(
 					var $temp$remainingTickTime = remainingTickTime - t,
 						$temp$model = _Utils_update(
 						model,
-						{bubbles: allNewBubbles});
+						{h: allNewBubbles});
 					remainingTickTime = $temp$remainingTickTime;
 					model = $temp$model;
 					continue runTick;
@@ -6377,39 +6360,39 @@ var $author$project$Main$tickTime = $author$project$Main$timeDeltaMillis / 1000;
 var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
-			case 'ClearAll':
-				return $author$project$Main$init(_Utils_Tuple0);
-			case 'Tick':
+			case 0:
+				return $author$project$Main$init(0);
+			case 3:
 				return _Utils_Tuple2(
 					A2($author$project$Main$runTick, $author$project$Main$tickTime, model),
 					$elm$core$Platform$Cmd$none);
-			case 'NextCollision':
+			case 2:
 				return _Utils_Tuple2(
 					A2($author$project$Main$runTick, $author$project$Main$tickTime, model),
 					$elm$core$Platform$Cmd$none);
-			case 'NewBubble':
+			case 1:
 				var num = msg.a;
 				var _v1 = msg.b;
 				var pos = _v1.a;
 				var vel = _v1.b;
 				if (num > 0) {
 					var newBubble = {
-						collisions: 0,
-						pos: $author$project$QuadTree$Vector2d$fromPair(pos),
-						radius: $author$project$Main$bubbleRadius,
-						vel: $author$project$QuadTree$Vector2d$fromPair(vel)
+						ak: 0,
+						x: $author$project$QuadTree$Vector2d$fromPair(pos),
+						y: $author$project$Main$bubbleRadius,
+						e: $author$project$QuadTree$Vector2d$fromPair(vel)
 					};
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								bubbles: A2($elm$core$List$cons, newBubble, model.bubbles)
+								h: A2($elm$core$List$cons, newBubble, model.h)
 							}),
 						$author$project$Main$newRandomBubbleCommand(num - 1));
 				} else {
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
-			case 'MouseDown':
+			case 4:
 				var data = msg.a;
 				return _Utils_Tuple2(
 					model,
@@ -6418,15 +6401,15 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{showQTree: !model.showQTree}),
+						{P: !model.P}),
 					$elm$core$Platform$Cmd$none);
 		}
 	});
-var $author$project$Main$ClearAll = {$: 'ClearAll'};
+var $author$project$Main$ClearAll = {$: 0};
 var $author$project$Main$MouseDown = function (a) {
-	return {$: 'MouseDown', a: a};
+	return {$: 4, a: a};
 };
-var $author$project$Main$ToggleShowQTree = {$: 'ToggleShowQTree'};
+var $author$project$Main$ToggleShowQTree = {$: 5};
 var $elm$core$List$any = F2(
 	function (isOkay, list) {
 		any:
@@ -6450,9 +6433,9 @@ var $elm$core$List$any = F2(
 	});
 var $author$project$QuadTree$Bubble$bubbleCollision = F2(
 	function (b1, b2) {
-		var maxDistSq = (b1.radius + b2.radius) * (b1.radius + b2.radius);
+		var maxDistSq = (b1.y + b2.y) * (b1.y + b2.y);
 		var distSq = $author$project$QuadTree$Vector2d$sqLength(
-			A2($author$project$QuadTree$Vector2d$subtract, b1.pos, b2.pos));
+			A2($author$project$QuadTree$Vector2d$subtract, b1.x, b2.x));
 		return _Utils_cmp(distSq, maxDistSq) < 1;
 	});
 var $author$project$Main$anyCollision = F2(
@@ -6460,18 +6443,18 @@ var $author$project$Main$anyCollision = F2(
 		return A2(
 			$elm$core$List$any,
 			function (s) {
-				return A2($author$project$QuadTree$Bubble$bubbleCollision, bubbleShape.data, s.data);
+				return A2($author$project$QuadTree$Bubble$bubbleCollision, bubbleShape.i, s.i);
 			},
 			A2($author$project$QuadTree$QuadTree$collisions, tree, bubbleShape));
 	});
 var $joakin$elm_canvas$Canvas$Internal$Canvas$LineTo = function (a) {
-	return {$: 'LineTo', a: a};
+	return {$: 2, a: a};
 };
 var $joakin$elm_canvas$Canvas$lineTo = function (point) {
 	return $joakin$elm_canvas$Canvas$Internal$Canvas$LineTo(point);
 };
 var $joakin$elm_canvas$Canvas$Internal$Canvas$SettingCommand = function (a) {
-	return {$: 'SettingCommand', a: a};
+	return {$: 0, a: a};
 };
 var $elm$json$Json$Encode$object = function (pairs) {
 	return _Json_wrap(
@@ -6483,7 +6466,7 @@ var $elm$json$Json$Encode$object = function (pairs) {
 					var v = _v0.b;
 					return A3(_Json_addField, k, v, obj);
 				}),
-			_Json_emptyObject(_Utils_Tuple0),
+			_Json_emptyObject(0),
 			pairs));
 };
 var $elm$json$Json$Encode$string = _Json_wrap;
@@ -6513,14 +6496,14 @@ var $joakin$elm_canvas$Canvas$Settings$Line$lineWidth = function (width) {
 		$joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$lineWidth(width));
 };
 var $joakin$elm_canvas$Canvas$Internal$Canvas$MoveTo = function (a) {
-	return {$: 'MoveTo', a: a};
+	return {$: 3, a: a};
 };
 var $joakin$elm_canvas$Canvas$moveTo = function (point) {
 	return $joakin$elm_canvas$Canvas$Internal$Canvas$MoveTo(point);
 };
 var $joakin$elm_canvas$Canvas$Internal$Canvas$Path = F2(
 	function (a, b) {
-		return {$: 'Path', a: a, b: b};
+		return {$: 2, a: a, b: b};
 	});
 var $joakin$elm_canvas$Canvas$path = F2(
 	function (startingPoint, segments) {
@@ -6528,28 +6511,26 @@ var $joakin$elm_canvas$Canvas$path = F2(
 	});
 var $avh4$elm_color$Color$RgbaSpace = F4(
 	function (a, b, c, d) {
-		return {$: 'RgbaSpace', a: a, b: b, c: c, d: d};
+		return {$: 0, a: a, b: b, c: c, d: d};
 	});
 var $avh4$elm_color$Color$rgba = F4(
 	function (r, g, b, a) {
 		return A4($avh4$elm_color$Color$RgbaSpace, r, g, b, a);
 	});
 var $joakin$elm_canvas$Canvas$Internal$Canvas$DrawableShapes = function (a) {
-	return {$: 'DrawableShapes', a: a};
+	return {$: 1, a: a};
 };
-var $joakin$elm_canvas$Canvas$Internal$Canvas$NotSpecified = {$: 'NotSpecified'};
-var $joakin$elm_canvas$Canvas$Renderable = function (a) {
-	return {$: 'Renderable', a: a};
-};
+var $joakin$elm_canvas$Canvas$Internal$Canvas$NotSpecified = {$: 0};
+var $joakin$elm_canvas$Canvas$Renderable = $elm$core$Basics$identity;
 var $joakin$elm_canvas$Canvas$Internal$Canvas$Fill = function (a) {
-	return {$: 'Fill', a: a};
+	return {$: 1, a: a};
 };
 var $joakin$elm_canvas$Canvas$Internal$Canvas$FillAndStroke = F2(
 	function (a, b) {
-		return {$: 'FillAndStroke', a: a, b: b};
+		return {$: 3, a: a, b: b};
 	});
 var $joakin$elm_canvas$Canvas$Internal$Canvas$Stroke = function (a) {
-	return {$: 'Stroke', a: a};
+	return {$: 2, a: a};
 };
 var $joakin$elm_canvas$Canvas$mergeDrawOp = F2(
 	function (op1, op2) {
@@ -6557,21 +6538,21 @@ var $joakin$elm_canvas$Canvas$mergeDrawOp = F2(
 		_v0$7:
 		while (true) {
 			switch (_v0.b.$) {
-				case 'FillAndStroke':
+				case 3:
 					var _v1 = _v0.b;
 					var c = _v1.a;
 					var sc = _v1.b;
 					return A2($joakin$elm_canvas$Canvas$Internal$Canvas$FillAndStroke, c, sc);
-				case 'Fill':
+				case 1:
 					switch (_v0.a.$) {
-						case 'Fill':
+						case 1:
 							var c = _v0.b.a;
 							return $joakin$elm_canvas$Canvas$Internal$Canvas$Fill(c);
-						case 'Stroke':
+						case 2:
 							var c1 = _v0.a.a;
 							var c2 = _v0.b.a;
 							return A2($joakin$elm_canvas$Canvas$Internal$Canvas$FillAndStroke, c2, c1);
-						case 'FillAndStroke':
+						case 3:
 							var _v2 = _v0.a;
 							var c = _v2.a;
 							var sc = _v2.b;
@@ -6580,16 +6561,16 @@ var $joakin$elm_canvas$Canvas$mergeDrawOp = F2(
 						default:
 							break _v0$7;
 					}
-				case 'Stroke':
+				case 2:
 					switch (_v0.a.$) {
-						case 'Stroke':
+						case 2:
 							var c = _v0.b.a;
 							return $joakin$elm_canvas$Canvas$Internal$Canvas$Stroke(c);
-						case 'Fill':
+						case 1:
 							var c1 = _v0.a.a;
 							var c2 = _v0.b.a;
 							return A2($joakin$elm_canvas$Canvas$Internal$Canvas$FillAndStroke, c1, c2);
-						case 'FillAndStroke':
+						case 3:
 							var _v3 = _v0.a;
 							var c = _v3.a;
 							var sc = _v3.b;
@@ -6599,7 +6580,7 @@ var $joakin$elm_canvas$Canvas$mergeDrawOp = F2(
 							break _v0$7;
 					}
 				default:
-					if (_v0.a.$ === 'NotSpecified') {
+					if (!_v0.a.$) {
 						break _v0$7;
 					} else {
 						var whatever = _v0.a;
@@ -6616,40 +6597,37 @@ var $joakin$elm_canvas$Canvas$addSettingsToRenderable = F2(
 	function (settings, renderable) {
 		var addSetting = F2(
 			function (setting, _v1) {
-				var r = _v1.a;
-				return $joakin$elm_canvas$Canvas$Renderable(
-					function () {
-						switch (setting.$) {
-							case 'SettingCommand':
-								var cmd = setting.a;
-								return _Utils_update(
-									r,
-									{
-										commands: A2($elm$core$List$cons, cmd, r.commands)
-									});
-							case 'SettingCommands':
-								var cmds = setting.a;
-								return _Utils_update(
-									r,
-									{
-										commands: A3($elm$core$List$foldl, $elm$core$List$cons, r.commands, cmds)
-									});
-							case 'SettingUpdateDrawable':
-								var f = setting.a;
-								return _Utils_update(
-									r,
-									{
-										drawable: f(r.drawable)
-									});
-							default:
-								var op = setting.a;
-								return _Utils_update(
-									r,
-									{
-										drawOp: A2($joakin$elm_canvas$Canvas$mergeDrawOp, r.drawOp, op)
-									});
-						}
-					}());
+				var r = _v1;
+				switch (setting.$) {
+					case 0:
+						var cmd = setting.a;
+						return _Utils_update(
+							r,
+							{
+								r: A2($elm$core$List$cons, cmd, r.r)
+							});
+					case 1:
+						var cmds = setting.a;
+						return _Utils_update(
+							r,
+							{
+								r: A3($elm$core$List$foldl, $elm$core$List$cons, r.r, cmds)
+							});
+					case 3:
+						var f = setting.a;
+						return _Utils_update(
+							r,
+							{
+								B: f(r.B)
+							});
+					default:
+						var op = setting.a;
+						return _Utils_update(
+							r,
+							{
+								A: A2($joakin$elm_canvas$Canvas$mergeDrawOp, r.A, op)
+							});
+				}
 			});
 		return A3($elm$core$List$foldl, addSetting, renderable, settings);
 	});
@@ -6658,22 +6636,21 @@ var $joakin$elm_canvas$Canvas$shapes = F2(
 		return A2(
 			$joakin$elm_canvas$Canvas$addSettingsToRenderable,
 			settings,
-			$joakin$elm_canvas$Canvas$Renderable(
-				{
-					commands: _List_Nil,
-					drawOp: $joakin$elm_canvas$Canvas$Internal$Canvas$NotSpecified,
-					drawable: $joakin$elm_canvas$Canvas$Internal$Canvas$DrawableShapes(ss)
-				}));
+			{
+				r: _List_Nil,
+				A: $joakin$elm_canvas$Canvas$Internal$Canvas$NotSpecified,
+				B: $joakin$elm_canvas$Canvas$Internal$Canvas$DrawableShapes(ss)
+			});
 	});
 var $joakin$elm_canvas$Canvas$Internal$Canvas$SettingDrawOp = function (a) {
-	return {$: 'SettingDrawOp', a: a};
+	return {$: 2, a: a};
 };
 var $joakin$elm_canvas$Canvas$Settings$stroke = function (color) {
 	return $joakin$elm_canvas$Canvas$Internal$Canvas$SettingDrawOp(
 		$joakin$elm_canvas$Canvas$Internal$Canvas$Stroke(color));
 };
 var $joakin$elm_canvas$Canvas$Internal$Canvas$SettingCommands = function (a) {
-	return {$: 'SettingCommands', a: a};
+	return {$: 1, a: a};
 };
 var $elm$json$Json$Encode$list = F2(
 	function (func, entries) {
@@ -6681,7 +6658,7 @@ var $elm$json$Json$Encode$list = F2(
 			A3(
 				$elm$core$List$foldl,
 				_Json_addEntry(func),
-				_Json_emptyArray(_Utils_Tuple0),
+				_Json_emptyArray(0),
 				entries));
 	});
 var $joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$fn = F2(
@@ -6752,24 +6729,24 @@ var $joakin$elm_canvas$Canvas$Settings$Advanced$transform = function (transforms
 			$elm$core$List$map,
 			function (t) {
 				switch (t.$) {
-					case 'Rotate':
+					case 0:
 						var angle = t.a;
 						return $joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$rotate(angle);
-					case 'Scale':
+					case 1:
 						var x = t.a;
 						var y = t.b;
 						return A2($joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$scale, x, y);
-					case 'Translate':
+					case 2:
 						var x = t.a;
 						var y = t.b;
 						return A2($joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$translate, x, y);
 					default:
-						var m11 = t.a.m11;
-						var m12 = t.a.m12;
-						var m21 = t.a.m21;
-						var m22 = t.a.m22;
-						var dx = t.a.dx;
-						var dy = t.a.dy;
+						var m11 = t.a.a4;
+						var m12 = t.a.a5;
+						var m21 = t.a.a6;
+						var m22 = t.a.a7;
+						var dx = t.a.aW;
+						var dy = t.a.aX;
 						return A6($joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$transform, m11, m12, m21, m22, dx, dy);
 				}
 			},
@@ -6777,7 +6754,7 @@ var $joakin$elm_canvas$Canvas$Settings$Advanced$transform = function (transforms
 };
 var $joakin$elm_canvas$Canvas$Settings$Advanced$Translate = F2(
 	function (a, b) {
-		return {$: 'Translate', a: a, b: b};
+		return {$: 2, a: a, b: b};
 	});
 var $joakin$elm_canvas$Canvas$Settings$Advanced$translate = $joakin$elm_canvas$Canvas$Settings$Advanced$Translate;
 var $author$project$QuadTree$Renderables$border = F2(
@@ -6817,7 +6794,7 @@ var $author$project$QuadTree$Renderables$border = F2(
 	});
 var $joakin$elm_canvas$Canvas$Internal$Canvas$Circle = F2(
 	function (a, b) {
-		return {$: 'Circle', a: a, b: b};
+		return {$: 1, a: a, b: b};
 	});
 var $joakin$elm_canvas$Canvas$circle = F2(
 	function (pos, radius) {
@@ -6828,7 +6805,7 @@ var $joakin$elm_canvas$Canvas$Settings$fill = function (color) {
 		$joakin$elm_canvas$Canvas$Internal$Canvas$Fill(color));
 };
 var $author$project$QuadTree$Vector2d$toPair = function (v) {
-	return _Utils_Tuple2(v.x, v.y);
+	return _Utils_Tuple2(v.n, v.o);
 };
 var $author$project$QuadTree$Renderables$bubbleShapes = F2(
 	function (bubbles, colliding) {
@@ -6852,28 +6829,27 @@ var $author$project$QuadTree$Renderables$bubbleShapes = F2(
 				function (bs) {
 					return A2(
 						$joakin$elm_canvas$Canvas$circle,
-						$author$project$QuadTree$Vector2d$toPair(bs.data.pos),
-						bs.data.radius);
+						$author$project$QuadTree$Vector2d$toPair(bs.i.x),
+						bs.i.y);
 				},
 				bubbles));
 	});
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $joakin$elm_canvas$Canvas$Internal$Canvas$DrawableClear = F3(
 	function (a, b, c) {
-		return {$: 'DrawableClear', a: a, b: b, c: c};
+		return {$: 3, a: a, b: b, c: c};
 	});
 var $joakin$elm_canvas$Canvas$clear = F3(
 	function (point, w, h) {
-		return $joakin$elm_canvas$Canvas$Renderable(
-			{
-				commands: _List_Nil,
-				drawOp: $joakin$elm_canvas$Canvas$Internal$Canvas$NotSpecified,
-				drawable: A3($joakin$elm_canvas$Canvas$Internal$Canvas$DrawableClear, point, w, h)
-			});
+		return {
+			r: _List_Nil,
+			A: $joakin$elm_canvas$Canvas$Internal$Canvas$NotSpecified,
+			B: A3($joakin$elm_canvas$Canvas$Internal$Canvas$DrawableClear, point, w, h)
+		};
 	});
 var $author$project$Main$MouseDownData = F2(
 	function (offsetX, offsetY) {
-		return {offsetX: offsetX, offsetY: offsetY};
+		return {a9: offsetX, ba: offsetY};
 	});
 var $elm$json$Json$Decode$field = _Json_decodeField;
 var $elm$json$Json$Decode$at = F2(
@@ -6895,7 +6871,7 @@ var $author$project$Main$decoder = A3(
 			['offsetY']),
 		$elm$json$Json$Decode$int));
 var $elm$html$Html$div = _VirtualDom_node('div');
-var $joakin$elm_canvas$Canvas$Settings$Text$Center = {$: 'Center'};
+var $joakin$elm_canvas$Canvas$Settings$Text$Center = 2;
 var $joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$textAlign = function (align) {
 	return A2(
 		$joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$field,
@@ -6903,14 +6879,14 @@ var $joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$textAlign = function
 		$elm$json$Json$Encode$string(align));
 };
 var $joakin$elm_canvas$Canvas$Settings$Text$textAlignToString = function (alignment) {
-	switch (alignment.$) {
-		case 'Left':
+	switch (alignment) {
+		case 0:
 			return 'left';
-		case 'Right':
+		case 1:
 			return 'right';
-		case 'Center':
+		case 2:
 			return 'center';
-		case 'Start':
+		case 3:
 			return 'start';
 		default:
 			return 'end';
@@ -6928,27 +6904,26 @@ var $joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$font = function (f) 
 		$elm$json$Json$Encode$string(f));
 };
 var $joakin$elm_canvas$Canvas$Settings$Text$font = function (_v0) {
-	var size = _v0.size;
-	var family = _v0.family;
+	var size = _v0.bh;
+	var family = _v0.a$;
 	return $joakin$elm_canvas$Canvas$Internal$Canvas$SettingCommand(
 		$joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$font(
 			$elm$core$String$fromInt(size) + ('px ' + family)));
 };
 var $joakin$elm_canvas$Canvas$Internal$Canvas$DrawableText = function (a) {
-	return {$: 'DrawableText', a: a};
+	return {$: 0, a: a};
 };
 var $joakin$elm_canvas$Canvas$text = F3(
 	function (settings, point, str) {
 		return A2(
 			$joakin$elm_canvas$Canvas$addSettingsToRenderable,
 			settings,
-			$joakin$elm_canvas$Canvas$Renderable(
-				{
-					commands: _List_Nil,
-					drawOp: $joakin$elm_canvas$Canvas$Internal$Canvas$NotSpecified,
-					drawable: $joakin$elm_canvas$Canvas$Internal$Canvas$DrawableText(
-						{maxWidth: $elm$core$Maybe$Nothing, point: point, text: str})
-				}));
+			{
+				r: _List_Nil,
+				A: $joakin$elm_canvas$Canvas$Internal$Canvas$NotSpecified,
+				B: $joakin$elm_canvas$Canvas$Internal$Canvas$DrawableText(
+					{Y: $elm$core$Maybe$Nothing, az: point, af: str})
+			});
 	});
 var $author$project$Main$genText = function (bubbleShape) {
 	return A3(
@@ -6956,15 +6931,15 @@ var $author$project$Main$genText = function (bubbleShape) {
 		_List_fromArray(
 			[
 				$joakin$elm_canvas$Canvas$Settings$Text$font(
-				{family: 'serif', size: 16}),
-				$joakin$elm_canvas$Canvas$Settings$Text$align($joakin$elm_canvas$Canvas$Settings$Text$Center)
+				{a$: 'serif', bh: 16}),
+				$joakin$elm_canvas$Canvas$Settings$Text$align(2)
 			]),
-		_Utils_Tuple2(bubbleShape.data.pos.x, bubbleShape.data.pos.y + (bubbleShape.data.radius / 3)),
-		$elm$core$String$fromInt(bubbleShape.data.collisions));
+		_Utils_Tuple2(bubbleShape.i.x.n, bubbleShape.i.x.o + (bubbleShape.i.y / 3)),
+		$elm$core$String$fromInt(bubbleShape.i.ak));
 };
 var $author$project$QuadTree$Renderables$treeGrids = function (node) {
-	if (node.$ === 'Just') {
-		if (node.a.$ === 'Leaf') {
+	if (!node.$) {
+		if (!node.a.$) {
 			var l = node.a.a;
 			return _List_Nil;
 		} else {
@@ -6974,15 +6949,15 @@ var $author$project$QuadTree$Renderables$treeGrids = function (node) {
 				$author$project$QuadTree$Renderables$treeGrids,
 				_List_fromArray(
 					[
-						$elm$core$Maybe$Just(l.nw),
-						$elm$core$Maybe$Just(l.ne),
-						$elm$core$Maybe$Just(l.sw),
-						$elm$core$Maybe$Just(l.se)
+						$elm$core$Maybe$Just(l.N),
+						$elm$core$Maybe$Just(l.M),
+						$elm$core$Maybe$Just(l.Q),
+						$elm$core$Maybe$Just(l.O)
 					]));
-			var _v1 = _Utils_Tuple2(l.bounds.rx, l.bounds.ry);
+			var _v1 = _Utils_Tuple2(l.aR.bf, l.aR.bg);
 			var rx = _v1.a;
 			var ry = _v1.b;
-			var _v2 = $author$project$QuadTree$Vector2d$toPair(l.bounds.center);
+			var _v2 = $author$project$QuadTree$Vector2d$toPair(l.aR.aS);
 			var mx = _v2.a;
 			var my = _v2.b;
 			return _Utils_ap(
@@ -7028,7 +7003,7 @@ var $author$project$QuadTree$Renderables$gridShapes = function (tree) {
 var $elm$html$Html$input = _VirtualDom_node('input');
 var $elm$html$Html$label = _VirtualDom_node('label');
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 'Normal', a: a};
+	return {$: 0, a: a};
 };
 var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
 var $elm$html$Html$Events$on = F2(
@@ -7219,7 +7194,7 @@ var $joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$quadraticCurveTo = F
 var $joakin$elm_canvas$Canvas$renderLineSegment = F2(
 	function (segment, cmds) {
 		switch (segment.$) {
-			case 'ArcTo':
+			case 0:
 				var _v1 = segment.a;
 				var x = _v1.a;
 				var y = _v1.b;
@@ -7231,7 +7206,7 @@ var $joakin$elm_canvas$Canvas$renderLineSegment = F2(
 					$elm$core$List$cons,
 					A5($joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$arcTo, x, y, x2, y2, radius),
 					cmds);
-			case 'BezierCurveTo':
+			case 1:
 				var _v3 = segment.a;
 				var cp1x = _v3.a;
 				var cp1y = _v3.b;
@@ -7245,7 +7220,7 @@ var $joakin$elm_canvas$Canvas$renderLineSegment = F2(
 					$elm$core$List$cons,
 					A6($joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$bezierCurveTo, cp1x, cp1y, cp2x, cp2y, x, y),
 					cmds);
-			case 'LineTo':
+			case 2:
 				var _v6 = segment.a;
 				var x = _v6.a;
 				var y = _v6.b;
@@ -7253,7 +7228,7 @@ var $joakin$elm_canvas$Canvas$renderLineSegment = F2(
 					$elm$core$List$cons,
 					A2($joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$lineTo, x, y),
 					cmds);
-			case 'MoveTo':
+			case 3:
 				var _v7 = segment.a;
 				var x = _v7.a;
 				var y = _v7.b;
@@ -7278,7 +7253,7 @@ var $elm$core$Basics$sin = _Basics_sin;
 var $joakin$elm_canvas$Canvas$renderShape = F2(
 	function (shape, cmds) {
 		switch (shape.$) {
-			case 'Rect':
+			case 0:
 				var _v1 = shape.a;
 				var x = _v1.a;
 				var y = _v1.b;
@@ -7291,7 +7266,7 @@ var $joakin$elm_canvas$Canvas$renderShape = F2(
 						$elm$core$List$cons,
 						A2($joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$moveTo, x, y),
 						cmds));
-			case 'Circle':
+			case 1:
 				var _v2 = shape.a;
 				var x = _v2.a;
 				var y = _v2.b;
@@ -7303,7 +7278,7 @@ var $joakin$elm_canvas$Canvas$renderShape = F2(
 						$elm$core$List$cons,
 						A2($joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$moveTo, x + r, y),
 						cmds));
-			case 'Path':
+			case 2:
 				var _v3 = shape.a;
 				var x = _v3.a;
 				var y = _v3.b;
@@ -7343,9 +7318,9 @@ var $joakin$elm_canvas$Canvas$renderShape = F2(
 		}
 	});
 var $avh4$elm_color$Color$black = A4($avh4$elm_color$Color$RgbaSpace, 0 / 255, 0 / 255, 0 / 255, 1.0);
-var $joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$NonZero = {$: 'NonZero'};
+var $joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$NonZero = 0;
 var $joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$fillRuleToString = function (fillRule) {
-	if (fillRule.$ === 'NonZero') {
+	if (!fillRule) {
 		return 'nonzero';
 	} else {
 		return 'evenodd';
@@ -7406,7 +7381,7 @@ var $joakin$elm_canvas$Canvas$renderShapeFill = F2(
 	function (c, cmds) {
 		return A2(
 			$elm$core$List$cons,
-			$joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$fill($joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$NonZero),
+			$joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$fill(0),
 			A2(
 				$elm$core$List$cons,
 				$joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$fillStyle(c),
@@ -7433,12 +7408,12 @@ var $joakin$elm_canvas$Canvas$renderShapeStroke = F2(
 var $joakin$elm_canvas$Canvas$renderShapeDrawOp = F2(
 	function (drawOp, cmds) {
 		switch (drawOp.$) {
-			case 'NotSpecified':
+			case 0:
 				return A2($joakin$elm_canvas$Canvas$renderShapeFill, $avh4$elm_color$Color$black, cmds);
-			case 'Fill':
+			case 1:
 				var c = drawOp.a;
 				return A2($joakin$elm_canvas$Canvas$renderShapeFill, c, cmds);
-			case 'Stroke':
+			case 2:
 				var c = drawOp.a;
 				return A2($joakin$elm_canvas$Canvas$renderShapeStroke, c, cmds);
 			default:
@@ -7452,7 +7427,7 @@ var $joakin$elm_canvas$Canvas$renderShapeDrawOp = F2(
 	});
 var $joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$fillText = F4(
 	function (text, x, y, maybeMaxWidth) {
-		if (maybeMaxWidth.$ === 'Nothing') {
+		if (maybeMaxWidth.$ === 1) {
 			return A2(
 				$joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$fn,
 				'fillText',
@@ -7480,7 +7455,7 @@ var $joakin$elm_canvas$Canvas$renderTextFill = F5(
 	function (txt, x, y, color, cmds) {
 		return A2(
 			$elm$core$List$cons,
-			A4($joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$fillText, txt.text, x, y, txt.maxWidth),
+			A4($joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$fillText, txt.af, x, y, txt.Y),
 			A2(
 				$elm$core$List$cons,
 				$joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$fillStyle(color),
@@ -7488,7 +7463,7 @@ var $joakin$elm_canvas$Canvas$renderTextFill = F5(
 	});
 var $joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$strokeText = F4(
 	function (text, x, y, maybeMaxWidth) {
-		if (maybeMaxWidth.$ === 'Nothing') {
+		if (maybeMaxWidth.$ === 1) {
 			return A2(
 				$joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$fn,
 				'strokeText',
@@ -7516,7 +7491,7 @@ var $joakin$elm_canvas$Canvas$renderTextStroke = F5(
 	function (txt, x, y, color, cmds) {
 		return A2(
 			$elm$core$List$cons,
-			A4($joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$strokeText, txt.text, x, y, txt.maxWidth),
+			A4($joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$strokeText, txt.af, x, y, txt.Y),
 			A2(
 				$elm$core$List$cons,
 				$joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$strokeStyle(color),
@@ -7524,16 +7499,16 @@ var $joakin$elm_canvas$Canvas$renderTextStroke = F5(
 	});
 var $joakin$elm_canvas$Canvas$renderTextDrawOp = F3(
 	function (drawOp, txt, cmds) {
-		var _v0 = txt.point;
+		var _v0 = txt.az;
 		var x = _v0.a;
 		var y = _v0.b;
 		switch (drawOp.$) {
-			case 'NotSpecified':
+			case 0:
 				return A5($joakin$elm_canvas$Canvas$renderTextFill, txt, x, y, $avh4$elm_color$Color$black, cmds);
-			case 'Fill':
+			case 1:
 				var c = drawOp.a;
 				return A5($joakin$elm_canvas$Canvas$renderTextFill, txt, x, y, c, cmds);
-			case 'Stroke':
+			case 2:
 				var c = drawOp.a;
 				return A5($joakin$elm_canvas$Canvas$renderTextStroke, txt, x, y, c, cmds);
 			default:
@@ -7575,13 +7550,13 @@ var $joakin$elm_canvas$Canvas$Internal$Texture$drawTexture = F4(
 		return A2(
 			$elm$core$List$cons,
 			function () {
-				if (t.$ === 'TImage') {
+				if (!t.$) {
 					var image = t.a;
-					return A9($joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$drawImage, 0, 0, image.width, image.height, x, y, image.width, image.height, image.json);
+					return A9($joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$drawImage, 0, 0, image.aN, image.aq, x, y, image.aN, image.aq, image.V);
 				} else {
 					var sprite = t.a;
 					var image = t.b;
-					return A9($joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$drawImage, sprite.x, sprite.y, sprite.width, sprite.height, x, y, sprite.width, sprite.height, image.json);
+					return A9($joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$drawImage, sprite.n, sprite.o, sprite.aN, sprite.aq, x, y, sprite.aN, sprite.aq, image.V);
 				}
 			}(),
 			cmds);
@@ -7595,10 +7570,10 @@ var $joakin$elm_canvas$Canvas$renderTexture = F3(
 var $joakin$elm_canvas$Canvas$renderDrawable = F3(
 	function (drawable, drawOp, cmds) {
 		switch (drawable.$) {
-			case 'DrawableText':
+			case 0:
 				var txt = drawable.a;
 				return A3($joakin$elm_canvas$Canvas$renderText, drawOp, txt, cmds);
-			case 'DrawableShapes':
+			case 1:
 				var ss = drawable.a;
 				return A2(
 					$joakin$elm_canvas$Canvas$renderShapeDrawOp,
@@ -7608,7 +7583,7 @@ var $joakin$elm_canvas$Canvas$renderDrawable = F3(
 						$joakin$elm_canvas$Canvas$renderShape,
 						A2($elm$core$List$cons, $joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$beginPath, cmds),
 						ss));
-			case 'DrawableTexture':
+			case 2:
 				var p = drawable.a;
 				var t = drawable.b;
 				return A3($joakin$elm_canvas$Canvas$renderTexture, p, t, cmds);
@@ -7623,10 +7598,10 @@ var $joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$restore = A2($joakin
 var $joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$save = A2($joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$fn, 'save', _List_Nil);
 var $joakin$elm_canvas$Canvas$renderOne = F2(
 	function (_v0, cmds) {
-		var data = _v0.a;
-		var commands = data.commands;
-		var drawable = data.drawable;
-		var drawOp = data.drawOp;
+		var data = _v0;
+		var commands = data.r;
+		var drawable = data.B;
+		var drawOp = data.A;
 		return A2(
 			$elm$core$List$cons,
 			$joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$restore,
@@ -7650,7 +7625,7 @@ var $elm$virtual_dom$VirtualDom$attribute = F2(
 	});
 var $elm$html$Html$Attributes$attribute = $elm$virtual_dom$VirtualDom$attribute;
 var $joakin$elm_canvas$Canvas$Internal$Texture$TImage = function (a) {
-	return {$: 'TImage', a: a};
+	return {$: 0, a: a};
 };
 var $elm$json$Json$Decode$andThen = _Json_andThen;
 var $elm$json$Json$Decode$float = _Json_decodeFloat;
@@ -7666,7 +7641,7 @@ var $joakin$elm_canvas$Canvas$Internal$Texture$decodeTextureImage = A2(
 				function (tagName, width, height) {
 					return (tagName === 'IMG') ? $elm$core$Maybe$Just(
 						$joakin$elm_canvas$Canvas$Internal$Texture$TImage(
-							{height: height, json: image, width: width})) : $elm$core$Maybe$Nothing;
+							{aq: height, V: image, aN: width})) : $elm$core$Maybe$Nothing;
 				}),
 			A2($elm$json$Json$Decode$field, 'tagName', $elm$json$Json$Decode$string),
 			A2($elm$json$Json$Decode$field, 'width', $elm$json$Json$Decode$float),
@@ -7729,15 +7704,15 @@ var $joakin$elm_canvas$Canvas$toHtmlWith = F3(
 					$joakin$elm_canvas$Canvas$render(entities)),
 				A2(
 					$elm$core$List$cons,
-					$elm$html$Html$Attributes$height(options.height),
+					$elm$html$Html$Attributes$height(options.aq),
 					A2(
 						$elm$core$List$cons,
-						$elm$html$Html$Attributes$width(options.width),
+						$elm$html$Html$Attributes$width(options.aN),
 						attrs))),
 			A2(
 				$elm$core$List$cons,
 				_Utils_Tuple2('__canvas', $joakin$elm_canvas$Canvas$cnvs),
-				A2($elm$core$List$map, $joakin$elm_canvas$Canvas$renderTextureSource, options.textures)));
+				A2($elm$core$List$map, $joakin$elm_canvas$Canvas$renderTextureSource, options.aL)));
 	});
 var $joakin$elm_canvas$Canvas$toHtml = F3(
 	function (_v0, attrs, entities) {
@@ -7745,7 +7720,7 @@ var $joakin$elm_canvas$Canvas$toHtml = F3(
 		var h = _v0.b;
 		return A3(
 			$joakin$elm_canvas$Canvas$toHtmlWith,
-			{height: h, textures: _List_Nil, width: w},
+			{aq: h, aL: _List_Nil, aN: w},
 			attrs,
 			entities);
 	});
@@ -7759,11 +7734,11 @@ var $author$project$Main$view = function (model) {
 	var bShapes = A2(
 		$elm$core$List$map,
 		$author$project$Main$toShape(0),
-		model.bubbles);
+		model.h);
 	var bubbleText = A2($elm$core$List$map, $author$project$Main$genText, bShapes);
 	var tree = A2($author$project$QuadTree$QuadTree$create, $author$project$Main$qtreeNodeCapacity, bShapes);
 	var collisionTest = function () {
-		if (tree.$ === 'Nothing') {
+		if (tree.$ === 1) {
 			return function (_v2) {
 				return false;
 			};
@@ -7772,7 +7747,7 @@ var $author$project$Main$view = function (model) {
 			return $author$project$Main$anyCollision(n);
 		}
 	}();
-	var gridRenderable = model.showQTree ? $author$project$QuadTree$Renderables$gridShapes(tree) : $author$project$QuadTree$Renderables$gridShapes($elm$core$Maybe$Nothing);
+	var gridRenderable = model.P ? $author$project$QuadTree$Renderables$gridShapes(tree) : $author$project$QuadTree$Renderables$gridShapes($elm$core$Maybe$Nothing);
 	var _v0 = A2($elm$core$List$partition, collisionTest, bShapes);
 	var collisionBubbles = _v0.a;
 	var nonCollisionBubbles = _v0.b;
@@ -7821,7 +7796,7 @@ var $author$project$Main$view = function (model) {
 					[
 						$elm$html$Html$text(
 						'Bubbles:' + $elm$core$String$fromInt(
-							$elm$core$List$length(model.bubbles)))
+							$elm$core$List$length(model.h)))
 					])),
 				A2(
 				$elm$html$Html$div,
@@ -7852,6 +7827,6 @@ var $author$project$Main$view = function (model) {
 			]));
 };
 var $author$project$Main$main = $elm$browser$Browser$element(
-	{init: $author$project$Main$init, subscriptions: $author$project$Main$subscriptions, update: $author$project$Main$update, view: $author$project$Main$view});
+	{a3: $author$project$Main$init, bj: $author$project$Main$subscriptions, bl: $author$project$Main$update, bm: $author$project$Main$view});
 _Platform_export({'Main':{'init':$author$project$Main$main(
-	$elm$json$Json$Decode$succeed(_Utils_Tuple0))(0)}});}(this));
+	$elm$json$Json$Decode$succeed(0))(0)}});}(this));
