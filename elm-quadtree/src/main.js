@@ -5883,6 +5883,7 @@ var $author$project$Main$collide = F2(
 			_Utils_update(
 				b1,
 				{
+					collisions: b1.collisions + 1,
 					vel: A2(
 						$author$project$QuadTree$Vector2d$add,
 						b1.vel,
@@ -5891,6 +5892,7 @@ var $author$project$Main$collide = F2(
 			_Utils_update(
 				b2,
 				{
+					collisions: b2.collisions + 1,
 					vel: A2($author$project$QuadTree$Vector2d$add, b2.vel, velChange)
 				}));
 	});
@@ -6035,14 +6037,15 @@ var $author$project$QuadTree$Bubble$nextCollision = F3(
 			var relPos = A2($author$project$QuadTree$Vector2d$subtract, b1.pos, b2.pos);
 			var r = 2 * ((relPos.x * relVel.x) + (relPos.y * relVel.y));
 			var q = $author$project$QuadTree$Vector2d$sqLength(relVel);
+			var margin = 0.000000001;
 			var dist = b1.radius + b2.radius;
 			var s = $author$project$QuadTree$Vector2d$sqLength(relPos) - (dist * dist);
 			var det = (r * r) - ((4 * q) * s);
 			if (det > 0) {
 				var t2 = ((-r) - $elm$core$Basics$sqrt(det)) / (2 * q);
-				var t1 = ((-r) + $elm$core$Basics$sqrt(det)) / (2 * q);
+				var t1 = 100;
 				var t1Smallest = _Utils_cmp(t1, t2) < 0;
-				return (t1Smallest && ((t1 > 0) && (_Utils_cmp(t1, deadline) < 0))) ? $elm$core$Maybe$Just(t1) : (((!t1Smallest) && ((t2 > 0) && (_Utils_cmp(t2, deadline) < 0))) ? $elm$core$Maybe$Just(t2) : $elm$core$Maybe$Nothing);
+				return (t1Smallest && ((_Utils_cmp(t1, margin) > 0) && (_Utils_cmp(t1, deadline) < 0))) ? $elm$core$Maybe$Just(t1) : (((!t1Smallest) && ((_Utils_cmp(t2, margin) > 0) && (_Utils_cmp(t2, deadline) < 0))) ? $elm$core$Maybe$Just(t2) : $elm$core$Maybe$Nothing);
 			} else {
 				return $elm$core$Maybe$Nothing;
 			}
@@ -6382,6 +6385,7 @@ var $author$project$Main$update = F2(
 				var vel = _v1.b;
 				if (num > 0) {
 					var newBubble = {
+						collisions: 0,
 						pos: $author$project$QuadTree$Vector2d$fromPair(pos),
 						radius: $author$project$Main$bubbleRadius,
 						vel: $author$project$QuadTree$Vector2d$fromPair(vel)
@@ -6821,6 +6825,73 @@ var $author$project$Main$decoder = A3(
 			['offsetY']),
 		$elm$json$Json$Decode$int));
 var $elm$html$Html$div = _VirtualDom_node('div');
+var $joakin$elm_canvas$Canvas$Settings$Text$Center = {$: 'Center'};
+var $joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$textAlign = function (align) {
+	return A2(
+		$joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$field,
+		'textAlign',
+		$elm$json$Json$Encode$string(align));
+};
+var $joakin$elm_canvas$Canvas$Settings$Text$textAlignToString = function (alignment) {
+	switch (alignment.$) {
+		case 'Left':
+			return 'left';
+		case 'Right':
+			return 'right';
+		case 'Center':
+			return 'center';
+		case 'Start':
+			return 'start';
+		default:
+			return 'end';
+	}
+};
+var $joakin$elm_canvas$Canvas$Settings$Text$align = function (alignment) {
+	return $joakin$elm_canvas$Canvas$Internal$Canvas$SettingCommand(
+		$joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$textAlign(
+			$joakin$elm_canvas$Canvas$Settings$Text$textAlignToString(alignment)));
+};
+var $joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$font = function (f) {
+	return A2(
+		$joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$field,
+		'font',
+		$elm$json$Json$Encode$string(f));
+};
+var $joakin$elm_canvas$Canvas$Settings$Text$font = function (_v0) {
+	var size = _v0.size;
+	var family = _v0.family;
+	return $joakin$elm_canvas$Canvas$Internal$Canvas$SettingCommand(
+		$joakin$elm_canvas$Canvas$Internal$CustomElementJsonApi$font(
+			$elm$core$String$fromInt(size) + ('px ' + family)));
+};
+var $joakin$elm_canvas$Canvas$Internal$Canvas$DrawableText = function (a) {
+	return {$: 'DrawableText', a: a};
+};
+var $joakin$elm_canvas$Canvas$text = F3(
+	function (settings, point, str) {
+		return A2(
+			$joakin$elm_canvas$Canvas$addSettingsToRenderable,
+			settings,
+			$joakin$elm_canvas$Canvas$Renderable(
+				{
+					commands: _List_Nil,
+					drawOp: $joakin$elm_canvas$Canvas$Internal$Canvas$NotSpecified,
+					drawable: $joakin$elm_canvas$Canvas$Internal$Canvas$DrawableText(
+						{maxWidth: $elm$core$Maybe$Nothing, point: point, text: str})
+				}));
+	});
+var $author$project$Main$genText = function (bubbleShape) {
+	return A3(
+		$joakin$elm_canvas$Canvas$text,
+		_List_fromArray(
+			[
+				$joakin$elm_canvas$Canvas$Settings$Text$font(
+				{family: 'serif', size: 16}),
+				$joakin$elm_canvas$Canvas$Settings$Text$align($joakin$elm_canvas$Canvas$Settings$Text$Center)
+			]),
+		_Utils_Tuple2(bubbleShape.data.pos.x, bubbleShape.data.pos.y + (bubbleShape.data.radius / 3)),
+		$elm$core$String$fromInt(bubbleShape.data.collisions));
+};
 var $joakin$elm_canvas$Canvas$Internal$Canvas$Path = F2(
 	function (a, b) {
 		return {$: 'Path', a: a, b: b};
@@ -7636,6 +7707,7 @@ var $author$project$Main$view = function (model) {
 		$elm$core$List$map,
 		$author$project$Main$toShape(0),
 		model.bubbles);
+	var bubbleText = A2($elm$core$List$map, $author$project$Main$genText, bShapes);
 	var tree = A2($author$project$QuadTree$QuadTree$create, 1, bShapes);
 	var collisionTest = function () {
 		if (tree.$ === 'Nothing') {
@@ -7689,8 +7761,10 @@ var $author$project$Main$view = function (model) {
 						'mousedown',
 						A2($elm$json$Json$Decode$map, $author$project$Main$MouseDown, $author$project$Main$decoder))
 					]),
-				_List_fromArray(
-					[clearRenderable, gridRenderable, colBub, nonColBub])),
+				_Utils_ap(
+					_List_fromArray(
+						[clearRenderable, gridRenderable, colBub, nonColBub]),
+					bubbleText)),
 				A2(
 				$elm$html$Html$div,
 				_List_Nil,

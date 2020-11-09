@@ -5,6 +5,7 @@ import Canvas exposing (..)
 import Canvas.Settings exposing (..)
 import Canvas.Settings.Line exposing (..)
 import Canvas.Settings.Advanced exposing (..)
+import Canvas.Settings.Text exposing (..)
 import Color
 import Html exposing (Html,text, div,button,span, pre)
 import Html.Attributes exposing (style)
@@ -123,7 +124,7 @@ update msg model = case msg of
     NewBubble num (pos,vel) ->
         if (num>0) then
             let
-                newBubble = { pos = (fromPair pos), vel=(fromPair vel), radius=bubbleRadius}
+                newBubble = { pos = (fromPair pos), vel=(fromPair vel), radius=bubbleRadius, collisions=0}
             in
                 ({model | bubbles=newBubble::model.bubbles}, newRandomBubbleCommand (num-1))
         else 
@@ -184,7 +185,7 @@ collide b1 b2 =
         normRelPos=norm (subtract b1.pos b2.pos)
         velChange=multiply (dot normRelVel normRelPos) relVel 
     in
-    ({b1| vel = add b1.vel (neg velChange)},{b2 | vel = add b2.vel velChange})
+    ({b1| vel = add b1.vel (neg velChange),collisions=b1.collisions+1},{b2 | vel = add b2.vel velChange, collisions=b2.collisions+1})
 
 
 
@@ -222,6 +223,15 @@ anyCollision: QuadTree.QuadTree.Node Bubble -> QuadTree.QuadTree.Shape Bubble ->
 anyCollision tree bubbleShape = QuadTree.QuadTree.collisions tree bubbleShape 
                                 |> List.any (\s -> bubbleCollision bubbleShape.data s.data)
 
+genText bubbleShape = Canvas.text
+    [ font { size = 16, family = "serif" }
+    , align Center
+    ]
+    ( bubbleShape.data.pos.x, bubbleShape.data.pos.y+bubbleShape.data.radius/3 )
+    (String.fromInt bubbleShape.data.collisions)
+
+
+
 -- Creates the view for a given max-value
 view model= 
     let
@@ -238,6 +248,7 @@ view model=
         gridRenderable = gridShapes tree
         colBub = bubbleShapes collisionBubbles True
         nonColBub = bubbleShapes nonCollisionBubbles False  
+        bubbleText = bShapes |> List.map genText
     in
         div
             []
@@ -247,7 +258,7 @@ view model=
             , Canvas.toHtml (width, height)
                 [on "mousedown" (Json.Decode.map MouseDown decoder)]
                 (
-                    [clearRenderable, gridRenderable, colBub, nonColBub]
+                    [clearRenderable, gridRenderable, colBub, nonColBub]++bubbleText
                 )
             , div[][Html.text ("Bubbles:"++(String.fromInt (List.length model.bubbles)))]
             , div[][Html.text ("Click mouse to add some more bubbles")]

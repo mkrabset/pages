@@ -10,6 +10,7 @@ type alias Bubble=
     { pos: Vector2d
     , vel: Vector2d
     , radius: Float
+    , collisions: Int
     }
 
 -- Takes a value for remainingTickTime and two bubbles and returns the time of the next collision, if it's below remainingTickTime
@@ -19,6 +20,7 @@ nextCollision deadline b1 b2 =
     if (dot (subtract b1.vel b2.vel) (subtract b1.pos b2.pos) >=0) then Nothing
     else
         let
+            margin=0.000000001
             relPos = subtract b1.pos b2.pos
             relVel = subtract b1.vel b2.vel
             dist=b1.radius+b2.radius
@@ -31,11 +33,11 @@ nextCollision deadline b1 b2 =
         in
             if (det>0) then
                 let
-                    t1=(-r + (sqrt det)) / (2*q)
+                    t1=100 --(-r + (sqrt det)) / (2*q)
                     t2=(-r - (sqrt det)) / (2*q)
                     t1Smallest = t1 < t2
                 in
-                    if (t1Smallest && t1>0 && t1<deadline) then Just t1
-                    else if (not t1Smallest && t2>0 && t2<deadline) then Just t2
+                    if (t1Smallest && t1>margin && t1<deadline) then Just t1
+                    else if (not t1Smallest && t2>margin && t2<deadline) then Just t2
                     else Nothing
             else Nothing
