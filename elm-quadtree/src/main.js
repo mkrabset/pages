@@ -5370,7 +5370,7 @@ var $elm$random$Random$float = F2(
 			});
 	});
 var $author$project$Main$height = 700;
-var $author$project$Main$maxSpeed = 200;
+var $author$project$Main$maxSpeed = 400;
 var $elm$random$Random$map2 = F3(
 	function (func, _v0, _v1) {
 		var genA = _v0.a;
@@ -5892,23 +5892,23 @@ var $author$project$QuadTree$Bubble$collide = F2(
 		var normRelPos = $author$project$QuadTree$Vector2d$norm(relPos);
 		var velChange = A2(
 			$author$project$QuadTree$Vector2d$multiply,
-			A2($author$project$QuadTree$Vector2d$dot, normRelVel, normRelPos),
-			relVel);
+			A2($author$project$QuadTree$Vector2d$dot, relVel, normRelPos),
+			normRelPos);
 		return _Utils_Tuple2(
 			_Utils_update(
 				b1,
 				{
 					collisions: b1.collisions + 1,
-					vel: A2(
-						$author$project$QuadTree$Vector2d$add,
-						b1.vel,
-						$author$project$QuadTree$Vector2d$neg(velChange))
+					vel: A2($author$project$QuadTree$Vector2d$add, b1.vel, velChange)
 				}),
 			_Utils_update(
 				b2,
 				{
 					collisions: b2.collisions + 1,
-					vel: A2($author$project$QuadTree$Vector2d$add, b2.vel, velChange)
+					vel: A2(
+						$author$project$QuadTree$Vector2d$add,
+						b2.vel,
+						$author$project$QuadTree$Vector2d$neg(velChange))
 				}));
 	});
 var $elm$core$List$append = F2(

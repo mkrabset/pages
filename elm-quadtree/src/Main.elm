@@ -40,7 +40,7 @@ timeDeltaMillis=5
 tickTime=timeDeltaMillis/1000
 
 -- Maximum initial axial bubble speed
-maxSpeed = 200
+maxSpeed = 400
 
 -- Canvas size
 width=1200

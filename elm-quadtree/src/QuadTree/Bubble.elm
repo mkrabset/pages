@@ -59,9 +59,9 @@ collide b1 b2 =
         relPos=subtract b1.pos b2.pos
         normRelVel=norm relVel
         normRelPos=norm relPos
-        velChange=multiply (dot normRelVel normRelPos) relVel
+        velChange=multiply (dot relVel normRelPos) normRelPos
     in
-    ({b1| vel = add b1.vel (neg velChange),collisions=b1.collisions+1},{b2 | vel = add b2.vel velChange, collisions=b2.collisions+1})
+    ({b1| vel = add b1.vel (velChange),collisions=b1.collisions+1},{b2 | vel = add b2.vel (neg velChange), collisions=b2.collisions+1})
 
 
 
