@@ -784,11 +784,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.ad.L === region.an.L)
+	if (region.ad.M === region.an.M)
 	{
-		return 'on line ' + region.ad.L;
+		return 'on line ' + region.ad.M;
 	}
-	return 'on lines ' + region.ad.L + ' through ' + region.an.L;
+	return 'on lines ' + region.ad.M + ' through ' + region.an.M;
 }
 
 
@@ -5402,7 +5402,7 @@ var $author$project$Main$newRandomBubbleCommand = function (num) {
 var $author$project$Main$startBubbles = _List_Nil;
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
-		{h: $author$project$Main$startBubbles, P: false},
+		{h: $author$project$Main$startBubbles, F: false},
 		$author$project$Main$newRandomBubbleCommand($author$project$Main$initialNumberOfBubbles));
 };
 var $author$project$Main$Tick = {$: 3};
@@ -5941,12 +5941,12 @@ var $author$project$QuadTree$QuadTree$collisions = F2(
 						var _v2 = _v1.a;
 						return _Utils_ap(
 							directCollisions,
-							A2($author$project$QuadTree$QuadTree$collisions, nl.N, shape));
+							A2($author$project$QuadTree$QuadTree$collisions, nl.O, shape));
 					case 1:
 						var _v3 = _v1.a;
 						return _Utils_ap(
 							directCollisions,
-							A2($author$project$QuadTree$QuadTree$collisions, nl.M, shape));
+							A2($author$project$QuadTree$QuadTree$collisions, nl.N, shape));
 					case 2:
 						var _v4 = _v1.a;
 						return _Utils_ap(
@@ -5956,7 +5956,7 @@ var $author$project$QuadTree$QuadTree$collisions = F2(
 						var _v5 = _v1.a;
 						return _Utils_ap(
 							directCollisions,
-							A2($author$project$QuadTree$QuadTree$collisions, nl.O, shape));
+							A2($author$project$QuadTree$QuadTree$collisions, nl.P, shape));
 				}
 			} else {
 				var collisionsInQuadrants = $elm$core$List$concat(
@@ -5966,7 +5966,7 @@ var $author$project$QuadTree$QuadTree$collisions = F2(
 							return A2($author$project$QuadTree$QuadTree$collisions, qn, shape);
 						},
 						_List_fromArray(
-							[nl.N, nl.M, nl.Q, nl.O])));
+							[nl.O, nl.N, nl.Q, nl.P])));
 				return _Utils_ap(directCollisions, collisionsInQuadrants);
 			}
 		}
@@ -6123,21 +6123,21 @@ var $author$project$QuadTree$QuadTree$add = F2(
 					{
 						aR: l.aR,
 						g: _List_Nil,
-						M: $author$project$QuadTree$QuadTree$Leaf(
+						N: $author$project$QuadTree$QuadTree$Leaf(
 							_Utils_update(
 								l,
 								{
 									aR: quad(1),
 									g: _List_Nil
 								})),
-						N: $author$project$QuadTree$QuadTree$Leaf(
+						O: $author$project$QuadTree$QuadTree$Leaf(
 							_Utils_update(
 								l,
 								{
 									aR: quad(0),
 									g: _List_Nil
 								})),
-						O: $author$project$QuadTree$QuadTree$Leaf(
+						P: $author$project$QuadTree$QuadTree$Leaf(
 							_Utils_update(
 								l,
 								{
@@ -6169,7 +6169,7 @@ var $author$project$QuadTree$QuadTree$add = F2(
 							_Utils_update(
 								nl,
 								{
-									N: A2($author$project$QuadTree$QuadTree$add, shape, nl.N)
+									O: A2($author$project$QuadTree$QuadTree$add, shape, nl.O)
 								}));
 					case 1:
 						var _v3 = _v1.a;
@@ -6177,7 +6177,7 @@ var $author$project$QuadTree$QuadTree$add = F2(
 							_Utils_update(
 								nl,
 								{
-									M: A2($author$project$QuadTree$QuadTree$add, shape, nl.M)
+									N: A2($author$project$QuadTree$QuadTree$add, shape, nl.N)
 								}));
 					case 2:
 						var _v4 = _v1.a;
@@ -6193,7 +6193,7 @@ var $author$project$QuadTree$QuadTree$add = F2(
 							_Utils_update(
 								nl,
 								{
-									O: A2($author$project$QuadTree$QuadTree$add, shape, nl.O)
+									P: A2($author$project$QuadTree$QuadTree$add, shape, nl.P)
 								}));
 				}
 			} else {
@@ -6361,7 +6361,14 @@ var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
 			case 0:
-				return $author$project$Main$init(0);
+				var _v1 = $author$project$Main$init(0);
+				var m = _v1.a;
+				var c = _v1.b;
+				return _Utils_Tuple2(
+					_Utils_update(
+						m,
+						{F: model.F}),
+					c);
 			case 3:
 				return _Utils_Tuple2(
 					A2($author$project$Main$runTick, $author$project$Main$tickTime, model),
@@ -6372,9 +6379,9 @@ var $author$project$Main$update = F2(
 					$elm$core$Platform$Cmd$none);
 			case 1:
 				var num = msg.a;
-				var _v1 = msg.b;
-				var pos = _v1.a;
-				var vel = _v1.b;
+				var _v2 = msg.b;
+				var pos = _v2.a;
+				var vel = _v2.b;
 				if (num > 0) {
 					var newBubble = {
 						ak: 0,
@@ -6401,7 +6408,7 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{P: !model.P}),
+						{F: !model.F}),
 					$elm$core$Platform$Cmd$none);
 		}
 	});
@@ -6949,10 +6956,10 @@ var $author$project$QuadTree$Renderables$treeGrids = function (node) {
 				$author$project$QuadTree$Renderables$treeGrids,
 				_List_fromArray(
 					[
+						$elm$core$Maybe$Just(l.O),
 						$elm$core$Maybe$Just(l.N),
-						$elm$core$Maybe$Just(l.M),
 						$elm$core$Maybe$Just(l.Q),
-						$elm$core$Maybe$Just(l.O)
+						$elm$core$Maybe$Just(l.P)
 					]));
 			var _v1 = _Utils_Tuple2(l.aR.bf, l.aR.bg);
 			var rx = _v1.a;
@@ -7747,7 +7754,7 @@ var $author$project$Main$view = function (model) {
 			return $author$project$Main$anyCollision(n);
 		}
 	}();
-	var gridRenderable = model.P ? $author$project$QuadTree$Renderables$gridShapes(tree) : $author$project$QuadTree$Renderables$gridShapes($elm$core$Maybe$Nothing);
+	var gridRenderable = model.F ? $author$project$QuadTree$Renderables$gridShapes(tree) : $author$project$QuadTree$Renderables$gridShapes($elm$core$Maybe$Nothing);
 	var _v0 = A2($elm$core$List$partition, collisionTest, bShapes);
 	var collisionBubbles = _v0.a;
 	var nonCollisionBubbles = _v0.b;

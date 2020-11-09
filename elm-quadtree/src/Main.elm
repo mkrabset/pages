@@ -115,7 +115,8 @@ updateBubble dt bubble =
 -- Main model update function
 update: Msg -> Model -> (Model,Cmd Msg)
 update msg model = case msg of 
-    ClearAll -> init () 
+    ClearAll -> case (init ()) of 
+        ((m),c) -> ({m|showQTree=model.showQTree},c) 
 
     Tick -> 
 --      ({model | bubbles=(model.bubbles |> List.map (updateBubble (tickTime)))}, Cmd.none)
