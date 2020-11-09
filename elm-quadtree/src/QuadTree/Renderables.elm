@@ -37,7 +37,7 @@ bubbleShapes bubbles colliding =
     let
         color = 
             if (colliding) then Color.rgba 1 0 0 1
-            else Color.rgba 0 1 0 1
+            else Color.rgba 0.4 1 0.4 1
     in
         shapes
             [transform [translate (0) (0)]

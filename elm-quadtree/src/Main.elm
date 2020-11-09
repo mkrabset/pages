@@ -24,15 +24,15 @@ import QuadTree.Vector2d exposing (Vector2d,multiply,add,toPair,fromPair,sqLengt
 import QuadTree.Renderables exposing (gridShapes, bubbleShapes)
 import QuadTree.Bubble exposing (Bubble,nextCollision,bubbleCollision,collide)
 
-
-initialNumberOfBubbles=0
+qtreeNodeCapacity = 5
+initialNumberOfBubbles=10
 
 bubbleRadius=20
 
 
 startBubbles = 
-    [ { pos = { x = 100, y = 319}, vel = { x = 100, y = 0 }, radius=bubbleRadius, collisions=0 }
-    , { pos = { x = 600, y = 300}, vel = { x =-100, y = 0 }, radius=bubbleRadius, collisions=0 }
+    [-- { pos = { x = 100, y = 319}, vel = { x = 100, y = 0 }, radius=bubbleRadius, collisions=0 }
+    --, { pos = { x = 600, y = 300}, vel = { x =-100, y = 0 }, radius=bubbleRadius, collisions=0 }
     ]
 
 -- Time delta for each step
@@ -89,10 +89,6 @@ type Msg =
 -- Command for generating a number of new bubbles
 newRandomBubbleCommand num = Random.generate (NewBubble num) randomPosVel
 
--- Applies modulo on number, used for keeping the bubbles on-screen
-modval mod v = if (v>mod) then v-mod
-                else if (v<0) then v+mod
-                else v
 
 -- Updates bubble position
 updateBubble: Float -> Bubble -> Bubble
@@ -101,12 +97,12 @@ updateBubble dt bubble =
         nx=bubble.pos.x + dt*bubble.vel.x
         ny=bubble.pos.y + dt*bubble.vel.y
         (px,vx)=
-            if (nx>(width-bubble.radius)) then (2*(width-bubble.radius)-nx, -bubble.vel.x)
-            else if (nx<bubble.radius) then (2*bubble.radius-nx, -bubble.vel.x)
+            if (nx>(width-bubble.radius) && bubble.vel.x>0) then (nx, -bubble.vel.x)
+            else if (nx<bubble.radius && bubble.vel.x<0) then (nx, -bubble.vel.x)
             else (nx, bubble.vel.x)
         (py,vy)=
-            if (ny>(height-bubble.radius)) then (2*(height-bubble.radius)-ny, -bubble.vel.y)
-            else if (ny<bubble.radius) then (2*bubble.radius-ny, -bubble.vel.y)
+            if (ny>(height-bubble.radius) && bubble.vel.y>0) then (ny, -bubble.vel.y)
+            else if (ny<bubble.radius && bubble.vel.y<0) then (ny, -bubble.vel.y)
             else (ny, bubble.vel.y)
         newPos = (px,py)
         newVel = (vx,vy)
@@ -159,7 +155,7 @@ runTick remainingTickTime model =
     let
         bubbleShapes = List.map (toShape remainingTickTime) model.bubbles 
     in
-        case QuadTree.QuadTree.create 1 bubbleShapes  of -- todo: extend boundary according to vel-vector
+        case QuadTree.QuadTree.create qtreeNodeCapacity bubbleShapes  of -- todo: extend boundary according to vel-vector
             Nothing -> {model | bubbles=(model.bubbles |> List.map (updateBubble remainingTickTime))}
             Just qtree ->
                 let
@@ -219,7 +215,7 @@ genText bubbleShape = Canvas.text
 view model= 
     let
         bShapes=(model.bubbles |> List.map (toShape 0))
-        tree=QuadTree.QuadTree.create 1 bShapes
+        tree=QuadTree.QuadTree.create qtreeNodeCapacity bShapes
 
         collisionTest=case tree of 
             Nothing-> (\_->False)
@@ -237,7 +233,7 @@ view model=
             []
             [ div [][]
             , button [onClick ClearAll][Html.text "Reset"]
-            , button [onClick NextCollision][Html.text "NextCollision"]
+            --, button [onClick NextCollision][Html.text "NextCollision"]
             , Canvas.toHtml (width, height)
                 [on "mousedown" (Json.Decode.map MouseDown decoder)]
                 (

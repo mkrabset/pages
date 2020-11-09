@@ -5227,7 +5227,7 @@ var $elm$core$Task$perform = F2(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$element = _Browser_element;
-var $author$project$Main$initialNumberOfBubbles = 0;
+var $author$project$Main$initialNumberOfBubbles = 10;
 var $author$project$Main$NewBubble = F2(
 	function (a, b) {
 		return {$: 'NewBubble', a: a, b: b};
@@ -5416,22 +5416,7 @@ var $author$project$Main$newRandomBubbleCommand = function (num) {
 		$author$project$Main$NewBubble(num),
 		$author$project$Main$randomPosVel);
 };
-var $author$project$Main$bubbleRadius = 20;
-var $author$project$Main$startBubbles = _List_fromArray(
-	[
-		{
-		collisions: 0,
-		pos: {x: 100, y: 319},
-		radius: $author$project$Main$bubbleRadius,
-		vel: {x: 100, y: 0}
-	},
-		{
-		collisions: 0,
-		pos: {x: 600, y: 300},
-		radius: $author$project$Main$bubbleRadius,
-		vel: {x: -100, y: 0}
-	}
-	]);
+var $author$project$Main$startBubbles = _List_Nil;
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
 		{bubbles: $author$project$Main$startBubbles},
@@ -5846,6 +5831,7 @@ var $author$project$Main$subscriptions = function (model) {
 			return $author$project$Main$Tick;
 		});
 };
+var $author$project$Main$bubbleRadius = 20;
 var $author$project$Main$bubblesAddedForEachClick = 10;
 var $author$project$QuadTree$Vector2d$fromPair = function (_v0) {
 	var x = _v0.a;
@@ -6282,6 +6268,7 @@ var $author$project$QuadTree$QuadTree$create = F2(
 					shapes));
 		}
 	});
+var $author$project$Main$qtreeNodeCapacity = 5;
 var $author$project$Main$bubbleBounds = F2(
 	function (dt, b) {
 		var dy = b.vel.y * dt;
@@ -6303,10 +6290,10 @@ var $author$project$Main$updateBubble = F2(
 	function (dt, bubble) {
 		var ny = bubble.pos.y + (dt * bubble.vel.y);
 		var nx = bubble.pos.x + (dt * bubble.vel.x);
-		var _v0 = (_Utils_cmp(ny, $author$project$Main$height - bubble.radius) > 0) ? _Utils_Tuple2((2 * ($author$project$Main$height - bubble.radius)) - ny, -bubble.vel.y) : ((_Utils_cmp(ny, bubble.radius) < 0) ? _Utils_Tuple2((2 * bubble.radius) - ny, -bubble.vel.y) : _Utils_Tuple2(ny, bubble.vel.y));
+		var _v0 = ((_Utils_cmp(ny, $author$project$Main$height - bubble.radius) > 0) && (bubble.vel.y > 0)) ? _Utils_Tuple2(ny, -bubble.vel.y) : (((_Utils_cmp(ny, bubble.radius) < 0) && (bubble.vel.y < 0)) ? _Utils_Tuple2(ny, -bubble.vel.y) : _Utils_Tuple2(ny, bubble.vel.y));
 		var py = _v0.a;
 		var vy = _v0.b;
-		var _v1 = (_Utils_cmp(nx, $author$project$Main$width - bubble.radius) > 0) ? _Utils_Tuple2((2 * ($author$project$Main$width - bubble.radius)) - nx, -bubble.vel.x) : ((_Utils_cmp(nx, bubble.radius) < 0) ? _Utils_Tuple2((2 * bubble.radius) - nx, -bubble.vel.x) : _Utils_Tuple2(nx, bubble.vel.x));
+		var _v1 = ((_Utils_cmp(nx, $author$project$Main$width - bubble.radius) > 0) && (bubble.vel.x > 0)) ? _Utils_Tuple2(nx, -bubble.vel.x) : (((_Utils_cmp(nx, bubble.radius) < 0) && (bubble.vel.x < 0)) ? _Utils_Tuple2(nx, -bubble.vel.x) : _Utils_Tuple2(nx, bubble.vel.x));
 		var px = _v1.a;
 		var vx = _v1.b;
 		var newPos = _Utils_Tuple2(px, py);
@@ -6326,7 +6313,7 @@ var $author$project$Main$runTick = F2(
 				$elm$core$List$map,
 				$author$project$Main$toShape(remainingTickTime),
 				model.bubbles);
-			var _v0 = A2($author$project$QuadTree$QuadTree$create, 1, bubbleShapes);
+			var _v0 = A2($author$project$QuadTree$QuadTree$create, $author$project$Main$qtreeNodeCapacity, bubbleShapes);
 			if (_v0.$ === 'Nothing') {
 				return _Utils_update(
 					model,
@@ -6433,7 +6420,6 @@ var $author$project$Main$ClearAll = {$: 'ClearAll'};
 var $author$project$Main$MouseDown = function (a) {
 	return {$: 'MouseDown', a: a};
 };
-var $author$project$Main$NextCollision = {$: 'NextCollision'};
 var $elm$core$List$any = F2(
 	function (isOkay, list) {
 		any:
@@ -6784,7 +6770,7 @@ var $joakin$elm_canvas$Canvas$Settings$Advanced$Translate = F2(
 var $joakin$elm_canvas$Canvas$Settings$Advanced$translate = $joakin$elm_canvas$Canvas$Settings$Advanced$Translate;
 var $author$project$QuadTree$Renderables$bubbleShapes = F2(
 	function (bubbles, colliding) {
-		var color = colliding ? A4($avh4$elm_color$Color$rgba, 1, 0, 0, 1) : A4($avh4$elm_color$Color$rgba, 0, 1, 0, 1);
+		var color = colliding ? A4($avh4$elm_color$Color$rgba, 1, 0, 0, 1) : A4($avh4$elm_color$Color$rgba, 0.4, 1, 0.4, 1);
 		return A2(
 			$joakin$elm_canvas$Canvas$shapes,
 			_List_fromArray(
@@ -7730,7 +7716,7 @@ var $author$project$Main$view = function (model) {
 		$author$project$Main$toShape(0),
 		model.bubbles);
 	var bubbleText = A2($elm$core$List$map, $author$project$Main$genText, bShapes);
-	var tree = A2($author$project$QuadTree$QuadTree$create, 1, bShapes);
+	var tree = A2($author$project$QuadTree$QuadTree$create, $author$project$Main$qtreeNodeCapacity, bShapes);
 	var collisionTest = function () {
 		if (tree.$ === 'Nothing') {
 			return function (_v2) {
@@ -7762,16 +7748,6 @@ var $author$project$Main$view = function (model) {
 				_List_fromArray(
 					[
 						$elm$html$Html$text('Reset')
-					])),
-				A2(
-				$elm$html$Html$button,
-				_List_fromArray(
-					[
-						$elm$html$Html$Events$onClick($author$project$Main$NextCollision)
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('NextCollision')
 					])),
 				A3(
 				$joakin$elm_canvas$Canvas$toHtml,
