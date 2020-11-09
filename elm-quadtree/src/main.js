@@ -5227,7 +5227,7 @@ var $elm$core$Task$perform = F2(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$element = _Browser_element;
-var $author$project$Main$initialNumberOfBubbles = 5;
+var $author$project$Main$initialNumberOfBubbles = 0;
 var $author$project$Main$NewBubble = F2(
 	function (a, b) {
 		return {$: 'NewBubble', a: a, b: b};
@@ -5416,9 +5416,25 @@ var $author$project$Main$newRandomBubbleCommand = function (num) {
 		$author$project$Main$NewBubble(num),
 		$author$project$Main$randomPosVel);
 };
+var $author$project$Main$bubbleRadius = 20;
+var $author$project$Main$startBubbles = _List_fromArray(
+	[
+		{
+		collisions: 0,
+		pos: {x: 100, y: 319},
+		radius: $author$project$Main$bubbleRadius,
+		vel: {x: 100, y: 0}
+	},
+		{
+		collisions: 0,
+		pos: {x: 600, y: 300},
+		radius: $author$project$Main$bubbleRadius,
+		vel: {x: -100, y: 0}
+	}
+	]);
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
-		{bubbles: _List_Nil},
+		{bubbles: $author$project$Main$startBubbles},
 		$author$project$Main$newRandomBubbleCommand($author$project$Main$initialNumberOfBubbles));
 };
 var $author$project$Main$Tick = {$: 'Tick'};
@@ -5830,8 +5846,7 @@ var $author$project$Main$subscriptions = function (model) {
 			return $author$project$Main$Tick;
 		});
 };
-var $author$project$Main$bubbleRadius = 20;
-var $author$project$Main$bubblesAddedForEachClick = 50;
+var $author$project$Main$bubblesAddedForEachClick = 10;
 var $author$project$QuadTree$Vector2d$fromPair = function (_v0) {
 	var x = _v0.a;
 	var y = _v0.b;
@@ -5869,12 +5884,12 @@ var $author$project$QuadTree$Vector2d$subtract = F2(
 	function (v2, v1) {
 		return {x: v1.x - v2.x, y: v1.y - v2.y};
 	});
-var $author$project$Main$collide = F2(
+var $author$project$QuadTree$Bubble$collide = F2(
 	function (b1, b2) {
 		var relVel = A2($author$project$QuadTree$Vector2d$subtract, b1.vel, b2.vel);
+		var relPos = A2($author$project$QuadTree$Vector2d$subtract, b1.pos, b2.pos);
 		var normRelVel = $author$project$QuadTree$Vector2d$norm(relVel);
-		var normRelPos = $author$project$QuadTree$Vector2d$norm(
-			A2($author$project$QuadTree$Vector2d$subtract, b1.pos, b2.pos));
+		var normRelPos = $author$project$QuadTree$Vector2d$norm(relPos);
 		var velChange = A2(
 			$author$project$QuadTree$Vector2d$multiply,
 			A2($author$project$QuadTree$Vector2d$dot, normRelVel, normRelPos),
@@ -6351,7 +6366,7 @@ var $author$project$Main$runTick = F2(
 							return (!_Utils_eq(b, b1.data)) && (!_Utils_eq(b, b2.data));
 						},
 						model.bubbles));
-				var _v3 = A2($author$project$Main$collide, u1, u2);
+				var _v3 = A2($author$project$QuadTree$Bubble$collide, u1, u2);
 				var crashedb1 = _v3.a;
 				var crashedb2 = _v3.b;
 				var allNewBubbles = A2(
@@ -6433,7 +6448,7 @@ var $elm$core$List$any = F2(
 			}
 		}
 	});
-var $author$project$Main$bubbleCollision = F2(
+var $author$project$QuadTree$Bubble$bubbleCollision = F2(
 	function (b1, b2) {
 		var maxDistSq = (b1.radius + b2.radius) * (b1.radius + b2.radius);
 		var distSq = $author$project$QuadTree$Vector2d$sqLength(
@@ -6445,7 +6460,7 @@ var $author$project$Main$anyCollision = F2(
 		return A2(
 			$elm$core$List$any,
 			function (s) {
-				return A2($author$project$Main$bubbleCollision, bubbleShape.data, s.data);
+				return A2($author$project$QuadTree$Bubble$bubbleCollision, bubbleShape.data, s.data);
 			},
 			A2($author$project$QuadTree$QuadTree$collisions, tree, bubbleShape));
 	});

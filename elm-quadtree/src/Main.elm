@@ -20,14 +20,20 @@ import Html exposing (a)
 import Json.Decode exposing (Decoder, int, at, map)
 import QuadTree.Bounds exposing (Bounds)
 import QuadTree.QuadTree exposing (collisions)
-import QuadTree.Vector2d exposing (Vector2d,multiply,add,toPair,fromPair,sqLength,subtract,dot,norm,neg)
+import QuadTree.Vector2d exposing (Vector2d,multiply,add,toPair,fromPair,sqLength,subtract,dot,neg)
 import QuadTree.Renderables exposing (gridShapes, bubbleShapes)
-import QuadTree.Bubble exposing (Bubble)
-import QuadTree.Bubble exposing (nextCollision)
+import QuadTree.Bubble exposing (Bubble,nextCollision,bubbleCollision,collide)
 
-initialNumberOfBubbles=5
+
+initialNumberOfBubbles=0
 
 bubbleRadius=20
+
+
+startBubbles = 
+    [ { pos = { x = 100, y = 319}, vel = { x = 100, y = 0 }, radius=bubbleRadius, collisions=0 }
+    , { pos = { x = 600, y = 300}, vel = { x =-100, y = 0 }, radius=bubbleRadius, collisions=0 }
+    ]
 
 -- Time delta for each step
 timeDeltaMillis=5
@@ -41,7 +47,7 @@ width=1200
 height=700
 
 -- Number of bubbles added for each mouse-click
-bubblesAddedForEachClick=50
+bubblesAddedForEachClick=10
 
 type alias BS = QuadTree.QuadTree.Shape Bubble
 
@@ -64,7 +70,7 @@ type alias Model=
 
 -- Initial model: empty bubble list and no command
 init: ()-> (Model, Cmd Msg)
-init _= ( {bubbles=[]}
+init _= ( {bubbles=startBubbles}
         , newRandomBubbleCommand initialNumberOfBubbles
         )
 
@@ -176,23 +182,6 @@ runTick remainingTickTime model =
                             in
                                 {model | bubbles=allNewBubbles}
 
--- Apply collision to bubbles
-collide: Bubble -> Bubble -> (Bubble,Bubble)
-collide b1 b2 = 
-    let
-        relVel=subtract b1.vel b2.vel
-        normRelVel=norm relVel
-        normRelPos=norm (subtract b1.pos b2.pos)
-        velChange=multiply (dot normRelVel normRelPos) relVel 
-    in
-    ({b1| vel = add b1.vel (neg velChange),collisions=b1.collisions+1},{b2 | vel = add b2.vel velChange, collisions=b2.collisions+1})
-
-
-
-
-
-
-
 
 -- Create bounds for a bubble
 bubbleBounds: Float -> Bubble -> Bounds
@@ -212,12 +201,6 @@ toShape: Float -> Bubble -> QuadTree.QuadTree.Shape Bubble
 toShape dt bubble = { bounds = (bubbleBounds dt bubble), data=bubble}
 
 
-bubbleCollision b1 b2 = 
-    let
-        maxDistSq=(b1.radius + b2.radius)*(b1.radius + b2.radius)
-        distSq=sqLength (subtract b1.pos b2.pos)
-    in
-        distSq<=maxDistSq
 
 anyCollision: QuadTree.QuadTree.Node Bubble -> QuadTree.QuadTree.Shape Bubble -> Bool                
 anyCollision tree bubbleShape = QuadTree.QuadTree.collisions tree bubbleShape 
