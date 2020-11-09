@@ -6320,28 +6320,14 @@ var $author$project$Main$updateBubble = F2(
 	});
 var $author$project$Main$runTick = F2(
 	function (remainingTickTime, model) {
-		var bubbleShapes = A2(
-			$elm$core$List$map,
-			$author$project$Main$toShape(remainingTickTime),
-			model.bubbles);
-		var _v0 = A2($author$project$QuadTree$QuadTree$create, 1, bubbleShapes);
-		if (_v0.$ === 'Nothing') {
-			return _Utils_update(
-				model,
-				{
-					bubbles: A2(
-						$elm$core$List$map,
-						$author$project$Main$updateBubble(remainingTickTime),
-						model.bubbles)
-				});
-		} else {
-			var qtree = _v0.a;
-			var nextCollision = A3(
-				$elm$core$List$foldl,
-				A2($author$project$Main$collisionAggregator, qtree, remainingTickTime),
-				$elm$core$Maybe$Nothing,
-				bubbleShapes);
-			if (nextCollision.$ === 'Nothing') {
+		runTick:
+		while (true) {
+			var bubbleShapes = A2(
+				$elm$core$List$map,
+				$author$project$Main$toShape(remainingTickTime),
+				model.bubbles);
+			var _v0 = A2($author$project$QuadTree$QuadTree$create, 1, bubbleShapes);
+			if (_v0.$ === 'Nothing') {
 				return _Utils_update(
 					model,
 					{
@@ -6351,31 +6337,52 @@ var $author$project$Main$runTick = F2(
 							model.bubbles)
 					});
 			} else {
-				var _v2 = nextCollision.a;
-				var t = _v2.a;
-				var b1 = _v2.b;
-				var b2 = _v2.c;
-				var u2 = A2($author$project$Main$updateBubble, t, b2.data);
-				var u1 = A2($author$project$Main$updateBubble, t, b1.data);
-				var otherBubbles = A2(
-					$elm$core$List$map,
-					$author$project$Main$updateBubble(t),
-					A2(
-						$elm$core$List$filter,
-						function (b) {
-							return (!_Utils_eq(b, b1.data)) && (!_Utils_eq(b, b2.data));
-						},
-						model.bubbles));
-				var _v3 = A2($author$project$QuadTree$Bubble$collide, u1, u2);
-				var crashedb1 = _v3.a;
-				var crashedb2 = _v3.b;
-				var allNewBubbles = A2(
-					$elm$core$List$cons,
-					crashedb1,
-					A2($elm$core$List$cons, crashedb2, otherBubbles));
-				return _Utils_update(
-					model,
-					{bubbles: allNewBubbles});
+				var qtree = _v0.a;
+				var nextCollision = A3(
+					$elm$core$List$foldl,
+					A2($author$project$Main$collisionAggregator, qtree, remainingTickTime),
+					$elm$core$Maybe$Nothing,
+					bubbleShapes);
+				if (nextCollision.$ === 'Nothing') {
+					return _Utils_update(
+						model,
+						{
+							bubbles: A2(
+								$elm$core$List$map,
+								$author$project$Main$updateBubble(remainingTickTime),
+								model.bubbles)
+						});
+				} else {
+					var _v2 = nextCollision.a;
+					var t = _v2.a;
+					var b1 = _v2.b;
+					var b2 = _v2.c;
+					var u2 = A2($author$project$Main$updateBubble, t, b2.data);
+					var u1 = A2($author$project$Main$updateBubble, t, b1.data);
+					var otherBubbles = A2(
+						$elm$core$List$map,
+						$author$project$Main$updateBubble(t),
+						A2(
+							$elm$core$List$filter,
+							function (b) {
+								return (!_Utils_eq(b, b1.data)) && (!_Utils_eq(b, b2.data));
+							},
+							model.bubbles));
+					var _v3 = A2($author$project$QuadTree$Bubble$collide, u1, u2);
+					var crashedb1 = _v3.a;
+					var crashedb2 = _v3.b;
+					var allNewBubbles = A2(
+						$elm$core$List$cons,
+						crashedb1,
+						A2($elm$core$List$cons, crashedb2, otherBubbles));
+					var $temp$remainingTickTime = remainingTickTime - t,
+						$temp$model = _Utils_update(
+						model,
+						{bubbles: allNewBubbles});
+					remainingTickTime = $temp$remainingTickTime;
+					model = $temp$model;
+					continue runTick;
+				}
 			}
 		}
 	});

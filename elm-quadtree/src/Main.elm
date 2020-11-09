@@ -180,7 +180,7 @@ runTick remainingTickTime model =
                                 (crashedb1,crashedb2) = collide u1 u2
                                 allNewBubbles = crashedb1::(crashedb2::otherBubbles)
                             in
-                                {model | bubbles=allNewBubbles}
+                                runTick (remainingTickTime-t) {model | bubbles=allNewBubbles}
 
 
 -- Create bounds for a bubble
