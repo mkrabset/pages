@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>PoseNet test</title>
+
+  <style>
+    .video {
+      width: 640px;
+      height: 480px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      transform: rotateY(180deg);
+      -webkit-transform: rotateY(180deg);
+      /* Safari and Chrome */
+      -moz-transform: rotateY(180deg);
+      /* Firefox */
+    }
+
+    .canvas {
+      width: 640px;
+      height: 480px;
+      position: fixed;
+      background-color: #00000000;
+      top: 0;
+      left: 0;
+      z-index: 10;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
+</head>
+
+<body onload="init();">
+  <div id="container">
+    <video class="video" autoplay="true" id="videoElement" width=640 height=480>
+    </video>
+    <canvas class="canvas" id="cv1" width=640 height=480>
+    </canvas>
+  </div>
+  <script src="./script.js"></script>
+</body>
+
+</html>
