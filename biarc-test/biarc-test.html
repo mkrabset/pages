@@ -1,0 +1,328 @@
+<html>
+  <body>
+    <canvas id="canvas" width="1900" height="1000"/>
+  </body>
+  <script>
+    const tolerance=2
+    const boxsize=5
+    const canvas=document.getElementById("canvas")
+    const ctx = canvas.getContext("2d");
+    const h=window.innerHeight
+    const w=window.innerWidth
+    const points=[
+      [w/5*1.0001,h/2],
+      [w/5*2,h/4*1.0001],
+      [w/5*3,h/4*3.0001],
+      [w/5*4,h/2]
+    ]
+    var dragging=false
+    var dragInd=0
+    
+    const v_add=(v1,v2)=>[v1[0]+v2[0], v1[1]+v2[1]]
+    const v_neg=(v)=>[-v[0],-v[1]]
+    const v_sub=(v1,v2)=>v_add(v1,v_neg(v2))
+    const v_lengthsquared=(v)=>v[0]*v[0]+v[1]*v[1]
+    const v_length=(v)=>Math.sqrt(v_lengthsquared(v))
+    const v_distsquared=(p1,p2) => v_lengthsquared(v_sub(p2,p1))
+    const v_dot=(v1,v2)=>v1[0]*v2[0]+v1[1]*v2[1]
+    
+    
+    
+    const inBox=(p1, p2) => Math.abs(p1[0]-p2[0])<=boxsize && Math.abs(p1[1]-p2[1])<=boxsize
+    
+    const bezier = (p1, c1, c2, p2, t) => {
+        const omt = 1 - t
+        const omt2 = omt * omt
+        const omt3 = omt2 * omt
+        const t2 = t * t
+        const t3 = t2 * t
+        return (omt3 * p1) + (3 * omt2 * t * c1) + (3 * omt * t2 * c2) + (t3 * p2)
+    }
+    
+    const bezier_split = (p1, c1, c2, p2, t) => {
+        const _p0 = [p1[0] + t * (c1[0] - p1[0]), p1[1] + t * (c1[1] - p1[1])]
+        const _p1 = [c1[0] + t * (c2[0] - c1[0]), c1[1] + t * (c2[1] - c1[1])]
+        const _p2 = [c2[0] + t * (p2[0] - c2[0]), c2[1] + t * (p2[1] - c2[1])]
+
+        const p01 = [_p0[0] + t * (_p1[0] - _p0[0]), _p0[1] + t * (_p1[1] - _p0[1])]
+        const p12 = [_p1[0] + t * (_p2[0] - _p1[0]), _p1[1] + t * (_p2[1] - _p1[1])]
+
+        const dp = [p01[0] + t * (p12[0] - p01[0]), p01[1] + t * (p12[1] - p01[1])]
+
+        return [
+            [p1, _p0, p01, dp],
+            [dp, p12, _p2, p2]
+        ]
+    }
+    
+    const isBetween=(x, v1, v2)=> {
+        if (v1 <= v2) {
+            return x >= v1 && x <= v2
+        } else {
+            return x >= v2 && x <= v1
+        }
+    }
+    
+    const lineEquation = (p1, p2)=> {
+        const [x1, x2] = [p1[0], p2[0]]
+        const [y1, y2] = [p1[1], p2[1]]
+        return [y1 - y2, x2 - x1, x1 * y2 - y1 * x2]
+    }
+    
+    const pointToLine=(x, y, a, b, c)=> {
+        const den = a * a + b * b
+        return [(b * (b * x - a * y) - a * c) / den, (a * (-b * x + a * y) - b * c) / den]
+    }
+    
+    const bezier_controlPointDistanceWithinToleranceFromLine=(cp, p1, p2, a, b, c, tolSquared)=>{
+        const c1Hat = pointToLine(...cp, a, b, c)
+        const cpDistSqared = v_distsquared(cp, c1Hat)
+
+        if (cpDistSqared > tolSquared) {
+            return false
+        }
+        if (Math.abs(p2[0]-p1[0]) > Math.abs(p2[1]-p1[1])) {
+          if (!isBetween(c1Hat[0], p1[0], p2[0])) {
+            return false
+          }
+        } else {
+          if (!isBetween(c1Hat[1], p1[1], p2[1])) {
+            return false
+          }
+        } 
+        return true
+    }
+    
+    const bezier_isflat = (p1, c1, c2, p2, tolerance) => {
+        const tolSquared = tolerance * tolerance
+        if (v_distsquared(p1,c1)<tolSquared && v_distsquared(p2,c2)<tolSquared) {
+            console.log(v_distsquared(p1,c1))
+            return true
+        }
+
+        const [a, b, c] = lineEquation(p1, p2)
+        return bezier_controlPointDistanceWithinToleranceFromLine(c1, p1, p2, a, b, c, tolSquared) &&
+            bezier_controlPointDistanceWithinToleranceFromLine(c2, p1, p2, a, b, c, tolSquared)
+
+    }
+    
+    const inflectionPoints = (p1, c1, c2, p2) => {
+        const [ax, ay] = [c1[0] - p1[0], c1[1] - p1[1]]
+        const [bx, by] = [c2[0] - c1[0] - ax, c2[1] - c1[1] - ay]
+        const [cx, cy] = [p2[0] - c2[0] - ax - 2 * bx, p2[1] - c2[1] - ay - 2 * by]
+
+        const a = bx * cy - by * cx
+        const b = ax * cy - ay * cx
+        const c = ax * by - ay * bx
+        
+
+        const det = b * b - 4 * a * c
+        if (det < 0) {
+            return []
+        } else if (det === 0) {
+            const t = -b / (2 * a)
+            return (t > 0 && t < 1) ? [t] : []
+        } else {
+            return [
+                (-b + Math.sqrt(det)) / (2 * a),
+                (-b - Math.sqrt(det)) / (2 * a)
+            ].filter(t => (t > 0 && t < 1))
+        }
+    }
+    
+    const line2line=(p1a, p2a, p1b, p2b)=> {
+        const [a, b] = p1a
+        const [c, d] = v_sub(p2a, p1a)
+        const [e, f] = p1b
+        const [g, h] = v_sub(p2b, p1b)
+        const det = c * h - d * g
+        if (Math.abs(det) <= 0.00001) {
+            return null
+        }
+        const t1 = (h * (e - a) - g * (f - b)) / det
+        const t2 = (d * (e - a) - c * (f - b)) / det
+        return {
+            t1: t1,
+            t2: t2,
+            p: [a + t1 * c, b + t1 * d]
+        }
+    }
+    
+    const findCenter=(p, c, g)=> {
+        const pgmid = [(p[0] + g[0]) / 2, (p[1] + g[1]) / 2] // Midpoint between p and g
+        const p_plus_pcnorm = [p[0] + c[1] - p[1], p[1] + p[0] - c[0]]
+        const pgmid_plus_pgnorm = [pgmid[0] + g[1] - p[1], pgmid[1] + p[0] - g[0]]
+        const crossing = line2line(p, p_plus_pcnorm, pgmid, pgmid_plus_pgnorm);
+        return crossing === null ? null : crossing.p
+    }
+    
+    const resizeCanvas=() => [canvas.width,canvas.height]=[window.innerWidth, window.innerHeight]
+    
+    
+    const drawHandles = (p1,c1,c2,p2, strokestyle, linewidth) => {
+      ctx.beginPath()
+      ctx.strokeStyle=strokestyle
+      ctx.lineWidth=linewidth
+      ctx.moveTo(...p1)
+      ctx.lineTo(...c1)
+      ctx.moveTo(...c2)
+      ctx.lineTo(...p2)
+      ctx.stroke()
+    }
+    
+    const monotone_beziers = (points, inf) => {
+      if (inf.length===0) {
+        return [points]
+      } else if (inf.length===1) {
+        return bezier_split(...points,inf[0])
+      } else {
+        const [bez1,beztmp]=bezier_split(...points,inf[0])
+        const [bez2,bez3]=bezier_split(...beztmp, inf[1])
+        return [bez1,bez2,bez3]
+      }
+    }
+    
+    const repaint = () => {
+      ctx.clearRect(0,0,canvas.width,canvas.height)
+      ctx.beginPath()
+      ctx.strokeStyle='#2020C0'
+      ctx.moveTo(...points[0]);
+      ctx.bezierCurveTo(...points[1],...points[2],...points[3])
+      ctx.stroke()
+    
+      drawHandles(...points, '#c0c0c0', 1)
+    
+      ctx.beginPath()
+      ctx.fillStyle='#e0e0e0'
+      ctx.strokeStyle='#808080'
+      points.forEach(p=>{
+        ctx.rect(...v_add(p,[-boxsize,-boxsize]),10,10)
+      })
+      ctx.fill()
+      ctx.stroke()
+      
+      const inf=inflectionPoints(...points)
+      const monotones=monotone_beziers(points, inf)
+      
+      inf.forEach(t=>{
+        ctx.beginPath()
+        const x=bezier(...(points.map(p=>p[0])),t)
+      	const y=bezier(...(points.map(p=>p[1])),t)
+      	ctx.fillStyle='#e08080'
+      	ctx.arc(x,y,5,0,Math.PI*2,false)
+      	ctx.fill()
+      	ctx.stroke()
+      })
+      
+      //if (inf.length===0) {
+        if (bezier_isflat(...points,tolerance)) {
+          console.log("LINE")
+        } else if (v_distsquared(points[0],points[3])<tolerance*tolerance){
+          console.log("LINE")
+        } else {
+          const [p1,c1,c2,p2]=[...points]
+          
+          const crossing = line2line(p1, c1, p2, c2)
+          if (crossing!==null) {
+          
+            // Point v
+            const v = crossing.p
+            const p1c1 = v_sub(c1, p1)
+            const p1v=v_sub(v,p1)
+            if (v_dot(p1c1,p1v)>0) {
+            
+              const dp1v = v_length(p1v)
+              const dp2v = v_length(v_sub(v, p2))
+              const dp1p2 = v_length(v_sub(p2, p1))
+              
+              // Point g
+              const g = [
+                (dp2v * p1[0] + dp1v * p2[0] + dp1p2 * v[0]) / (dp2v + dp1v + dp1p2),
+                (dp2v * p1[1] + dp1v * p2[1] + dp1p2 * v[1]) / (dp2v + dp1v + dp1p2)
+              ]
+            
+              ctx.beginPath();
+              ctx.lineWidth=0.5
+              ctx.strokeStyle='#ff0000'
+              ctx.moveTo(...p1)
+              ctx.lineTo(...v)
+              ctx.lineTo(...p2)
+              ctx.stroke();
+              
+              // Incenter point g
+              ctx.beginPath()
+      	      ctx.fillStyle='#80f080'
+      	      ctx.arc(...g,5,0,Math.PI*2,false)
+      	      ctx.fill()
+      	      ctx.stroke()
+      	      ctx.beginPath();
+      	      ctx.strokeStyle='#e0e060'
+      	      ctx.moveTo(...p1)
+      	      ctx.lineTo(...g)
+      	      ctx.lineTo(...p2)
+      	      ctx.stroke()
+              
+              const s1 = findCenter(p1, c1, g)
+              const s2 = findCenter(p2, c2, g)
+              
+              if (s1!==null && s2!==null) {
+                ctx.beginPath();
+      	        ctx.strokeStyle='#e0e060'
+      	        ctx.moveTo(...p1)
+      	        ctx.lineTo(...s1)
+      	        ctx.lineTo(...g)
+      	        ctx.moveTo(...p2)
+      	        ctx.lineTo(...s2)
+      	        ctx.lineTo(...g)
+      	        ctx.stroke()
+      	        
+      	        ctx.beginPath()
+      	        ctx.fillStyle='#80f080'
+      	        ctx.strokeStyle='#ff0000'
+      	        ctx.arc(...s1,5,0,Math.PI*2,false)
+      	        ctx.fill()
+      	        ctx.stroke()
+      	        
+      	        ctx.beginPath()
+      	        ctx.fillStyle='#80f080'
+      	        ctx.strokeStyle='#ff0000'
+      	        ctx.arc(...s2,5,0,Math.PI*2,false)
+      	        ctx.fill()
+      	        ctx.stroke()
+              } 
+            }
+          }
+        }
+      //}
+    }
+    
+
+    
+    const mousepos =(e)=> [e.clientX-canvas.offsetLeft, e.clientY-canvas.offsetTop]
+    
+    canvas.onmousedown = (e) => {
+      const mp=mousepos(e)
+      const pind=points.findIndex((p)=>inBox(p,mp))
+      if (pind>=0) {
+        dragging=true
+        dragInd=pind
+      }
+    }
+    
+    canvas.onmousemove = (e) => {
+      if (dragging) {
+        const mp=mousepos(e)
+        points[dragInd]=mp
+        repaint()
+      }
+    }
+    
+    canvas.onmouseup = (e) => {
+      dragging=false
+      dragInd=-1
+    }
+    
+    resizeCanvas()
+    repaint()
+  </script>
+</html>
