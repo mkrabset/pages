@@ -1,0 +1,202 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    text-align: center;
+    max-width: 1000px;
+    height: 98vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.game-layout {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    overflow: hidden;
+}
+
+.sidebar {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 280px;
+    text-align: left;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+h1 {
+    color: #333;
+    margin: 0 0 10px 0;
+    font-size: 24px;
+}
+
+.game-container {
+    flex: 1;
+    border: 2px solid #333;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    overflow: visible;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 300px;
+    min-height: 300px;
+    max-width: calc(100vh - 80px);
+    flex-shrink: 0;
+}
+
+canvas {
+    display: block;
+}
+
+.controls {
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+.difficulty-selector {
+    margin: 10px 0;
+}
+
+.difficulty-selector select {
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.game-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 15px;
+    margin-top: 15px;
+    width: 100%;
+}
+
+#timer {
+    font-family: monospace;
+    font-size: 24px;
+    color: #333;
+    background-color: #000;
+    padding: 10px 15px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.digit {
+    display: inline-block;
+    position: relative;
+    width: 18px;
+    height: 30px;
+    margin: 0 2px;
+    background-color: #222;
+}
+
+.segment {
+    position: absolute;
+    background-color: #f00;
+    opacity: 0.2;
+}
+
+.segment.on {
+    opacity: 1;
+}
+
+/* Horisontale segmenter */
+.segment-a, .segment-d, .segment-g {
+    width: 12px;
+    height: 3px;
+    left: 3px;
+}
+
+.segment-a {
+    top: 0;
+}
+
+.segment-g {
+    top: 13px;
+}
+
+.segment-d {
+    bottom: 0;
+}
+
+/* Vertikale segmenter */
+.segment-b, .segment-c, .segment-e, .segment-f {
+    width: 3px;
+    height: 12px;
+}
+
+.segment-b, .segment-c {
+    right: 0;
+}
+
+.segment-e, .segment-f {
+    left: 0;
+}
+
+.segment-b, .segment-f {
+    top: 1px;
+}
+
+.segment-c, .segment-e {
+    bottom: 1px;
+}
+
+.colon, .dot {
+    display: inline-block;
+    color: #f00;
+    font-weight: bold;
+    margin: 0 2px;
+    position: relative;
+    top: -2px;
+}
+
+#resetButton, #giveUpButton {
+    padding: 8px 16px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#resetButton {
+    background-color: #3498db;
+}
+
+#resetButton:hover {
+    background-color: #2980b9;
+}
+
+#giveUpButton {
+    background-color: #e74c3c;
+}
+
+#giveUpButton:hover {
+    background-color: #c0392b;
+}
+
+#message {
+    height: 30px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #d63031;
+    margin-top: 10px;
+}

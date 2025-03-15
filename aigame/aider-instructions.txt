@@ -1,0 +1,441 @@
+# 2025-03-15 22:39:48.390495
++y
+
+# 2025-03-15 22:41:04.412960
++lag en webside med et spill der en mann starter i midten av en labyrint, og man styrer mannen med piltastene for å finne veien ut
+
+# 2025-03-15 22:41:44.785976
++y
+
+# 2025-03-15 22:41:57.081430
++/run firefox index.html
+
+# 2025-03-15 22:41:57.081487
++/run firefox index.html
+
+# 2025-03-15 22:42:41.267875
++y
+
+# 2025-03-15 22:42:44.131144
++n
+
+# 2025-03-15 22:43:26.359711
++legg til en reset-knapp som restarter spillet, og et klokke-display som sier hvor lang tid man har brukt
+
+# 2025-03-15 22:43:58.232437
++y
+
+# 2025-03-15 22:43:58.235042
++/run firefox index.html
+
+# 2025-03-15 22:43:58.235085
++/run firefox index.html
+
+# 2025-03-15 22:44:41.101629
++n
+
+# 2025-03-15 22:46:57.379501
++endre stoppeklokken til å se ut som et 7 segment display som viser hundredels sekunds nøyaktighet
+
+# 2025-03-15 22:47:43.241306
++y
+
+# 2025-03-15 22:47:43.243908
++/run firefox index.html
+
+# 2025-03-15 22:47:43.243946
++/run firefox index.html
+
+# 2025-03-15 22:48:16.164379
++n
+
+# 2025-03-15 22:48:49.952893
++endre slik at det genereres en ny tilfeldig labyrint hver gang man resetter spllet
+
+# 2025-03-15 22:49:45.093091
++y
+
+# 2025-03-15 22:49:45.095634
++/run firefox index.html
+
+# 2025-03-15 22:49:45.095674
++/run firefox index.html
+
+# 2025-03-15 22:50:27.692407
++n
+
+# 2025-03-15 22:50:46.192077
++nå har piltastene sluttet å fungere
+
+# 2025-03-15 22:51:05.209509
++y
+
+# 2025-03-15 22:51:05.212929
++/run firefox index.html
+
+# 2025-03-15 22:51:05.212971
++/run firefox index.html
+
+# 2025-03-15 22:52:07.749988
++y
+
+# 2025-03-15 22:52:13.838233
++n
+
+# 2025-03-15 22:53:07.307260
++endre labyrint-generatoren sånn at den ikke lager store hulrom. F.eks en kvadrat på 2x2 celler kan aldri kun bestå av hulrom
+
+# 2025-03-15 22:53:40.462368
++y
+
+# 2025-03-15 22:53:40.465505
++/run firefox index.html
+
+# 2025-03-15 22:53:40.465547
++/run firefox index.html
+
+# 2025-03-15 22:54:45.760284
++y
+
+# 2025-03-15 22:54:48.819289
++n
+
+# 2025-03-15 22:55:43.189154
++når mannen har nådd målet vil jeg se en fyrverkeri-effekt, og det skal ikke være mulig å flytte mannen etter dette før man har restartet spillet
+
+# 2025-03-15 22:56:28.155335
++y
+
+# 2025-03-15 22:56:28.158460
++/run firefox index.html
+
+# 2025-03-15 22:56:28.158524
++/run firefox index.html
+
+# 2025-03-15 22:57:10.372568
++y
+
+# 2025-03-15 22:57:11.533899
++n
+
+# 2025-03-15 22:59:08.076423
++jeg vil gjerne ha en dropdown hvor man kan velge mellom easy, normal og hard, og hvor disse bestemmer oppløsningen på spillebrettet. Spillet slik det er nå er easy. Normal har dobbel oppløsning, og hard har tredobbel oppløsning
+
+# 2025-03-15 22:59:41.252427
++y
+
+# 2025-03-15 22:59:41.255577
++/run firefox index.html
+
+# 2025-03-15 22:59:41.255624
++/run firefox index.html
+
+# 2025-03-15 23:01:48.488498
++y
+
+# 2025-03-15 23:01:50.626662
++n
+
+# 2025-03-15 23:02:10.531533
++veldig bra, men jeg har ikke sett noe fyrverkeri effekt når man kommer i mål
+
+# 2025-03-15 23:03:05.955491
++y
+
+# 2025-03-15 23:03:05.958629
++/run firefox index.html
+
+# 2025-03-15 23:03:05.958674
++/run firefox index.html
+
+# 2025-03-15 23:03:55.798834
++yes
+
+# 2025-03-15 23:03:59.192881
++no
+
+# 2025-03-15 23:05:48.714495
++bra, nå fungerer fyrverkeriet. Jeg vil gjerne ha en gi-opp knapp som avslutter omgangen. Når denne trykkes skal mannen ikke lenger kunne flyttes, og korteste vei ut av labyrinten skal markeres ved at de hvite cellen på denne stien farges gule
+
+# 2025-03-15 23:09:51.544319
++y
+
+# 2025-03-15 23:09:51.547903
++/run firefox index.html
+
+# 2025-03-15 23:09:51.547955
++/run firefox index.html
+
+# 2025-03-15 23:09:56.438493
++n
+
+# 2025-03-15 23:12:37.488642
++endre farge på mannen fra rød til gul, og sørg for at øynene også blir mindre når oppløsningen økes
+
+# 2025-03-15 23:13:11.127717
++/run firefox index.html
+
+# 2025-03-15 23:13:11.127960
++/run firefox index.html
+
+# 2025-03-15 23:14:29.637550
++y
+
+# 2025-03-15 23:14:31.372191
++n
+
+# 2025-03-15 23:15:23.940449
++flytt alt som er under labyrinten til høyre for labyrinten sånn at canvas'en kan gjøres litt større
+
+# 2025-03-15 23:15:48.474558
++y
+
+# 2025-03-15 23:15:48.477327
++/run firefox index.html
+
+# 2025-03-15 23:15:48.477396
++/run firefox index.html
+
+# 2025-03-15 23:16:34.904080
++yes
+
+# 2025-03-15 23:16:37.141949
++n
+
+# 2025-03-15 23:17:28.819393
++sørg for at overskriften ikke tar så mye vertikal plass, og bruk nesten all resterende vertikal plass til å øke størrelsen på labyrinten
+
+# 2025-03-15 23:17:52.164256
++y
+
+# 2025-03-15 23:17:52.167767
++/run firefox index.html
+
+# 2025-03-15 23:17:52.167811
++/run firefox index.html
+
+# 2025-03-15 23:18:33.959002
++yes
+
+# 2025-03-15 23:18:37.182470
++n
+
+# 2025-03-15 23:20:01.865860
++Det er fortsatt ca 25 prosent ubrukt vertikal space. Kan du bruke media query eller noe for å finne ut hvor mye ledig plass det er, og øke størrelsen på labyrinten
+
+# 2025-03-15 23:20:30.473281
++y
+
+# 2025-03-15 23:20:30.476067
++/run firefox index.html
+
+# 2025-03-15 23:20:30.476133
++/run firefox index.html
+
+# 2025-03-15 23:22:16.963202
++yes
+
+# 2025-03-15 23:22:18.684970
++n
+
+# 2025-03-15 23:23:58.819784
++jeg vil ikke at det genereres ny labyrint hver gang man endrer størrelse på browservinduet. Og jeg vil at labyrinten skal fylle vinduet vertikalt dynamisk. Spillbrettet skal alltid være kvadratiskt
+
+# 2025-03-15 23:24:28.724570
++y
+
+# 2025-03-15 23:24:28.727377
++/run firefox index.html
+
+# 2025-03-15 23:24:28.727434
++/run firefox index.html
+
+# 2025-03-15 23:25:07.093437
++yes
+
+# 2025-03-15 23:25:09.690700
++n
+
+# 2025-03-15 23:26:24.692205
++det ser ut til at canvas'en blir mindre og mindre hver gang jeg endrer browservinduets størrelse, uansett om jeg gjør det større eller mindre. Hvis jeg gjør vinduet større så vil jeg at canvas'en skal bli tilsvarende større
+
+# 2025-03-15 23:26:54.807057
++y
+
+# 2025-03-15 23:26:54.809853
++/run firefox index.html
+
+# 2025-03-15 23:26:54.809890
++/run firefox index.html
+
+# 2025-03-15 23:27:15.281646
++yes
+
+# 2025-03-15 23:27:25.768877
++n
+
+# 2025-03-15 23:29:45.977798
++Canvas'en blir fortsatt mindre og mindre uansett. Går det ikke ann å f.eks bruke window.innerWidth og innerHeight som utgangspunkt for å sette størrelse på canvas'en?
+
+# 2025-03-15 23:30:27.954257
++y
+
+# 2025-03-15 23:30:27.957078
++/run firefox index.html
+
+# 2025-03-15 23:30:27.957142
++/run firefox index.html
+
+# 2025-03-15 23:31:50.897559
++n
+
+# 2025-03-15 23:33:45.953501
++sørg for at canvas'en alltid er kvadratisk, slik at vi ser hele labyrinten og ingen padding inni canvasen. Det er normalt masse horisontal plass
+
+# 2025-03-15 23:34:12.363909
++y
+
+# 2025-03-15 23:34:12.369439
++/run firefox index.html
+
+# 2025-03-15 23:34:12.369501
++/run firefox index.html
+
+# 2025-03-15 23:35:33.466569
++n
+
+# 2025-03-15 23:36:29.548836
++la game-info div'en flyte helt ut til høyre så vi gjør plass for at canvasen kan vise hele labyrinten
+
+# 2025-03-15 23:36:53.312455
++y
+
+# 2025-03-15 23:36:53.315834
++/run firefox index.html
+
+# 2025-03-15 23:36:53.315885
++/run firefox index.html
+
+# 2025-03-15 23:37:15.070810
++n
+
+# 2025-03-15 23:40:32.979520
++div'en med id game-container må styles så den alltid viser hele sitt innhold. Den må ikke krympe
+
+# 2025-03-15 23:40:52.078288
++y
+
+# 2025-03-15 23:40:52.081341
++/run firefox index.html
+
+# 2025-03-15 23:40:52.081381
++/run firefox index.html
+
+# 2025-03-15 23:42:43.181349
++gi sidebar div'en absolute positioning, og plasser den øverst til venstre
+
+# 2025-03-15 23:43:00.581747
++y
+
+# 2025-03-15 23:43:00.584505
++/run firefox index.html
+
+# 2025-03-15 23:43:00.584542
++/run firefox index.html
+
+# 2025-03-15 23:45:05.789875
++y
+
+# 2025-03-15 23:45:05.792795
++/run xdg-open index.html
+
+# 2025-03-15 23:45:05.792833
++/run xdg-open index.html
+
+# 2025-03-15 23:46:19.099566
++ta sidebar-div'en ut av flex-containeren og plasser den istedet direkte under body slik at den med absolute positioning havner øverst til venste på websiden
+
+# 2025-03-15 23:46:42.816161
++y
+
+# 2025-03-15 23:46:42.819240
++/run firefox index.html
+
+# 2025-03-15 23:46:42.819296
++/run firefox index.html
+
+# 2025-03-15 23:48:51.043074
++y
+
+# 2025-03-15 23:48:51.046313
++/run xdg-open index.html
+
+# 2025-03-15 23:48:51.046372
++/run xdg-open index.html
+
+# 2025-03-15 23:49:22.528936
++la mannen få litt hvitere tenner, og legg til svart omriss både på munn og hode
+
+# 2025-03-15 23:49:53.199484
++y
+
+# 2025-03-15 23:49:53.202985
++/run firefox index.html
+
+# 2025-03-15 23:49:53.203062
++/run firefox index.html
+
+# 2025-03-15 23:50:46.283206
++y
+
+# 2025-03-15 23:50:46.286724
++/run xdg-open index.html
+
+# 2025-03-15 23:50:46.286770
++/run xdg-open index.html
+
+# 2025-03-15 23:51:46.587640
++fjern hvite tenner, og bare bruk strek for munn. horisontal strek når spillet pågår, og smil når mannen kommer i mål. Hvis man trykker gi-opp, gi mannen et surt fjes
+
+
+
+
+
+> Kan du ramse opp alle instrukser jeg har gitt deg så langt?                                                                                                                                                                                 
+
+Her er en oppsummering av instruksene du har gitt meg så langt:                                                                                                                                                                               
+
+...
+...
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+index.html script.js style.css                                                                                                                                                                                                                
+> Kan du ramse dem opp ordrett slik jeg skrev dem                                                                                                                                                                                             
+
+Her er de ordrette instruksene du har gitt meg:                                                                                                                                                                                               
+
+ 1 "lag en webside med et spill der en mann starter i midten av en labyrint, og man styrer mannen med piltastene for å finne veien ut"                                                                                                        
+ 2 "legg til en reset-knapp som restarter spillet, og et klokke-display som sier hvor lang tid man har brukt"                                                                                                                                 
+  3 "endre stoppeklokken til å se ut som et 7 segment display som viser hundredels sekunds nøyaktighet"                                                                                                                                       
+  4 "endre slik at det genereres en ny tilfeldig labyrint hver gang man resetter spllet"                                                                                                                                                      
+  5 "endre labyrint-generatoren sånn at den ikke lager store hulrom. F.eks en kvadrat på 2x2 celler kan aldri kun bestå av hulrom"                                                                                                            
+  6 "når mannen har nådd målet vil jeg se en fyrverkeri-effekt, og det skal ikke være mulig å flytte mannen etter dette før man har restartet spillet"                                                                                        
+  7 "jeg vil gjerne ha en dropdown hvor man kan velge mellom easy, normal og hard, og hvor disse bestemmer oppløsningen på spillebrettet. Spillet slik det er nå er easy. Normal har dobbel oppløsning, og hard har tredobbel oppløsning"     
+  8 "flytt alt som er under labyrinten til høyre for labyrinten sånn at canvas'en kan gjøres litt større"                                                                                                                                     
+  9 "gi sidebar div'en absolute positioning, og plasser den øverst til venstre"                                                                                                                                                               
+ 10 "ta sidebar-div'en ut av flex-containeren og plasser den istedet direkte under body slik at den med absolute positioning havner øverst til venste på websiden"                                                                            
+ 11 "endre farge på mannen fra rød til gul, og sørg for at øynene også blir mindre når oppløsningen økes"                                                                                                                                     
+ 12 "endre slik at det genereres en ny tilfeldig labyrint hver gang man resetter spillet"                                                                                                                                                     
+ 13 "jeg vil gjerne ha en gi-opp knapp som avslutter omgangen. Når denne trykkes skal mannen ikke lenger kunne flyttes, og korteste vei ut av labyrinten skal markeres ved at de hvite cellen på denne stien farges gule"                     
+ 14 "fjern hvite tenner, og bare bruk strek for munn. horisontal strek når spillet pågår, og smil når mannen kommer i mål. Hvis man trykker gi-opp, gi mannen et surt fjes"                                                                   
+ 15 "det ser ut til at canvas'en blir mindre og mindre uansett. Går det ikke ann å f.eks bruke window.innerWidth og innerHeight som utgangspunkt for å sette størrelse på canvas'en?"                                                         
+ 16 "Canvas'en blir fortsatt mindre og mindre uansett. Hvis jeg gjør vinduet større så vil jeg at canvas'en skal bli tilsvarende større"                                                                                                      
+ 17 "jeg vil ikke at det genereres ny labyrint hver gang man endrer størrelse på browservinduet. Og jeg vil at labyrinten skal fylle vinduet vertikalt dynamisk. Spillbrettet skal alltid være kvadratiskt"                                   
+ 18 "div'en med id game-container må styles så den alltid viser hele sitt innhold. Den må ikke krympe"                                                                                                                                        
+ 19 "Det er fortsatt ca 25 prosent ubrukt vertikal space. Kan du bruke media query eller noe for å finne ut hvor mye ledig plass det er, og øke størrelsen på labyrinten"                                                                     
+ 20 "la mannen få litt hvitere tenner, og legg til svart omriss både på munn og hode"                                                                                                                                                         
+ 21 "sørg for at canvas'en alltid er kvadratisk, slik at vi ser hele labyrinten og ingen padding inni canvasen. Det er normalt masse horisontal plass"                                                                                        
+ 22 "la game-info div'en flyte helt ut til høyre så vi gjør plass for at canvasen kan vise hele labyrinten"   
+ ...
+ ...
+     

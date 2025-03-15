@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Labyrintspill</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="sidebar">
+        <p>Bruk piltastene for å navigere mannen ut av labyrinten</p>
+        <div class="controls">
+            <p>Kontroller: ←↑→↓ (piltaster)</p>
+            <div class="difficulty-selector">
+                <label for="difficulty">Vanskelighetsgrad: </label>
+                <select id="difficulty">
+                    <option value="easy">Easy</option>
+                    <option value="normal">Normal</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </div>
+            <div class="game-info">
+                <div id="timer"></div>
+                <button id="resetButton">Start på nytt</button>
+                <button id="giveUpButton">Gi opp</button>
+            </div>
+        </div>
+        <div id="message"></div>
+    </div>
+    <div class="container">
+        <h1>Labyrintspill - Finn veien ut!</h1>
+        <div class="game-layout">
+            <div class="game-container">
+                <canvas id="gameCanvas" width="600" height="600"></canvas>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
