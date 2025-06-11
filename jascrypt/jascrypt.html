@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jasypt PBEWITHHMACSHA512ANDAES_256 Encypter/Decrypter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, textarea {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      padding: 10px 15px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background-color: #f9f9f9;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>Jasypt PBEWITHHMACSHA512ANDAES_256 Encrypter/Decrypter</h1>
+  
+  <div class="container">
+    <div class="form-group">
+      <label for="password">Master passord:</label>
+      <input type="password" id="password" placeholder="Enter master password">
+    </div>
+    
+    <div class="form-group">
+      <label for="plaintext">Plain text:</label>
+      <textarea id="plaintext" rows="4" placeholder="Enter plain text to be encrypted"></textarea>
+    </div>
+    
+    <div class="form-group">
+      <label for="iterations">Iterations:</label>
+      <input type="number" id="iterations" value="1000" min="1">
+    </div>
+    
+    <div>
+      <button id="encryptBtn">Encrypt</button>
+      <button id="decryptBtn">Decrypt</button>
+    </div>
+    
+    <div class="form-group">
+      <label for="encryptedText">Encrypted text:</label>
+      <textarea id="encryptedText" rows="6" placeholder="Enter ciphertext to be decrypted"></textarea>
+    </div>
+    
+    <div class="result" id="resultBox">
+      <p>stats</p>
+    </div>
+  </div>
+
+  <script src="jasypt-implementation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const passwordInput = document.getElementById('password');
+      const plaintextInput = document.getElementById('plaintext');
+      const iterationsInput = document.getElementById('iterations');
+      const encryptedTextInput = document.getElementById('encryptedText');
+      const resultBox = document.getElementById('resultBox');
+      const encryptBtn = document.getElementById('encryptBtn');
+      const decryptBtn = document.getElementById('decryptBtn');
+      
+      // Krypter-knapp
+      encryptBtn.addEventListener('click', async () => {
+        try {
+          const password = passwordInput.value;
+          const plaintext = plaintextInput.value;
+          const iterations = parseInt(iterationsInput.value);
+          
+          if (!password || !plaintext) {
+            throw new Error('Password and plaintext must be entered');
+          }
+          
+          const jasypt = new JasyptPBEWITHHMACSHA512ANDAES256({
+            iterationCount: iterations
+          });
+          
+          const startTime = performance.now();
+          const encrypted = await jasypt.encrypt(plaintext, password);
+          const endTime = performance.now();
+          
+          encryptedTextInput.value = encrypted;
+          resultBox.innerHTML = `
+            <p>Encryption complete!</p>
+            <p>Time spent: ${(endTime - startTime).toFixed(2)} ms</p>
+            <p>Length of encrypted text: ${encrypted.length} chars</p>
+          `;
+        } catch (error) {
+          resultBox.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+        }
+      });
+      
+      // Dekrypter-knapp
+      decryptBtn.addEventListener('click', async () => {
+        try {
+          const password = passwordInput.value;
+          const encryptedText = encryptedTextInput.value;
+          const iterations = parseInt(iterationsInput.value);
+          
+          if (!password || !encryptedText) {
+            throw new Error('Password and encrypted text must be entered');
+          }
+          
+          const jasypt = new JasyptPBEWITHHMACSHA512ANDAES256({
+            iterationCount: iterations
+          });
+          
+          const startTime = performance.now();
+          const decrypted = await jasypt.decrypt(encryptedText, password);
+          const endTime = performance.now();
+          
+          plaintextInput.value = decrypted;
+          resultBox.innerHTML = `
+            <p>Decryption complete!</p>
+            <p>Time spent: ${(endTime - startTime).toFixed(2)} ms</p>
+            <p>Decrypted text: ${decrypted}</p>
+          `;
+        } catch (error) {
+          resultBox.innerHTML = `<p class="error">Decryption failed: ${error.message}</p>`;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
