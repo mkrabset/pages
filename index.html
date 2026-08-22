@@ -1,34 +1,595 @@
 <!DOCTYPE html>
-<html>
-  <head>
-<meta name="description" content="My CNC software and other projects" />
-  <meta name="keywords" content="CNC,GCODE,SVG,DXF, MILLING,KRABZCAM,G-CODE,GCODE,ROUTER,TOOLPATH"/>
-  </head>
-  <body>
-    <h2>My stuff</h2>
-    
-    <ul>
-      <li><a href="https://github.com/mkrabset/">me@github</a></li>
-      <li><a href="https://mkrabset.github.io/krabzcam/index.html">KrabzCAM</a> Tool for converting vector graphics (SVG and DXF) to G-CODE for CNC processing</li>
-      <li><a href="https://mkrabset.github.io/pages/logica/index.html">Logica</a> Educational tool for modeling and simulating digital circuitry (<a href="https://mkrabset.github.io/pages/logica/USER_GUIDE.html">User guide</a>) (<a href="https://mkrabset.github.io/pages/logica/design.logica.json">Sample design</a>, <a href="https://mkrabset.github.io/pages/logica/screenshot.png">screenshot</a>) </li>
-      <li><a href="https://mkrabset.github.io/pages/krabzgear/index.html">KrabzGear</a> Tool for creating involute gear SVGs</li>
-      <li><a href="https://mkrabset.github.io/pages/scribble-js/index.html">Scribble-js</a> Generate G-CODE from hand-written drawings</li>
-      <li><a href="./qrcodegen/index.html">QRCodeGen</a> Simple QR-code generator based on node-qrcode and 'QRCode for JavaScript' by Kazuhiko Arase</li>
-      <li><a href="./jascrypt/jascrypt.html">JasCrypt</a> Simple jasypt-like encrypt/decrypt utility</li>
-      <li><a href="./epicycles/epicycles.html">Epicycles</a> Tracing random curves in 2d with fourier series</li>
-      <li><a href="./biarc-test/biarc-test.html">BiArc interpolation test</a> Interpolating cubic beziers with biarcs</li>
-      <li><a href="./collatz/collatz.html">Collatz-js</a> Collatz brancing visualization (<a href="https://github.com/mkrabset/pages/tree/master/collatz">javascript implementation</a>)</li>
-      <li><a href="./collatz-elm/src/index.html">Collatz-elm</a> Collatz brancing visualization (<a href="https://github.com/mkrabset/pages/tree/master/collatz-elm">elm implementation</a>)</li>
-      <li><a href="./collatzseq/index.html">Collatz-sequences in ELM</a> (<a href="https://github.com/mkrabset/pages/tree/master/collatzseq">source</a>)</li>
-      <li><a href="./elm-hilbert/src/index.html">Hilbert curve in ELM using L-system</a> (<a href="https://github.com/mkrabset/pages/tree/master/elm-hilbert">source</a>)</li>
-      <li><a href="./elm-sierpinsky/src/index.html">Sierpinsky arrowhead curve in ELM using L-system</a> (<a href="https://github.com/mkrabset/pages/tree/master/elm-sierpinsky">source</a>)</li>
-      <li><a href="./elm-circlepack/src/index.html">Packing circles in ELM</a> (<a href="https://github.com/mkrabset/pages/tree/master/elm-circlepack">source</a>)</li>
-      <li><a href="./elm-quadtree/src/index.html">Collision detection with quadtrees in ELM</a> (<a href="https://github.com/mkrabset/pages/tree/master/elm-quadtree">source</a>)</li>
-      <li><a href="./mermaid-renderer/index.html">Mermaid-diagram editor</a></li>
-      <li><a href="./minesweeper/minesweeper.html">Minesweeper</a> A JS minesweeper (<a href="https://github.com/mkrabset/pages/tree/master/minesweeper">source</a>)</li>
-      <li><a href="./posenet-fun/index.html">Fun with PoseNet and camera (firefox)(<a href="https://github.com/mkrabset/pages/tree/master/posenet-fun">source</a>)</li>
-      <li><a href="./crisscross/index.html">Travel route plan/visualize app</a></li>
-    </ul>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="My CNC software and other projects" />
+  <meta name="keywords" content="CNC,GCODE,SVG,DXF,MILLING,KRABZCAM,G-CODE,GCODE,ROUTER,TOOLPATH"/>
+  <title>mkrabset — Projects</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  </body>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #21262d;
+      --border: #30363d;
+      --accent: #58a6ff;
+      --accent2: #3fb950;
+      --accent3: #d2a8ff;
+      --accent4: #ffa657;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --heading: #f0f6fc;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 3rem 2rem 2.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .site-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--heading);
+      letter-spacing: -0.03em;
+    }
+
+    .site-title span {
+      color: var(--accent);
+    }
+
+    .site-subtitle {
+      color: var(--muted);
+      margin-top: 0.35rem;
+      font-size: 1rem;
+    }
+
+    .github-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      border: 1px solid var(--border);
+      padding: 0.45rem 0.9rem;
+      border-radius: 6px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .github-link:hover { color: var(--text); border-color: var(--muted); }
+
+    .github-link svg { width: 18px; height: 18px; fill: currentColor; }
+
+    /* ── Main layout ── */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 2rem 5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4rem;
+    }
+
+    /* ── Section ── */
+    section {}
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-icon {
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── Featured card (full-width) ── */
+    .featured-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+
+    .featured-card.reverse { direction: rtl; }
+    .featured-card.reverse > * { direction: ltr; }
+
+    .featured-body {
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .featured-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .featured-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--heading);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+
+    .featured-desc {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.7;
+    }
+
+    .featured-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+
+    .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0d1117;
+    }
+
+    .btn-secondary {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .featured-media {
+      background: var(--surface2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 280px;
+      overflow: hidden;
+    }
+
+    .featured-media video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    video:-webkit-full-screen { object-fit: contain; }
+    video:fullscreen { object-fit: contain; }
+
+    .featured-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .media-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      color: var(--muted);
+      font-size: 3.5rem;
+      width: 100%;
+      height: 100%;
+      min-height: 280px;
+    }
+
+    .media-placeholder span {
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* ── Project grid ── */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      transition: border-color 0.2s, transform 0.2s;
+      text-decoration: none;
+    }
+
+    .project-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .project-card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--heading);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .project-card-title .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .dot-blue   { background: var(--accent); }
+    .dot-green  { background: var(--accent2); }
+    .dot-purple { background: var(--accent3); }
+    .dot-orange { background: var(--accent4); }
+
+    .project-card-desc {
+      color: var(--muted);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .project-card-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .tag-link {
+      font-size: 0.75rem;
+      color: var(--accent);
+      text-decoration: none;
+      background: rgba(88,166,255,0.08);
+      border: 1px solid rgba(88,166,255,0.2);
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      transition: background 0.15s;
+    }
+
+    .tag-link:hover { background: rgba(88,166,255,0.18); }
+
+    .tag-link.green {
+      color: var(--accent2);
+      background: rgba(63,185,80,0.08);
+      border-color: rgba(63,185,80,0.2);
+    }
+
+    .tag-link.green:hover { background: rgba(63,185,80,0.18); }
+
+    .tag-link.purple {
+      color: var(--accent3);
+      background: rgba(210,168,255,0.08);
+      border-color: rgba(210,168,255,0.2);
+    }
+
+    .tag-link.purple:hover { background: rgba(210,168,255,0.18); }
+
+    /* ── Responsive ── */
+    @media (max-width: 700px) {
+      .featured-card { grid-template-columns: 1fr; }
+      .featured-card.reverse { direction: ltr; }
+      .featured-media { min-height: 200px; }
+      .featured-title { font-size: 1.5rem; }
+      main { padding: 2rem 1rem 4rem; gap: 3rem; }
+      header { padding: 2rem 1rem 1.5rem; }
+      .site-title { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="site-title">mk<span>rabset</span></div>
+      <div class="site-subtitle">Hobby projects &amp; experiments</div>
+    </div>
+    <a class="github-link" href="https://github.com/mkrabset/" target="_blank" rel="noopener">
+      <svg viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
+          0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
+          -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
+          .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15
+          -.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27
+          .68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12
+          .51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
+          0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+      </svg>
+      mkrabset on GitHub
+    </a>
+  </div>
+</header>
+
+<main>
+
+  <!-- ══ KrabzCAM ══ -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">⚙️</div>
+      <div class="section-title">CNC Tooling</div>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="featured-card">
+      <div class="featured-body">
+        <div class="featured-label">Featured Project</div>
+        <div class="featured-title">KrabzCAM</div>
+        <div class="featured-desc">
+          A browser-based CAM tool that converts vector graphics — SVG and DXF files — into G-CODE toolpaths for CNC routers and mills. Supports multiple operations, tool offsets, and direct download of ready-to-run G-CODE.
+        </div>
+        <div class="featured-links">
+          <a class="btn btn-primary" href="https://mkrabset.github.io/krabzcam/index.html" target="_blank" rel="noopener">Open KrabzCAM</a>
+        </div>
+      </div>
+      <div class="featured-media">
+        <video controls muted loop playsinline>
+          <source src="./krabzcam/krabzcam.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <div class="project-grid" style="margin-top:1rem;">
+      <a class="project-card" href="https://mkrabset.github.io/pages/krabzgear/index.html" target="_blank" rel="noopener">
+        <div class="project-card-title"><span class="dot dot-blue"></span>KrabzGear</div>
+        <div class="project-card-desc">Generate precise involute gear profiles as SVG files, ready for laser cutting or importing into KrabzCAM.</div>
+      </a>
+      <a class="project-card" href="https://mkrabset.github.io/pages/scribble-js/index.html" target="_blank" rel="noopener">
+        <div class="project-card-title"><span class="dot dot-blue"></span>Scribble-js</div>
+        <div class="project-card-desc">Draw freehand on a canvas and export the strokes as G-CODE — lets a CNC machine trace your handwriting or sketches.</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ══ Logica ══ -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">🔌</div>
+      <div class="section-title">Logica</div>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="featured-card reverse">
+      <div class="featured-body">
+        <div class="featured-label">Featured Project</div>
+        <div class="featured-title">Logica</div>
+        <div class="featured-desc">
+          An educational tool for building and simulating digital logic circuits in the browser. Wire up gates, flip-flops, and buses — then clock them and watch the signals propagate in real time.
+        </div>
+        <div class="featured-links">
+          <a class="btn btn-primary" href="https://mkrabset.github.io/pages/logica/index.html" target="_blank" rel="noopener">Open Logica</a>
+          <a class="btn btn-secondary" href="https://mkrabset.github.io/pages/logica/USER_GUIDE.html" target="_blank" rel="noopener">User guide</a>
+          <a class="btn btn-secondary" href="https://mkrabset.github.io/pages/logica/design.logica.json">Sample design</a>
+        </div>
+      </div>
+      <div class="featured-media">
+        <video controls muted loop playsinline>
+          <source src="./logica/logica_f.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CrissCross ══ -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">🗺️</div>
+      <div class="section-title">CrissCross</div>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="featured-card">
+      <div class="featured-body">
+        <div class="featured-label">Travel Planning</div>
+        <div class="featured-title">CrissCross</div>
+        <div class="featured-desc">
+          Plan and visualize travel routes on an interactive map. Add waypoints, reorder stops, and see your journey laid out geographically.
+        </div>
+        <div class="featured-links">
+          <a class="btn btn-primary" href="./crisscross/index.html" target="_blank" rel="noopener">Open CrissCross</a>
+        </div>
+      </div>
+      <div class="featured-media">
+        <div class="media-placeholder">🗺️<span>Route Planning</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ Elm ══ -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">🌳</div>
+      <div class="section-title">Elm Experiments</div>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="project-grid">
+      <div class="project-card">
+        <div class="project-card-title"><span class="dot dot-purple"></span>Collatz Branching</div>
+        <div class="project-card-desc">Visualizes the branching structure of Collatz sequences as a tree — built in Elm.</div>
+        <div class="project-card-links">
+          <a class="tag-link purple" href="./collatz-elm/src/index.html" target="_blank" rel="noopener">launch</a>
+          <a class="tag-link purple" href="https://github.com/mkrabset/pages/tree/master/collatz-elm" target="_blank" rel="noopener">source</a>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-card-title"><span class="dot dot-purple"></span>Collatz Sequences</div>
+        <div class="project-card-desc">Explore individual Collatz sequences and their stopping times, rendered in Elm.</div>
+        <div class="project-card-links">
+          <a class="tag-link purple" href="./collatzseq/index.html" target="_blank" rel="noopener">launch</a>
+          <a class="tag-link purple" href="https://github.com/mkrabset/pages/tree/master/collatzseq" target="_blank" rel="noopener">source</a>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-card-title"><span class="dot dot-purple"></span>Hilbert Curve</div>
+        <div class="project-card-desc">Space-filling Hilbert curve generated using an L-system, rendered with Elm's SVG.</div>
+        <div class="project-card-links">
+          <a class="tag-link purple" href="./elm-hilbert/src/index.html" target="_blank" rel="noopener">launch</a>
+          <a class="tag-link purple" href="https://github.com/mkrabset/pages/tree/master/elm-hilbert" target="_blank" rel="noopener">source</a>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-card-title"><span class="dot dot-purple"></span>Sierpiński Arrowhead</div>
+        <div class="project-card-desc">The Sierpiński arrowhead fractal curve drawn via L-system rewriting in Elm.</div>
+        <div class="project-card-links">
+          <a class="tag-link purple" href="./elm-sierpinsky/src/index.html" target="_blank" rel="noopener">launch</a>
+          <a class="tag-link purple" href="https://github.com/mkrabset/pages/tree/master/elm-sierpinsky" target="_blank" rel="noopener">source</a>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-card-title"><span class="dot dot-purple"></span>Circle Packing</div>
+        <div class="project-card-desc">Iterative circle packing algorithm visualized in real time using Elm.</div>
+        <div class="project-card-links">
+          <a class="tag-link purple" href="./elm-circlepack/src/index.html" target="_blank" rel="noopener">launch</a>
+          <a class="tag-link purple" href="https://github.com/mkrabset/pages/tree/master/elm-circlepack" target="_blank" rel="noopener">source</a>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-card-title"><span class="dot dot-purple"></span>Quadtree Collisions</div>
+        <div class="project-card-desc">Collision detection with a quadtree spatial index — bouncing particles demo in Elm.</div>
+        <div class="project-card-links">
+          <a class="tag-link purple" href="./elm-quadtree/src/index.html" target="_blank" rel="noopener">launch</a>
+          <a class="tag-link purple" href="https://github.com/mkrabset/pages/tree/master/elm-quadtree" target="_blank" rel="noopener">source</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ Math & Visualization ══ -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">📐</div>
+      <div class="section-title">Math &amp; Visualization</div>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="project-grid">
+      <div class="project-card">
+        <div class="project-card-title"><span class="dot dot-green"></span>Epicycles</div>
+        <div class="project-card-desc">Tracing arbitrary 2D curves by summing rotating vectors — a visual exploration of Fourier series decomposition.</div>
+        <div class="project-card-links">
+          <a class="tag-link green" href="./epicycles/epicycles.html" target="_blank" rel="noopener">launch</a>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-card-title"><span class="dot dot-green"></span>Collatz-js</div>
+        <div class="project-card-desc">Collatz branching tree visualization in plain JavaScript.</div>
+        <div class="project-card-links">
+          <a class="tag-link green" href="./collatz/collatz.html" target="_blank" rel="noopener">launch</a>
+          <a class="tag-link green" href="https://github.com/mkrabset/pages/tree/master/collatz" target="_blank" rel="noopener">source</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ Utilities & Fun ══ -->
+  <section>
+    <div class="section-header">
+      <div class="section-icon">🛠️</div>
+      <div class="section-title">Utilities &amp; Fun</div>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="project-grid">
+      <div class="project-card">
+        <div class="project-card-title"><span class="dot dot-orange"></span>QRCodeGen</div>
+        <div class="project-card-desc">Minimal QR-code generator that runs entirely in the browser — no server, no tracking.</div>
+        <div class="project-card-links">
+          <a class="tag-link" href="./qrcodegen/index.html" target="_blank" rel="noopener">launch</a>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-card-title"><span class="dot dot-orange"></span>JasCrypt</div>
+        <div class="project-card-desc">Browser-based encrypt / decrypt utility compatible with Jasypt — useful for checking Spring Boot encrypted properties.</div>
+        <div class="project-card-links">
+          <a class="tag-link" href="./jascrypt/jascrypt.html" target="_blank" rel="noopener">launch</a>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-card-title"><span class="dot dot-orange"></span>Mermaid Editor</div>
+        <div class="project-card-desc">Live preview editor for Mermaid diagrams — type the diagram syntax, see the rendered output instantly.</div>
+        <div class="project-card-links">
+          <a class="tag-link" href="./mermaid-renderer/index.html" target="_blank" rel="noopener">launch</a>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-card-title"><span class="dot dot-orange"></span>Minesweeper</div>
+        <div class="project-card-desc">Classic Minesweeper in JavaScript.</div>
+        <div class="project-card-links">
+          <a class="tag-link" href="./minesweeper/minesweeper.html" target="_blank" rel="noopener">launch</a>
+          <a class="tag-link" href="https://github.com/mkrabset/pages/tree/master/minesweeper" target="_blank" rel="noopener">source</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+</body>
 </html>
