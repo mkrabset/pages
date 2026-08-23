@@ -114,7 +114,30 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
     }
+
+    a.section-title:hover { color: var(--accent); }
+
+    /* ── Focus mode ── */
+    body.focused section[hidden] { display: none; }
+
+    .show-all {
+      display: none;
+      align-self: flex-start;
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.4rem 0.9rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .show-all:hover { color: var(--text); border-color: var(--muted); }
+
+    body.focused .show-all { display: inline-block; }
 
     .section-line {
       flex: 1;
@@ -369,11 +392,13 @@
 
 <main>
 
+  <a class="show-all" href="?">← Show all sections</a>
+
   <!-- ══ KrabzCAM ══ -->
-  <section>
+  <section id="krabzcam" data-focus="krabzcam">
     <div class="section-header">
       <div class="section-icon">⚙️</div>
-      <div class="section-title">CNC Tooling</div>
+      <a class="section-title" href="?focus=krabzcam">CNC Tooling</a>
       <div class="section-line"></div>
     </div>
 
@@ -408,10 +433,10 @@
   </section>
 
   <!-- ══ Logica ══ -->
-  <section>
+  <section id="logica" data-focus="logica">
     <div class="section-header">
       <div class="section-icon">🔌</div>
-      <div class="section-title">Logica</div>
+      <a class="section-title" href="?focus=logica">Logica</a>
       <div class="section-line"></div>
     </div>
 
@@ -437,10 +462,10 @@
   </section>
 
   <!-- ══ CrissCross ══ -->
-  <section>
+  <section id="crisscross" data-focus="crisscross">
     <div class="section-header">
       <div class="section-icon">🗺️</div>
-      <div class="section-title">CrissCross</div>
+      <a class="section-title" href="?focus=crisscross">CrissCross</a>
       <div class="section-line"></div>
     </div>
 
@@ -462,10 +487,10 @@
   </section>
 
   <!-- ══ Elm ══ -->
-  <section>
+  <section id="elm" data-focus="elm">
     <div class="section-header">
       <div class="section-icon">🌳</div>
-      <div class="section-title">Elm Experiments</div>
+      <a class="section-title" href="?focus=elm">Elm Experiments</a>
       <div class="section-line"></div>
     </div>
 
@@ -522,10 +547,10 @@
   </section>
 
   <!-- ══ Math & Visualization ══ -->
-  <section>
+  <section id="math" data-focus="math">
     <div class="section-header">
       <div class="section-icon">📐</div>
-      <div class="section-title">Math &amp; Visualization</div>
+      <a class="section-title" href="?focus=math">Math &amp; Visualization</a>
       <div class="section-line"></div>
     </div>
 
@@ -549,10 +574,10 @@
   </section>
 
   <!-- ══ Utilities & Fun ══ -->
-  <section>
+  <section id="utils" data-focus="utils">
     <div class="section-header">
       <div class="section-icon">🛠️</div>
-      <div class="section-title">Utilities &amp; Fun</div>
+      <a class="section-title" href="?focus=utils">Utilities &amp; Fun</a>
       <div class="section-line"></div>
     </div>
 
@@ -590,6 +615,50 @@
   </section>
 
 </main>
+
+<script>
+  // ?focus=<section> shows only that section. Section titles link to their own focus view.
+  (function () {
+    var sections = document.querySelectorAll('main section[data-focus]');
+
+    function applyFocus(focus) {
+      focus = (focus || '').trim().toLowerCase();
+      var matched = false;
+      sections.forEach(function (s) {
+        var hit = focus !== '' && s.dataset.focus.toLowerCase() === focus;
+        if (hit) matched = true;
+        s.hidden = focus !== '' && !hit;
+      });
+      // Unknown focus value: fall back to showing everything.
+      if (focus !== '' && !matched) sections.forEach(function (s) { s.hidden = false; });
+      document.body.classList.toggle('focused', matched);
+    }
+
+    function focusFromUrl() {
+      return new URLSearchParams(window.location.search).get('focus');
+    }
+
+    applyFocus(focusFromUrl());
+
+    // Handle clicks without a reload where the History API is available (not file://).
+    document.addEventListener('click', function (e) {
+      var link = e.target.closest('a.section-title, a.show-all');
+      if (!link || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+      var url = new URL(link.getAttribute('href'), window.location.href);
+      var focus = url.searchParams.get('focus');
+      try {
+        history.pushState({}, '', focus ? '?focus=' + encodeURIComponent(focus) : url.pathname);
+      } catch (err) {
+        return; // Let the browser navigate normally.
+      }
+      e.preventDefault();
+      applyFocus(focus);
+      window.scrollTo(0, 0);
+    });
+
+    window.addEventListener('popstate', function () { applyFocus(focusFromUrl()); });
+  })();
+</script>
 
 </body>
 </html>
