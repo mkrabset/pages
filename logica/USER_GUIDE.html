@@ -697,14 +697,15 @@ a selection).</p>
 it; single-click to select it on the canvas.</p>
 </li>
 <li>
-<p><strong>Properties</strong> — for the selected component: its <strong>name</strong>, its <strong>type</strong>, its input/output
-counts, its primitive <strong>properties</strong> (e.g. a CLOCK&#8217;s <em>Period</em>, a BUS&#8217;s <em>Lanes</em>), and its
-<strong>X/Y</strong> position. Values commit on <strong>Enter</strong> or blur.</p>
+<p><strong>Ports</strong> — the current scope&#8217;s terminals (shown first). Add (<code>+</code>) / remove (<code>−</code>) terminals
+(when the primitive allows it), rename them, reorder by dragging the ⣿ handle, and toggle the
+<strong>inversion</strong> checkbox (the negation bubble).</p>
 </li>
 <li>
-<p><strong>Ports</strong> — the current definition&#8217;s terminals. Add (<code>+</code>) / remove (<code>−</code>) terminals (when the
-primitive allows it), rename them, reorder by dragging the ⣿ handle, and toggle the
-<strong>inversion</strong> checkbox (the negation bubble).</p>
+<p><strong>Properties</strong> — for the selected component: its <strong>name</strong>, its <strong>type</strong>, its primitive
+<strong>properties</strong> (e.g. a CLOCK&#8217;s <em>Period</em>, a BUS&#8217;s <em>Lanes</em>), and an editable terminal list for
+that component, so you can add/remove/reorder/rename/invert its terminals without entering it.
+Values commit on <strong>Enter</strong> or blur.</p>
 </li>
 </ul>
 </div>
@@ -720,7 +721,8 @@ primitive allows it), rename them, reorder by dragging the ⣿ handle, and toggl
 <p><strong>My components</strong> — your composite components. Drag to place; double-click to edit its
 template; <strong>×</strong> deletes it. <strong>Export</strong> / <strong>Import</strong> exchange your component library as JSON,
 and <strong>Apply to instances</strong> (shown when a template is selected) propagates that template&#8217;s
-edits to every matching placed instance. The list scrolls if it grows tall.</p>
+edits (including its port names) to every matching placed instance. The list scrolls if it
+grows tall.</p>
 </li>
 </ul>
 </div>
@@ -895,8 +897,10 @@ instance.</p>
 <div class="paragraph">
 <p>When you place or group a component, Logica deep-copies its definition (a <strong>variant</strong>), so
 every instance is independent. <strong>My components</strong> lists your templates; editing a template (via
-its library card) and pressing <strong>Apply to instances</strong> updates every matching instance that
-still has an unaltered interface.</p>
+its library card) and pressing <strong>Apply to instances</strong> updates every matching instance — one
+whose terminals are the same (by id and order) as the template&#8217;s. Port <strong>names</strong> don&#8217;t affect
+matching and are overwritten with the template&#8217;s names, so renaming a template&#8217;s ports
+bulk-updates its instances.</p>
 </div>
 </div>
 </div>
@@ -1131,12 +1135,25 @@ width of both terminals; use it to pin a bus to a specific width regardless of i
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Inputs:</strong> 1 (<code>BUS</code>) · <strong>Outputs:</strong> none</p>
+<p><strong>Inputs:</strong> 1 (<code>BUS</code>) · <strong>Outputs:</strong> none · Properties <strong>Mode</strong> (<code>HEX</code> / <code>DEC</code> / <code>SIGNED DEC</code>) and <strong>Order</strong> (<code>asc</code> / <code>desc</code>)</p>
 </li>
 <li>
-<p>A multi-digit hexadecimal display. Its bus width must be a <strong>multiple of 4</strong> and <strong>≤ 64</strong>
-(one digit per 4-bit nibble, most-significant digit leftmost). Property <strong>Order</strong>
-(<code>asc</code> / <code>desc</code>) selects which end of the bus is the least-significant bit.</p>
+<p>A multi-digit display. Its bus width must be a <strong>multiple of 4</strong> and <strong>≤ 64</strong>. The <strong>Mode</strong>
+controls how the bus bits are decoded:</p>
+</li>
+<li>
+<p><strong>HEX</strong> — one digit per 4-bit nibble (0–F), most-significant digit leftmost.</p>
+</li>
+<li>
+<p><strong>DEC</strong> — the bus as an unsigned decimal number, with enough digit slots for the full
+value (unused leading slots stay blank).</p>
+</li>
+<li>
+<p><strong>SIGNED DEC</strong> — the bus as a two&#8217;s-complement signed number, with a leading <code>−</code> sign
+slot that lights when negative.</p>
+</li>
+<li>
+<p><strong>Order</strong> selects which end of the bus is the least-significant bit.</p>
 </li>
 </ul>
 </div>
@@ -1146,12 +1163,13 @@ width of both terminals; use it to pin a bus to a specific width regardless of i
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Inputs:</strong> none · <strong>Outputs:</strong> 1+ · Property <strong>Terminal type</strong> (<code>wire</code> / <code>bus</code>)</p>
+<p><strong>Inputs:</strong> none · <strong>Outputs:</strong> 1+ · Properties <strong>Terminal type</strong> (<code>wire</code> / <code>bus</code>) and <strong>Initial value</strong> (boolean, default off)</p>
 </li>
 <li>
 <p>A multi-lane interactive source. In <code>wire</code> mode each output terminal is one switch; in <code>bus</code>
-mode a single bus output carries one lane per wire. In simulate mode, click an indicator
-circle to toggle its lane.</p>
+mode a single bus output carries one lane per wire. Every lane starts at the <strong>Initial value</strong>
+when simulation starts (and shows that state, colored, in design mode). In simulate mode,
+click an indicator circle to toggle its lane.</p>
 </li>
 </ul>
 </div>
@@ -1275,7 +1293,7 @@ back up.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-22 00:12:16 +0200
+Last updated 2026-08-25 00:21:28 +0200
 </div>
 </div>
 <script>
