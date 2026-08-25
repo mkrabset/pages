@@ -588,8 +588,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_bus_merge">BUS-MERGE</a></li>
 <li><a href="#_bus">BUS</a></li>
 <li><a href="#_7_seg">7-SEG</a></li>
-<li><a href="#_switch_array">SWITCH-ARRAY</a></li>
-<li><a href="#_led_array">LED-ARRAY</a></li>
+<li><a href="#_switches">SWITCHES</a></li>
+<li><a href="#_leds">LEDS</a></li>
 </ul>
 </li>
 <li><a href="#_7_simulation">7. Simulation</a>
@@ -670,7 +670,8 @@ a selection).</p>
 <p><strong>Simulate / Exit</strong> — switch between <em>design</em> and <em>simulate</em> mode.</p>
 </li>
 <li>
-<p><strong>Run / Step / Stop / Reset</strong> — simulation controls (see §7).</p>
+<p><strong>Run / Step / Stop / Reset</strong> — simulation controls (see §7). <strong>Run</strong> also enters simulate mode
+from design mode and starts running; <strong>Space</strong> toggles run/pause while simulating.</p>
 </li>
 <li>
 <p><strong>Settings (gear)</strong> — open the simulation settings dialog.</p>
@@ -793,7 +794,8 @@ grows tall.</p>
 </table>
 <div class="paragraph">
 <p>When you <strong>enter</strong> a component, the canvas automatically zooms and pans to frame its
-internals; <strong>Escape</strong> restores the exact view you left.</p>
+internals; <strong>Escape</strong> restores the exact view you left. In simulate mode, pressing <strong>Escape</strong>
+at the top level leaves simulate mode; deeper, it ascends one level.</p>
 </div>
 <div class="sect2">
 <h3 id="_wiring">Wiring</h3>
@@ -847,7 +849,11 @@ rejected with a message.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Escape</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Go up one level</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Go up one level (or leave simulate mode at the top level)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Space</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Toggle run/pause (in simulate mode)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>i</code></p></td>
@@ -1159,11 +1165,11 @@ slot that lights when negative.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_switch_array">SWITCH-ARRAY</h3>
+<h3 id="_switches">SWITCHES</h3>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Inputs:</strong> none · <strong>Outputs:</strong> 1+ · Properties <strong>Terminal type</strong> (<code>wire</code> / <code>bus</code>) and <strong>Initial value</strong> (boolean, default off)</p>
+<p><strong>Inputs:</strong> none · <strong>Outputs:</strong> 1+ · Properties <strong>Terminal type</strong> (<code>wire</code> / <code>bus</code>, default <code>bus</code>) and <strong>Initial value</strong> (boolean, default off)</p>
 </li>
 <li>
 <p>A multi-lane interactive source. In <code>wire</code> mode each output terminal is one switch; in <code>bus</code>
@@ -1175,11 +1181,11 @@ click an indicator circle to toggle its lane.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_led_array">LED-ARRAY</h3>
+<h3 id="_leds">LEDS</h3>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Inputs:</strong> 1+ · <strong>Outputs:</strong> none · Property <strong>Terminal type</strong> (<code>wire</code> / <code>bus</code>)</p>
+<p><strong>Inputs:</strong> 1+ · <strong>Outputs:</strong> none · Property <strong>Terminal type</strong> (<code>wire</code> / <code>bus</code>, default <code>bus</code>)</p>
 </li>
 <li>
 <p>A multi-lane lamp. In <code>wire</code> mode each input terminal is one LED; in <code>bus</code> mode a single bus
@@ -1210,16 +1216,17 @@ group components or edit a composite&#8217;s ports.</p>
 <h2 id="_7_simulation">7. Simulation</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Press <strong>Simulate</strong> to enter simulation mode (it resets to the top-level sheet and builds a
-simulation of your design). In this mode editing is disabled, but you can still pan, zoom, and
-navigate into components.</p>
+<p>Press <strong>Simulate</strong> — or just <strong>Run</strong> — to enter simulation mode (it resets to the top-level sheet
+and builds a simulation of your design). The canvas background turns <strong>dark green</strong> while
+simulating. In this mode editing is disabled, but you can still pan, zoom, and navigate into
+components.</p>
 </div>
 <div class="sect2">
 <h3 id="_controls">Controls</h3>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Run</strong> — advance the simulation continuously.</p>
+<p><strong>Run</strong> — enter simulate mode (if not already) and advance the simulation continuously.</p>
 </li>
 <li>
 <p><strong>Step</strong> — advance one step (see <em>Step mode</em>).</p>
@@ -1229,6 +1236,9 @@ navigate into components.</p>
 </li>
 <li>
 <p><strong>Reset</strong> — rebuild the simulation from scratch.</p>
+</li>
+<li>
+<p><strong>Space</strong> — toggle between running and paused while simulating.</p>
 </li>
 <li>
 <p><strong>Settings</strong> — set the default gate delay (ps) and the step mode.</p>
@@ -1256,11 +1266,11 @@ to a stable state; a true oscillator is detected and shown as <code>x</code>.</p
 <p><strong>CLOCK</strong> toggles its output on a square wave with its <code>Period</code>.</p>
 </li>
 <li>
-<p><strong>SWITCH-ARRAY</strong> lanes toggle by clicking their indicator circles (a double-click just
+<p><strong>SWITCHES</strong> lanes toggle by clicking their indicator circles (a double-click just
 toggles twice — it does <em>not</em> enter the component).</p>
 </li>
 <li>
-<p><strong>LED-ARRAY</strong> lanes light when their signal is <code>1</code>.</p>
+<p><strong>LEDS</strong> lanes light when their signal is <code>1</code>.</p>
 </li>
 <li>
 <p><strong>7-SEG</strong> displays the value of each 4-bit nibble of its bus.</p>
@@ -1285,7 +1295,7 @@ toggles twice — it does <em>not</em> enter the component).</p>
 <h3 id="_navigating_in_simulate_mode">Navigating in simulate mode</h3>
 <div class="paragraph">
 <p>Double-click a component to descend into it and inspect its internals live; <strong>Escape</strong> ascends
-back up.</p>
+back up. At the top level, <strong>Escape</strong> leaves simulate mode and returns to design mode.</p>
 </div>
 </div>
 </div>
@@ -1293,7 +1303,7 @@ back up.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-25 00:21:28 +0200
+Last updated 2026-08-25 19:33:30 +0200
 </div>
 </div>
 <script>
