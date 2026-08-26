@@ -685,6 +685,10 @@ from design mode and starts running; <strong>Space</strong> toggles run/pause wh
 <p><strong>Open / Save JSON</strong> — load or save the whole design as a <code>.json</code> file.</p>
 </li>
 <li>
+<p><strong>Export Verilog</strong> — generate synthesizable Verilog from the current design and download it as a
+<code>.v</code> file (see §8).</p>
+</li>
+<li>
 <p><strong>Theme toggle</strong> — switch between dark and light.</p>
 </li>
 </ul>
@@ -1316,6 +1320,61 @@ toggles twice — it does <em>not</em> enter the component).</p>
 back up. At the top level, <strong>Escape</strong> leaves simulate mode and returns to design mode.</p>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_8_exporting_verilog">8. Exporting Verilog</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Press <strong>Export Verilog</strong> in the toolbar to generate synthesizable Verilog from the current design
+(the same JSON you get from <strong>Save JSON</strong>) and download it as <code>design.v</code>, so the circuit can be
+taken into an FPGA toolchain or an HDL simulator.</p>
+</div>
+<div class="paragraph">
+<p>What the generator produces:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>One <strong><code>module</code> per composite</strong>, with the top-level sheet (<code>main</code>) as the top module.</p>
+</li>
+<li>
+<p><strong>Gates</strong> (AND/OR/XOR/NOT/BUFFER) as <code>assign</code> expressions, so terminal inversion becomes a <code>~</code>.</p>
+</li>
+<li>
+<p><strong>DFF</strong> as <code>always @(posedge clk …)</code>, with the async reset (when connected) and <code>INIT</code> from the
+<em>Initial value</em> property.</p>
+</li>
+<li>
+<p><strong>Buses</strong> as <code>[n-1:0]</code> vectors — FAN-IN/BUS-MERGE concatenate, FAN-OUT/BUS-SPLIT slice.</p>
+</li>
+<li>
+<p><strong>Hierarchy</strong> as nested module instantiations; composite ports become module ports.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Probes map to top-level I/O: <strong>CLOCK</strong> and <strong>SWITCHES</strong> become <code>input</code> pins, <strong>LEDS</strong> and <strong>7-SEG</strong>
+become <code>output</code> pins. A <strong>SWITCHES</strong> placed inside a composite is exported as a constant fixed at
+its <em>Initial value</em>.</p>
+</div>
+<div class="paragraph">
+<p>The export reports issues by severity:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Errors</strong> (shown as a toast and logged to the console): <em>floating nets</em> (an input/output with no
+driver) and a <em>nested CLOCK</em> (a clock inside a composite can&#8217;t be exported).</p>
+</li>
+<li>
+<p><strong>Info</strong> (console only): nested SWITCHES (fixed initial value) and nested LEDS/7-SEG (not exported).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The same generator is available as a CLI: <code>pnpm --filter @gatefold/verilog cli &lt;design.json&gt; [out.v]</code>.</p>
 </div>
 </div>
 </div>
