@@ -582,6 +582,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_not">NOT</a></li>
 <li><a href="#_buffer">BUFFER</a></li>
 <li><a href="#_clock">CLOCK</a></li>
+<li><a href="#_dff">DFF</a></li>
 <li><a href="#_fan_in">FAN-IN</a></li>
 <li><a href="#_fan_out">FAN-OUT</a></li>
 <li><a href="#_bus_split">BUS-SPLIT</a></li>
@@ -1071,6 +1072,22 @@ its properties, and what it does.</p>
 </div>
 </div>
 <div class="sect2">
+<h3 id="_dff">DFF</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Inputs:</strong> <code>D</code>, <code>CLK</code>, <code>RST</code> · <strong>Outputs:</strong> 1 (<code>Q</code>) · Properties <strong>Edge</strong> (<code>posedge</code> / <code>negedge</code>, default <code>posedge</code>), <strong>Initial value</strong> (boolean, default off), <strong>Active-high reset</strong> (boolean, default on)</p>
+</li>
+<li>
+<p>A D flip-flop. On the configured <strong>Edge</strong> of <code>CLK</code>, <code>Q</code> takes the value of <code>D</code> (after a
+clk-to-q delay); between edges <code>Q</code> holds. When <code>RST</code> is asserted (high by default, low with
+<em>Active-high reset</em> off), <code>Q</code> is forced <strong>asynchronously</strong> to the <strong>Initial value</strong>, overriding
+the clock. On power-on <code>Q</code> starts at the <strong>Initial value</strong>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_fan_in">FAN-IN</h3>
 <div class="ulist">
 <ul>
@@ -1304,7 +1321,7 @@ back up. At the top level, <strong>Escape</strong> leaves simulate mode and retu
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-26 02:21:50 +0200
+Last updated 2026-08-26 19:23:56 +0200
 </div>
 </div>
 <script>
