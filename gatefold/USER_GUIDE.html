@@ -596,12 +596,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_7_simulation">7. Simulation</a>
 <ul class="sectlevel2">
 <li><a href="#_controls">Controls</a></li>
+<li><a href="#_timing_lamp">Timing lamp</a></li>
 <li><a href="#_how_it_works">How it works</a></li>
 <li><a href="#_signals_and_probes">Signals and probes</a></li>
 <li><a href="#_step_mode">Step mode</a></li>
 <li><a href="#_navigating_in_simulate_mode">Navigating in simulate mode</a></li>
 </ul>
 </li>
+<li><a href="#_8_exporting_verilog">8. Exporting Verilog</a></li>
 </ul>
 </div>
 </div>
@@ -1269,6 +1271,30 @@ canvas.</p>
 </div>
 </div>
 <div class="sect2">
+<h3 id="_timing_lamp">Timing lamp</h3>
+<div class="paragraph">
+<p>When the design has <strong>exactly one CLOCK</strong>, a small lamp appears in the toolbar next to the
+simulation controls and reports how fast the logic settles relative to that clock&#8217;s period:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>green</strong> — the combinational logic settles within half a clock period.</p>
+</li>
+<li>
+<p><strong>yellow</strong> — it takes more than half a period (it doesn&#8217;t settle before the next clock edge).</p>
+</li>
+<li>
+<p><strong>red</strong> — it takes more than a full period (the clock is too fast for the logic).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>A yellow or red lamp latches on and stays until the next <strong>Run</strong>/<strong>Reset</strong>. Hover the lamp for a
+tooltip.</p>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_how_it_works">How it works</h3>
 <div class="paragraph">
 <p>The engine is event-driven with <strong>inertial gate delays</strong>: a gate&#8217;s output changes a configured
@@ -1318,7 +1344,6 @@ toggles twice — it does <em>not</em> enter the component).</p>
 <div class="paragraph">
 <p>Double-click a component to descend into it and inspect its internals live; <strong>Escape</strong> ascends
 back up. At the top level, <strong>Escape</strong> leaves simulate mode and returns to design mode.</p>
-</div>
 </div>
 </div>
 </div>
@@ -1378,9 +1403,10 @@ driver) and a <em>nested CLOCK</em> (a clock inside a composite can&#8217;t be e
 </div>
 </div>
 </div>
+</div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-26 19:23:56 +0200
+Last updated 2026-08-27 23:01:03 +0200
 </div>
 </div>
 <script>
