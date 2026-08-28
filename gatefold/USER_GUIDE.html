@@ -548,103 +548,48 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article">
 <div id="header">
-<h1>Gatefold — User Guide</h1>
-<div id="toc" class="toc">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#_1_the_interface">1. The interface</a>
-<ul class="sectlevel2">
-<li><a href="#_toolbar">Toolbar</a></li>
-<li><a href="#_sidebar_left">Sidebar (left)</a></li>
-<li><a href="#_library_right">Library (right)</a></li>
-<li><a href="#_dialogs">Dialogs</a></li>
-</ul>
-</li>
-<li><a href="#_2_canvas_controls">2. Canvas controls</a>
-<ul class="sectlevel2">
-<li><a href="#_wiring">Wiring</a></li>
-<li><a href="#_keyboard_shortcuts">Keyboard shortcuts</a></li>
-</ul>
-</li>
-<li><a href="#_3_building_circuits">3. Building circuits</a>
-<ul class="sectlevel2">
-<li><a href="#_terminal_inversion">Terminal inversion</a></li>
-<li><a href="#_copy_on_place_and_templates">Copy-on-place and templates</a></li>
-</ul>
-</li>
-<li><a href="#_4_buses">4. Buses</a></li>
-<li><a href="#_5_signals">5. Signals</a></li>
-<li><a href="#_6_primitive_reference">6. Primitive reference</a>
-<ul class="sectlevel2">
-<li><a href="#_and">AND</a></li>
-<li><a href="#_or">OR</a></li>
-<li><a href="#_xor">XOR</a></li>
-<li><a href="#_not">NOT</a></li>
-<li><a href="#_buffer">BUFFER</a></li>
-<li><a href="#_clock">CLOCK</a></li>
-<li><a href="#_dff">DFF</a></li>
-<li><a href="#_fan_in">FAN-IN</a></li>
-<li><a href="#_fan_out">FAN-OUT</a></li>
-<li><a href="#_bus_split">BUS-SPLIT</a></li>
-<li><a href="#_bus_merge">BUS-MERGE</a></li>
-<li><a href="#_bus">BUS</a></li>
-<li><a href="#_7_seg">7-SEG</a></li>
-<li><a href="#_switches">SWITCHES</a></li>
-<li><a href="#_leds">LEDS</a></li>
-</ul>
-</li>
-<li><a href="#_7_simulation">7. Simulation</a>
-<ul class="sectlevel2">
-<li><a href="#_controls">Controls</a></li>
-<li><a href="#_timing_lamp">Timing lamp</a></li>
-<li><a href="#_how_it_works">How it works</a></li>
-<li><a href="#_signals_and_probes">Signals and probes</a></li>
-<li><a href="#_step_mode">Step mode</a></li>
-<li><a href="#_navigating_in_simulate_mode">Navigating in simulate mode</a></li>
-</ul>
-</li>
-<li><a href="#_8_exporting_verilog">8. Exporting Verilog</a></li>
-</ul>
-</div>
 </div>
 <div id="content">
-<div id="preamble">
+<div class="sect1">
+<h2 id="_gatefold_user_guide">Gatefold — User Guide</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>A walkthrough of the interface and a reference for every primitive component and the
-simulator. Gatefold is a browser-based graphical designer and simulator for logic circuits:
-you place components, wire them together, group them into reusable parts, and simulate the
-result.</p>
+<p>A walkthrough of the interface and a reference for every primitive
+component and the simulator. Gatefold is a browser-based graphical
+designer and simulator for logic circuits: you place components, wire
+them together, group them into reusable parts, and simulate the result.</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_1_the_interface">1. The interface</h2>
-<div class="sectionbody">
+<hr>
+<div class="sect2">
+<h3 id="_1_the_interface">1. The interface</h3>
 <div class="paragraph">
 <p>The screen is split into four areas:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 60%;">
+<col style="width: 24%;">
+<col style="width: 40%;">
+<col style="width: 36%;">
 </colgroup>
-<tbody>
+<thead>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Area</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Location</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Purpose</p></td>
+<th class="tableblock halign-left valign-top">Area</th>
+<th class="tableblock halign-left valign-top">Location</th>
+<th class="tableblock halign-left valign-top">Purpose</th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Toolbar</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Top</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Actions, simulation controls, navigation, save/load, theme</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Actions, simulation controls, navigation, save/load,
+theme</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Sidebar</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Left</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Component tree, selected component&#8217;s properties, port editor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Component tree, selected component’s properties, port
+editor</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Canvas</strong></p></td>
@@ -658,37 +603,44 @@ result.</p>
 </tr>
 </tbody>
 </table>
-<div class="sect2">
-<h3 id="_toolbar">Toolbar</h3>
+<div class="sect3">
+<h4 id="_toolbar">Toolbar</h4>
 <div class="paragraph">
 <p>Left to right:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Group</strong> — turn the current selection into a named composite component (enabled only with
-a selection).</p>
+<p><strong>Group</strong> — turn the current selection into a named composite component
+(enabled only with a selection).</p>
 </li>
 <li>
 <p><strong>Simulate / Exit</strong> — switch between <em>design</em> and <em>simulate</em> mode.</p>
 </li>
 <li>
-<p><strong>Run / Step / Stop / Reset</strong> — simulation controls (see §7). <strong>Run</strong> also enters simulate mode
-from design mode and starts running; <strong>Space</strong> toggles run/pause while simulating.</p>
+<p><strong>Run / Step / Stop / Reset</strong> — simulation controls (see §7). <strong>Run</strong> also
+enters simulate mode from design mode and starts running; <strong>Space</strong>
+toggles run/pause while simulating.</p>
 </li>
 <li>
 <p><strong>Settings (gear)</strong> — open the simulation settings dialog.</p>
 </li>
 <li>
-<p><strong>Breadcrumb</strong> — the path of components you&#8217;ve navigated into (<code>main / adder / …</code>); the
-<strong>↑</strong> button (or <strong>Escape</strong>) goes up one level. A <code>template</code> badge marks a library template.</p>
+<p><strong>Breadcrumb</strong> — the path of components you’ve navigated into
+(<code>main / adder / …</code>); the <strong>↑</strong> button (or <strong>Escape</strong>) goes up one level. A
+<code>template</code> badge marks a library template.</p>
 </li>
 <li>
 <p><strong>Open / Save JSON</strong> — load or save the whole design as a <code>.json</code> file.</p>
 </li>
 <li>
-<p><strong>Export Verilog</strong> — generate synthesizable Verilog from the current design and download it as a
-<code>.v</code> file (see §8).</p>
+<p><strong>Export Verilog</strong> — generate synthesizable Verilog from the current
+design and download it as a <code>.v</code> file (see §8).</p>
+</li>
+<li>
+<p><strong>Save as default / Clear default</strong> — store the current design in the
+browser’s <code>localStorage</code> as the automatic launch state, or remove it so
+the app starts empty again.</p>
 </li>
 <li>
 <p><strong>Theme toggle</strong> — switch between dark and light.</p>
@@ -696,51 +648,56 @@ from design mode and starts running; <strong>Space</strong> toggles run/pause wh
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_sidebar_left">Sidebar (left)</h3>
+<div class="sect3">
+<h4 id="_sidebar_left">Sidebar (left)</h4>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Components</strong> — a tree of the current sheet&#8217;s instances. Double-click a composite to enter
-it; single-click to select it on the canvas.</p>
+<p><strong>Components</strong> — a tree of the current sheet’s instances. Double-click a
+composite to enter it; single-click to select it on the canvas.</p>
 </li>
 <li>
-<p><strong>Ports</strong> — the current scope&#8217;s terminals (shown first). Add (<code>+</code>) / remove (<code>−</code>) terminals
-(when the primitive allows it), rename them, reorder by dragging the ⣿ handle, and toggle the
-<strong>inversion</strong> checkbox (the negation bubble).</p>
+<p><strong>Ports</strong> — the current scope’s terminals (shown first). Add (<code>&#43;</code>)
+/ remove (<code>−</code>) terminals (when the primitive allows it), rename them,
+reorder by dragging the ⣿ handle, and toggle the <strong>inversion</strong> checkbox
+(the negation bubble).</p>
 </li>
 <li>
-<p><strong>Properties</strong> — for the selected component: its <strong>name</strong>, its <strong>type</strong>, its primitive
-<strong>properties</strong> (e.g. a CLOCK&#8217;s <em>Period</em>, a BUS&#8217;s <em>Lanes</em>), and an editable terminal list for
-that component, so you can add/remove/reorder/rename/invert its terminals without entering it.
+<p><strong>Properties</strong> — for the selected component: its <strong>name</strong>, its <strong>type</strong>, its
+primitive <strong>properties</strong> (e.g. a CLOCK’s <em>Period</em>, a BUS’s <em>Lanes</em>), and
+an editable terminal list for that component, so you can
+add/remove/reorder/rename/invert its terminals without entering it.
 Values commit on <strong>Enter</strong> or blur.</p>
 </li>
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_library_right">Library (right)</h3>
+<div class="sect3">
+<h4 id="_library_right">Library (right)</h4>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Primitives</strong> — the built-in components (§6). Drag one onto the canvas to place it.</p>
+<p><strong>Primitives</strong> — the built-in components (§6). Drag one onto the canvas
+to place it.</p>
 </li>
 <li>
-<p><strong>My components</strong> — your composite components. Drag to place; double-click to edit its
-template; <strong>×</strong> deletes it. <strong>Export</strong> / <strong>Import</strong> exchange your component library as JSON,
-and <strong>Apply to instances</strong> (shown when a template is selected) propagates that template&#8217;s
-edits (including its port names) to every matching placed instance. The list scrolls if it
-grows tall.</p>
+<p><strong>My components</strong> — your composite components. Drag to place;
+double-click to edit its template; <strong>×</strong> deletes it. <strong>Export</strong> / <strong>Import</strong>
+exchange your component library as JSON, and <strong>Apply to instances</strong> (shown
+when a template is selected) propagates that template’s edits (including
+its port names) to every matching placed instance. The list scrolls if
+it grows tall.</p>
 </li>
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_dialogs">Dialogs</h3>
+<div class="sect3">
+<h4 id="_dialogs">Dialogs</h4>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Group dialog</strong> — name the new component and its inferred inputs/outputs.</p>
+<p><strong>Group dialog</strong> — name the new component and its inferred
+inputs/outputs.</p>
 </li>
 <li>
 <p><strong>Simulation settings</strong> — default gate delay (ps) and the step mode.</p>
@@ -749,33 +706,35 @@ grows tall.</p>
 <p><strong>Delete dialog</strong> — confirm deleting a library template.</p>
 </li>
 <li>
-<p><strong>Toast</strong> — transient messages (e.g. "Input already has a driver").</p>
+<p><strong>Toast</strong> — transient messages (e.g. &#8220;Input already has a driver&#8221;).</p>
 </li>
 </ul>
 </div>
+<hr>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_2_canvas_controls">2. Canvas controls</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_2_canvas_controls">2. Canvas controls</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 66.6667%;">
+<col style="width: 62%;">
+<col style="width: 38%;">
 </colgroup>
-<tbody>
+<thead>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Action</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">How</p></td>
+<th class="tableblock halign-left valign-top">Action</th>
+<th class="tableblock halign-left valign-top">How</th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Select</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Click a component</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Multi-select</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Marquee (drag empty space), or Shift + click to toggle</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Marquee (drag empty space), or Shift &#43; click to
+toggle</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Move</p></td>
@@ -783,7 +742,7 @@ grows tall.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Pan</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Shift + drag (or Shift + drag anywhere in simulate mode)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Shift &#43; drag (or Shift &#43; drag anywhere in simulate mode)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Zoom</p></td>
@@ -800,46 +759,53 @@ grows tall.</p>
 </tbody>
 </table>
 <div class="paragraph">
-<p>When you <strong>enter</strong> a component, the canvas automatically zooms and pans to frame its
-internals; <strong>Escape</strong> restores the exact view you left. In simulate mode, pressing <strong>Escape</strong>
-at the top level leaves simulate mode; deeper, it ascends one level.</p>
+<p>When you <strong>enter</strong> a component, the canvas automatically zooms and pans to
+frame its internals; <strong>Escape</strong> restores the exact view you left. Opening
+a design (<strong>Open JSON</strong>) — or launching with a saved default — also
+auto-frames the top-level sheet to fit the canvas. In simulate mode,
+pressing <strong>Escape</strong> at the top level leaves simulate mode; deeper, it
+ascends one level.</p>
 </div>
-<div class="sect2">
-<h3 id="_wiring">Wiring</h3>
+<div class="sect3">
+<h4 id="_wiring">Wiring</h4>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Draw a wire</strong> — press an <strong>output</strong> pin, drag, and release on an <strong>input</strong> pin.</p>
+<p><strong>Draw a wire</strong> — press an <strong>output</strong> pin, drag, and release on an <strong>input</strong>
+pin.</p>
 </li>
 <li>
-<p><strong>Re-target / delete a wire</strong> — press an <strong>input</strong> pin that already has a wire, drag, and
-release on a new input (re-target) or on empty space (delete).</p>
+<p><strong>Re-target / delete a wire</strong> — press an <strong>input</strong> pin that already has a
+wire, drag, and release on a new input (re-target) or on empty space
+(delete).</p>
 </li>
 <li>
-<p>An input can have <strong>at most one</strong> driver; dropping a second wire onto a driven input is
-rejected with a message.</p>
+<p>An input can have <strong>at most one</strong> driver; dropping a second wire onto a
+driven input is rejected with a message.</p>
 </li>
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_keyboard_shortcuts">Keyboard shortcuts</h3>
+<div class="sect3">
+<h4 id="_keyboard_shortcuts">Keyboard shortcuts</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 66.6667%;">
+<col style="width: 50%;">
+<col style="width: 50%;">
 </colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Shortcut</th>
+<th class="tableblock halign-left valign-top">Action</th>
+</tr>
+</thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Shortcut</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Action</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Ctrl/Cmd + C</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ctrl/Cmd &#43; C</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Copy selection</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Ctrl/Cmd + V</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ctrl/Cmd &#43; V</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Paste</p></td>
 </tr>
 <tr>
@@ -847,11 +813,11 @@ rejected with a message.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Delete selection</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Ctrl/Cmd + Z</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ctrl/Cmd &#43; Z</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Undo</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Ctrl/Cmd + Shift + Z / Ctrl/Cmd + Y</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ctrl/Cmd &#43; Shift &#43; Z / Ctrl/Cmd &#43; Y</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Redo</p></td>
 </tr>
 <tr>
@@ -868,12 +834,11 @@ rejected with a message.</p>
 </tr>
 </tbody>
 </table>
+<hr>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_3_building_circuits">3. Building circuits</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_3_building_circuits">3. Building circuits</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -883,49 +848,53 @@ rejected with a message.</p>
 <p><strong>Wire</strong> — connect outputs to inputs.</p>
 </li>
 <li>
-<p><strong>Configure</strong> — select a component and set its properties in the sidebar.</p>
+<p><strong>Configure</strong> — select a component and set its properties in the
+sidebar.</p>
 </li>
 <li>
-<p><strong>Group</strong> — select a sub-circuit and press <strong>Group</strong> to turn it into a named composite.
-Inputs/outputs are inferred from the wires crossing the selection; floating pins become
-extra terminals. Components are <em>copied</em> when placed, so editing one instance never
-affects the template or other instances.</p>
+<p><strong>Group</strong> — select a sub-circuit and press <strong>Group</strong> to turn it into a
+named composite. Inputs/outputs are inferred from the wires crossing the
+selection; floating pins become extra terminals. Components are <em>copied</em>
+when placed, so editing one instance never affects the template or other
+instances.</p>
 </li>
 <li>
-<p><strong>Edit internals</strong> — double-click any component (composite or gate) to descend into it.</p>
+<p><strong>Edit internals</strong> — double-click any component (composite or gate) to
+descend into it.</p>
 </li>
 </ol>
 </div>
+<div class="sect3">
+<h4 id="_terminal_inversion">Terminal inversion</h4>
+<div class="paragraph">
+<p>Any terminal can be logically inverted (a negation bubble). Toggle it by
+pressing <strong><code>i</code></strong> while hovering the terminal, or with the checkbox in the
+ports editor. Inversion is instance-level: a library template’s
+terminals stay clean, and inversion lives on the placed instance.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_copy_on_place_and_templates">Copy-on-place and templates</h4>
+<div class="paragraph">
+<p>When you place or group a component, Gatefold deep-copies its definition
+(a <strong>variant</strong>), so every instance is independent. <strong>My components</strong> lists
+your templates; editing a template (via its library card) and pressing
+<strong>Apply to instances</strong> updates every matching instance — one whose
+terminals are the same (by id and order) as the template’s. Port <strong>names</strong>
+don’t affect matching and are overwritten with the template’s names, so
+renaming a template’s ports bulk-updates its instances.</p>
+</div>
+<hr>
+</div>
+</div>
 <div class="sect2">
-<h3 id="_terminal_inversion">Terminal inversion</h3>
+<h3 id="_4_buses">4. Buses</h3>
 <div class="paragraph">
-<p>Any terminal can be logically inverted (a negation bubble). Toggle it by pressing <strong><code>i</code></strong>
-while hovering the terminal, or with the checkbox in the ports editor. Inversion is
-instance-level: a library template&#8217;s terminals stay clean, and inversion lives on the placed
-instance.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_copy_on_place_and_templates">Copy-on-place and templates</h3>
-<div class="paragraph">
-<p>When you place or group a component, Gatefold deep-copies its definition (a <strong>variant</strong>), so
-every instance is independent. <strong>My components</strong> lists your templates; editing a template (via
-its library card) and pressing <strong>Apply to instances</strong> updates every matching instance — one
-whose terminals are the same (by id and order) as the template&#8217;s. Port <strong>names</strong> don&#8217;t affect
-matching and are overwritten with the template&#8217;s names, so renaming a template&#8217;s ports
-bulk-updates its instances.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_4_buses">4. Buses</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>A <strong>bus</strong> is a terminal carrying multiple wires (its <strong>width</strong>). Widths are <em>derived</em>, not
-stored — Gatefold solves them from the wiring. Hover a bus pin to see its <code>×n</code> arity; an
-<strong>undetermined</strong> pin adopts the width of whatever it connects to and renders as a thin dashed
-wire (or a <code>?</code> box on a display).</p>
+<p>A <strong>bus</strong> is a terminal carrying multiple wires (its <strong>width</strong>). Widths are
+<em>derived</em>, not stored — Gatefold solves them from the wiring. Hover a
+bus pin to see its <code>×n</code> arity; an <strong>undetermined</strong> pin adopts the width of
+whatever it connects to and renders as a thin dashed wire (or a <code>?</code> box
+on a display).</p>
 </div>
 <div class="ulist">
 <ul>
@@ -936,38 +905,41 @@ wire (or a <code>?</code> box on a display).</p>
 <p><strong>FAN-OUT</strong> splits one <code>n</code>-wide bus into <code>n</code> single wires.</p>
 </li>
 <li>
-<p><strong>BUS-SPLIT</strong> splits one bus into two halves; <strong>BUS-MERGE</strong> joins two buses into one (twice
-the width).</p>
+<p><strong>BUS-SPLIT</strong> splits one bus into two halves; <strong>BUS-MERGE</strong> joins two
+buses into one (twice the width).</p>
 </li>
 <li>
-<p><strong>BUS</strong> (the primitive) <em>fixes</em> a bus to a specific width (<code>Lanes</code>), and is a passthrough.</p>
+<p><strong>BUS</strong> (the primitive) <em>fixes</em> a bus to a specific width (<code>Lanes</code>), and
+is a passthrough.</p>
 </li>
 <li>
-<p>Connecting mismatched widths is rejected at wiring time ("Bus width mismatch"), and a bus
-splitter requires an even width ("Bus width must be even").</p>
+<p>Connecting mismatched widths is rejected at wiring time (&#8220;Bus width
+mismatch&#8221;), and a bus splitter requires an even width (&#8220;Bus width must
+be even&#8221;).</p>
 </li>
 </ul>
 </div>
+<hr>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_5_signals">5. Signals</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_5_signals">5. Signals</h3>
 <div class="paragraph">
 <p>Logic values are 3-state:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 20%;">
-<col style="width: 40%;">
-<col style="width: 40%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
 </colgroup>
-<tbody>
+<thead>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Value</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Meaning</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Wire color</p></td>
+<th class="tableblock halign-left valign-top">Value</th>
+<th class="tableblock halign-left valign-top">Meaning</th>
+<th class="tableblock halign-left valign-top">Wire color</th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>1</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">high</p></td>
@@ -986,37 +958,39 @@ splitter requires an even width ("Bus width must be even").</p>
 </tbody>
 </table>
 <div class="paragraph">
-<p><code>x</code> arises from unconnected inputs; it propagates through gates unless a dominant value
-determines the output (0 dominates AND, 1 dominates OR).</p>
+<p><code>x</code> arises from unconnected inputs; it propagates through gates unless a
+dominant value determines the output (0 dominates AND, 1 dominates OR).</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_6_primitive_reference">6. Primitive reference</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Each entry lists the component&#8217;s terminals, its arity (which terminals can be added/removed),
-its properties, and what it does.</p>
+<hr>
 </div>
 <div class="sect2">
-<h3 id="_and">AND</h3>
+<h3 id="_6_primitive_reference">6. Primitive reference</h3>
+<div class="paragraph">
+<p>Each entry lists the component’s terminals, its arity (which terminals
+can be added/removed), its properties, and what it does.</p>
+</div>
+<div class="sect3">
+<h4 id="_and">AND</h4>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Inputs:</strong> 2+ (<code>A</code>, <code>B</code>, … up to <code>H</code>) · <strong>Outputs:</strong> 1 (<code>Y</code>) · <em>inputs variable</em></p>
+<p><strong>Inputs:</strong> 2&#43; (<code>A</code>, <code>B</code>, … up to <code>H</code>) · <strong>Outputs:</strong> 1 (<code>Y</code>) ·
+<em>inputs variable</em></p>
 </li>
 <li>
-<p>Output is <code>1</code> only when <strong>all</strong> inputs are <code>1</code>; <code>0</code> dominates; <code>x</code> propagates otherwise.</p>
+<p>Output is <code>1</code> only when <strong>all</strong> inputs are <code>1</code>; <code>0</code> dominates; <code>x</code>
+propagates otherwise.</p>
 </li>
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_or">OR</h3>
+<div class="sect3">
+<h4 id="_or">OR</h4>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Inputs:</strong> 2+ (<code>A</code>, <code>B</code>, …) · <strong>Outputs:</strong> 1 (<code>Y</code>) · <em>inputs variable</em></p>
+<p><strong>Inputs:</strong> 2&#43; (<code>A</code>, <code>B</code>, …) · <strong>Outputs:</strong> 1 (<code>Y</code>) · <em>inputs
+variable</em></p>
 </li>
 <li>
 <p>Output is <code>1</code> when <strong>any</strong> input is <code>1</code>; <code>1</code> dominates.</p>
@@ -1024,12 +998,13 @@ its properties, and what it does.</p>
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_xor">XOR</h3>
+<div class="sect3">
+<h4 id="_xor">XOR</h4>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Inputs:</strong> 2+ (<code>A</code>, <code>B</code>, …) · <strong>Outputs:</strong> 1 (<code>Y</code>) · <em>inputs variable</em></p>
+<p><strong>Inputs:</strong> 2&#43; (<code>A</code>, <code>B</code>, …) · <strong>Outputs:</strong> 1 (<code>Y</code>) · <em>inputs
+variable</em></p>
 </li>
 <li>
 <p>Output is <code>1</code> on odd parity (an odd number of inputs are <code>1</code>).</p>
@@ -1037,68 +1012,77 @@ its properties, and what it does.</p>
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_not">NOT</h3>
+<div class="sect3">
+<h4 id="_not">NOT</h4>
 <div class="ulist">
 <ul>
 <li>
 <p><strong>Inputs:</strong> 1 (<code>A</code>) · <strong>Outputs:</strong> 1 (<code>Y</code>, inverted)</p>
 </li>
 <li>
-<p>Negates its input. Drawn as a triangle with a bubble (the bubble is the inverted output).</p>
+<p>Negates its input. Drawn as a triangle with a bubble (the bubble is
+the inverted output).</p>
 </li>
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_buffer">BUFFER</h3>
+<div class="sect3">
+<h4 id="_buffer">BUFFER</h4>
 <div class="ulist">
 <ul>
 <li>
 <p><strong>Inputs:</strong> 1 (<code>A</code>) · <strong>Outputs:</strong> 1 (<code>Y</code>)</p>
 </li>
 <li>
-<p>Passes its input through unchanged. Useful for fan-out / signal cleanup.</p>
+<p>Passes its input through unchanged. Useful for fan-out / signal
+cleanup.</p>
 </li>
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_clock">CLOCK</h3>
+<div class="sect3">
+<h4 id="_clock">CLOCK</h4>
 <div class="ulist">
 <ul>
 <li>
 <p><strong>Inputs:</strong> none · <strong>Outputs:</strong> 1 (<code>CLK</code>)</p>
 </li>
 <li>
-<p>A source producing a periodic <strong>square wave</strong>. Property <strong>Period</strong> (picoseconds, default
-10 000) sets the period.</p>
+<p>A source producing a periodic <strong>square wave</strong>. Property <strong>Period</strong>
+(picoseconds, default 100 000) sets the period.</p>
 </li>
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_dff">DFF</h3>
+<div class="sect3">
+<h4 id="_dff">DFF</h4>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Inputs:</strong> <code>D</code>, <code>CLK</code>, <code>RST</code> · <strong>Outputs:</strong> 1 (<code>Q</code>) · Properties <strong>Edge</strong> (<code>posedge</code> / <code>negedge</code>, default <code>posedge</code>), <strong>Initial value</strong> (boolean, default off), <strong>Active-high reset</strong> (boolean, default on)</p>
+<p><strong>Inputs:</strong> <code>D</code>, <code>CLK</code>, <code>RST</code> · <strong>Outputs:</strong> 2 (<code>Q</code>, <code>!Q</code>) · Properties
+<strong>Edge</strong> (<code>posedge</code> / <code>negedge</code>, default <code>posedge</code>), <strong>Initial value</strong>
+(boolean, default off), <strong>Active-high reset</strong> (boolean, default on)</p>
 </li>
 <li>
-<p>A D flip-flop. On the configured <strong>Edge</strong> of <code>CLK</code>, <code>Q</code> takes the value of <code>D</code> (after a
-clk-to-q delay); between edges <code>Q</code> holds. When <code>RST</code> is asserted (high by default, low with
-<em>Active-high reset</em> off), <code>Q</code> is forced <strong>asynchronously</strong> to the <strong>Initial value</strong>, overriding
+<p>A D flip-flop. On the configured <strong>Edge</strong> of <code>CLK</code>, <code>Q</code> takes the value
+of <code>D</code> (after a clk-to-q delay); between edges <code>Q</code> holds. <code>!Q</code> is always
+the complement of <code>Q</code>.</p>
+</li>
+<li>
+<p>When <code>RST</code> is asserted (high by default, low with <em>Active-high reset</em>
+off), <code>Q</code> is forced <strong>asynchronously</strong> to the <strong>Initial value</strong>, overriding
 the clock. On power-on <code>Q</code> starts at the <strong>Initial value</strong>.</p>
 </li>
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_fan_in">FAN-IN</h3>
+<div class="sect3">
+<h4 id="_fan_in">FAN-IN</h4>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Inputs:</strong> 2+ (single-wire) · <strong>Outputs:</strong> 1 (<code>BUS</code>) · <em>inputs variable</em></p>
+<p><strong>Inputs:</strong> 2&#43; (single-wire) · <strong>Outputs:</strong> 1 (<code>BUS</code>) · <em>inputs
+variable</em></p>
 </li>
 <li>
 <p>Bundles its <code>n</code> single-wire inputs into one <code>n</code>-wide bus output.</p>
@@ -1106,12 +1090,13 @@ the clock. On power-on <code>Q</code> starts at the <strong>Initial value</stron
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_fan_out">FAN-OUT</h3>
+<div class="sect3">
+<h4 id="_fan_out">FAN-OUT</h4>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Inputs:</strong> 1 (<code>BUS</code>) · <strong>Outputs:</strong> 2+ (single-wire) · <em>outputs variable</em></p>
+<p><strong>Inputs:</strong> 1 (<code>BUS</code>) · <strong>Outputs:</strong> 2&#43; (single-wire) · <em>outputs
+variable</em></p>
 </li>
 <li>
 <p>Splits one <code>n</code>-wide bus input into <code>n</code> single-wire outputs.</p>
@@ -1119,12 +1104,13 @@ the clock. On power-on <code>Q</code> starts at the <strong>Initial value</stron
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_bus_split">BUS-SPLIT</h3>
+<div class="sect3">
+<h4 id="_bus_split">BUS-SPLIT</h4>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Inputs:</strong> 1 (<code>BUS</code>, width <code>n</code>, even) · <strong>Outputs:</strong> 2 (<code>Y1</code>, <code>Y2</code>, width <code>n/2</code> each)</p>
+<p><strong>Inputs:</strong> 1 (<code>BUS</code>, width <code>n</code>, even) · <strong>Outputs:</strong> 2 (<code>Y1</code>, <code>Y2</code>, width
+<code>n/2</code> each)</p>
 </li>
 <li>
 <p>Splits a bus into two equal halves. The input width must be even.</p>
@@ -1132,12 +1118,13 @@ the clock. On power-on <code>Q</code> starts at the <strong>Initial value</stron
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_bus_merge">BUS-MERGE</h3>
+<div class="sect3">
+<h4 id="_bus_merge">BUS-MERGE</h4>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Inputs:</strong> 2 (<code>A</code>, <code>B</code>, width <code>m</code> each) · <strong>Outputs:</strong> 1 (<code>BUS</code>, width <code>2m</code>)</p>
+<p><strong>Inputs:</strong> 2 (<code>A</code>, <code>B</code>, width <code>m</code> each) · <strong>Outputs:</strong> 1 (<code>BUS</code>, width
+<code>2m</code>)</p>
 </li>
 <li>
 <p>Concatenates two buses into one twice as wide.</p>
@@ -1145,112 +1132,117 @@ the clock. On power-on <code>Q</code> starts at the <strong>Initial value</stron
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_bus">BUS</h3>
+<div class="sect3">
+<h4 id="_bus">BUS</h4>
 <div class="ulist">
 <ul>
 <li>
 <p><strong>Inputs:</strong> 1 (<code>A</code>) · <strong>Outputs:</strong> 1 (<code>Y</code>)</p>
 </li>
 <li>
-<p>A passthrough that <strong>fixes</strong> the bus width. Property <strong>Lanes</strong> (default 8, 1–32) sets the
-width of both terminals; use it to pin a bus to a specific width regardless of its source.</p>
+<p>A passthrough that <strong>fixes</strong> the bus width. Property <strong>Lanes</strong> (default 8,
+1–32) sets the width of both terminals; use it to pin a bus to a
+specific width regardless of its source.</p>
 </li>
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_7_seg">7-SEG</h3>
+<div class="sect3">
+<h4 id="_7_seg">7-SEG</h4>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Inputs:</strong> 1 (<code>BUS</code>) · <strong>Outputs:</strong> none · Properties <strong>Mode</strong> (<code>HEX</code> / <code>DEC</code> / <code>SIGNED DEC</code>) and <strong>Order</strong> (<code>asc</code> / <code>desc</code>)</p>
+<p><strong>Inputs:</strong> 1 (<code>BUS</code>) · <strong>Outputs:</strong> none · Properties <strong>Mode</strong> (<code>HEX</code> /
+<code>DEC</code> / <code>SIGNED DEC</code>) and <strong>Order</strong> (<code>asc</code> / <code>desc</code>)</p>
 </li>
 <li>
-<p>A multi-digit display. Its bus width must be a <strong>multiple of 4</strong> and <strong>≤ 64</strong>. The <strong>Mode</strong>
-controls how the bus bits are decoded:</p>
-</li>
-<li>
-<p><strong>HEX</strong> — one digit per 4-bit nibble (0–F), most-significant digit leftmost.</p>
-</li>
-<li>
-<p><strong>DEC</strong> — the bus as an unsigned decimal number, with enough digit slots for the full
-value (unused leading slots stay blank).</p>
-</li>
-<li>
-<p><strong>SIGNED DEC</strong> — the bus as a two&#8217;s-complement signed number, with a leading <code>−</code> sign
-slot that lights when negative.</p>
-</li>
-<li>
-<p><strong>Order</strong> selects which end of the bus is the least-significant bit.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_switches">SWITCHES</h3>
+<p>A multi-digit display. Its bus width must be a <strong>multiple of 4</strong> and <strong>≤
+64</strong>. The <strong>Mode</strong> controls how the bus bits are decoded:</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Inputs:</strong> none · <strong>Outputs:</strong> 1+ · Properties <strong>Terminal type</strong> (<code>wire</code> / <code>bus</code>, default <code>bus</code>) and <strong>Initial value</strong> (boolean, default off)</p>
+<p><strong>HEX</strong> — one digit per 4-bit nibble (0–F), most-significant digit
+leftmost.</p>
 </li>
 <li>
-<p>A multi-lane interactive source. In <code>wire</code> mode each output terminal is one switch; in <code>bus</code>
-mode a single bus output carries one lane per wire. Every lane starts at the <strong>Initial value</strong>
-when simulation starts (and shows that state, colored, in design mode). In simulate mode,
-click an indicator circle to toggle its lane.</p>
+<p><strong>DEC</strong> — the bus as an unsigned decimal number, with enough digit
+slots for the full value (unused leading slots stay blank).</p>
+</li>
+<li>
+<p><strong>SIGNED DEC</strong> — the bus as a two’s-complement signed number, with a
+leading <code>−</code> sign slot that lights when negative. <strong>Order</strong> selects which
+end of the bus is the least-significant bit.</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_leds">LEDS</h3>
+<div class="sect3">
+<h4 id="_switches">SWITCHES</h4>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Inputs:</strong> 1+ · <strong>Outputs:</strong> none · Property <strong>Terminal type</strong> (<code>wire</code> / <code>bus</code>, default <code>bus</code>)</p>
+<p><strong>Inputs:</strong> none · <strong>Outputs:</strong> 1&#43; · Properties <strong>Terminal type</strong>
+(<code>wire</code> / <code>bus</code>, default <code>bus</code>) and <strong>Initial value</strong> (boolean, default
+off)</p>
 </li>
 <li>
-<p>A multi-lane lamp. In <code>wire</code> mode each input terminal is one LED; in <code>bus</code> mode a single bus
-input lights one LED per lane. Each lane lights when its signal is <code>1</code>.</p>
+<p>A multi-lane interactive source. In <code>wire</code> mode each output terminal
+is one switch; in <code>bus</code> mode a single bus output carries one lane per
+wire. Every lane starts at the <strong>Initial value</strong> when simulation starts
+(and shows that state, colored, in design mode). In simulate mode, click
+an indicator circle to toggle its lane.</p>
 </li>
 </ul>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
+</div>
+<div class="sect3">
+<h4 id="_leds">LEDS</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Inputs:</strong> 1&#43; · <strong>Outputs:</strong> none · Property <strong>Terminal type</strong> (<code>wire</code>
+/ <code>bus</code>, default <code>bus</code>)</p>
+</li>
+<li>
+<p>A multi-lane lamp. In <code>wire</code> mode each input terminal is one LED; in
+<code>bus</code> mode a single bus input lights one LED per lane. Each lane lights
+when its signal is <code>1</code>.</p>
+</li>
+</ul>
+</div>
+<div class="quoteblock">
+<blockquote>
 <div class="paragraph">
-<p><strong>Internal primitives</strong> (<code>INPUT-PORT</code> / <code>OUTPUT-PORT</code>) are not in the palette: they model a
-composite&#8217;s own input/output terminals internally and are created automatically when you
-group components or edit a composite&#8217;s ports.</p>
+<p><strong>Internal primitives</strong> (<code>INPUT-PORT</code> / <code>OUTPUT-PORT</code>) are not in the
+palette: they model a composite’s own input/output terminals internally
+and are created automatically when you group components or edit a
+composite’s ports.</p>
 </div>
-</td>
-</tr>
-</table>
+</blockquote>
 </div>
+<hr>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_7_simulation">7. Simulation</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Press <strong>Simulate</strong> — or just <strong>Run</strong> — to enter simulation mode (it resets to the top-level sheet
-and builds a simulation of your design). The canvas background turns <strong>dark green</strong> while
-simulating. In this mode editing is disabled — you can&#8217;t place components from the library or
-enter a library template — but you can still pan, zoom, and navigate into the components on the
-canvas.</p>
 </div>
 <div class="sect2">
-<h3 id="_controls">Controls</h3>
+<h3 id="_7_simulation">7. Simulation</h3>
+<div class="paragraph">
+<p>Press <strong>Simulate</strong> — or just <strong>Run</strong> — to enter simulation mode (it resets
+to the top-level sheet and builds a simulation of your design). The
+canvas background turns <strong>dark green</strong> while simulating. In this mode
+editing is disabled — you can’t place components from the library or
+enter a library template — but you can still pan, zoom, and navigate
+into the components on the canvas.</p>
+</div>
+<div class="sect3">
+<h4 id="_controls">Controls</h4>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Run</strong> — enter simulate mode (if not already) and advance the simulation continuously.</p>
+<p><strong>Run</strong> — enter simulate mode (if not already) and advance the
+simulation continuously.</p>
 </li>
 <li>
 <p><strong>Step</strong> — advance one step (see <em>Step mode</em>).</p>
@@ -1270,11 +1262,12 @@ canvas.</p>
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_timing_lamp">Timing lamp</h3>
+<div class="sect3">
+<h4 id="_timing_lamp">Timing lamp</h4>
 <div class="paragraph">
-<p>When the design has <strong>exactly one CLOCK</strong>, a small lamp appears in the toolbar next to the
-simulation controls and reports how fast the logic settles relative to that clock&#8217;s period:</p>
+<p>When the design has <strong>exactly one CLOCK</strong>, a small lamp appears in the
+toolbar next to the simulation controls and reports how fast the logic
+settles relative to that clock’s period:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1282,40 +1275,44 @@ simulation controls and reports how fast the logic settles relative to that cloc
 <p><strong>green</strong> — the combinational logic settles within half a clock period.</p>
 </li>
 <li>
-<p><strong>yellow</strong> — it takes more than half a period (it doesn&#8217;t settle before the next clock edge).</p>
+<p><strong>yellow</strong> — it takes more than half a period (it doesn’t settle before
+the next clock edge).</p>
 </li>
 <li>
-<p><strong>red</strong> — it takes more than a full period (the clock is too fast for the logic).</p>
+<p><strong>red</strong> — it takes more than a full period (the clock is too fast for
+the logic).</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>A yellow or red lamp latches on and stays until the next <strong>Run</strong>/<strong>Reset</strong>. Hover the lamp for a
-tooltip.</p>
+<p>A yellow or red lamp latches on and stays until the next <strong>Run</strong>/<strong>Reset</strong>.
+Hover the lamp for a tooltip.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_how_it_works">How it works</h3>
+<div class="sect3">
+<h4 id="_how_it_works">How it works</h4>
 <div class="paragraph">
-<p>The engine is event-driven with <strong>inertial gate delays</strong>: a gate&#8217;s output changes a configured
-number of picoseconds after its inputs change. On start (or reset), driven nets begin at <code>0</code>
-(floating stay <code>x</code>), then a zero-delay settle pass resolves feedback loops (latches, flip-flops)
-to a stable state; a true oscillator is detected and shown as <code>x</code>.</p>
+<p>The engine is event-driven with <strong>inertial gate delays</strong>: a gate’s output
+changes a configured number of picoseconds after its inputs change. On
+start (or reset), driven nets begin at <code>0</code> (floating stay <code>x</code>), then a
+zero-delay settle pass resolves feedback loops (latches, flip-flops) to
+a stable state; a true oscillator is detected and shown as <code>x</code>.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_signals_and_probes">Signals and probes</h3>
+<div class="sect3">
+<h4 id="_signals_and_probes">Signals and probes</h4>
 <div class="ulist">
 <ul>
 <li>
-<p>Wires and terminal markers are colored by their value: <strong>red = 1, black = 0, gray = x</strong>.</p>
+<p>Wires and terminal markers are colored by their value: <strong>red = 1, black
+= 0, gray = x</strong>.</p>
 </li>
 <li>
 <p><strong>CLOCK</strong> toggles its output on a square wave with its <code>Period</code>.</p>
 </li>
 <li>
-<p><strong>SWITCHES</strong> lanes toggle by clicking their indicator circles (a double-click just
-toggles twice — it does <em>not</em> enter the component).</p>
+<p><strong>SWITCHES</strong> lanes toggle by clicking their indicator circles (a
+double-click just toggles twice — it does <em>not</em> enter the component).</p>
 </li>
 <li>
 <p><strong>LEDS</strong> lanes light when their signal is <code>1</code>.</p>
@@ -1326,12 +1323,13 @@ toggles twice — it does <em>not</em> enter the component).</p>
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_step_mode">Step mode</h3>
+<div class="sect3">
+<h4 id="_step_mode">Step mode</h4>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Quiescent</strong> — each Step advances until the circuit settles (no pending events).</p>
+<p><strong>Quiescent</strong> — each Step advances until the circuit settles (no pending
+events).</p>
 </li>
 <li>
 <p><strong>Clock-edge</strong> — each Step advances to the next clock edge.</p>
@@ -1339,22 +1337,23 @@ toggles twice — it does <em>not</em> enter the component).</p>
 </ul>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_navigating_in_simulate_mode">Navigating in simulate mode</h4>
+<div class="paragraph">
+<p>Double-click a component to descend into it and inspect its internals
+live; <strong>Escape</strong> ascends back up. At the top level, <strong>Escape</strong> leaves
+simulate mode and returns to design mode.</p>
+</div>
+<hr>
+</div>
+</div>
 <div class="sect2">
-<h3 id="_navigating_in_simulate_mode">Navigating in simulate mode</h3>
+<h3 id="_8_exporting_verilog">8. Exporting Verilog</h3>
 <div class="paragraph">
-<p>Double-click a component to descend into it and inspect its internals live; <strong>Escape</strong> ascends
-back up. At the top level, <strong>Escape</strong> leaves simulate mode and returns to design mode.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_8_exporting_verilog">8. Exporting Verilog</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Press <strong>Export Verilog</strong> in the toolbar to generate synthesizable Verilog from the current design
-(the same JSON you get from <strong>Save JSON</strong>) and download it as <code>design.v</code>, so the circuit can be
-taken into an FPGA toolchain or an HDL simulator.</p>
+<p>Press <strong>Export Verilog</strong> in the toolbar to generate synthesizable Verilog
+from the current design (the same JSON you get from <strong>Save JSON</strong>) and
+download it as <code>design.v</code>, so the circuit can be taken into an FPGA
+toolchain or an HDL simulator.</p>
 </div>
 <div class="paragraph">
 <p>What the generator produces:</p>
@@ -1362,27 +1361,31 @@ taken into an FPGA toolchain or an HDL simulator.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>One <strong><code>module</code> per composite</strong>, with the top-level sheet (<code>main</code>) as the top module.</p>
+<p>One <strong><code>module</code> per composite</strong>, with the top-level sheet (<code>main</code>) as the
+top module.</p>
 </li>
 <li>
-<p><strong>Gates</strong> (AND/OR/XOR/NOT/BUFFER) as <code>assign</code> expressions, so terminal inversion becomes a <code>~</code>.</p>
+<p><strong>Gates</strong> (AND/OR/XOR/NOT/BUFFER) as <code>assign</code> expressions, so terminal
+inversion becomes a <code>~</code>.</p>
 </li>
 <li>
-<p><strong>DFF</strong> as <code>always @(posedge clk …)</code>, with the async reset (when connected) and <code>INIT</code> from the
-<em>Initial value</em> property.</p>
+<p><strong>DFF</strong> as <code>always @(posedge clk …)</code>, with the async reset (when
+connected) and <code>INIT</code> from the <em>Initial value</em> property.</p>
 </li>
 <li>
-<p><strong>Buses</strong> as <code>[n-1:0]</code> vectors — FAN-IN/BUS-MERGE concatenate, FAN-OUT/BUS-SPLIT slice.</p>
+<p><strong>Buses</strong> as <code>[n-1:0]</code> vectors — FAN-IN/BUS-MERGE concatenate,
+FAN-OUT/BUS-SPLIT slice.</p>
 </li>
 <li>
-<p><strong>Hierarchy</strong> as nested module instantiations; composite ports become module ports.</p>
+<p><strong>Hierarchy</strong> as nested module instantiations; composite ports become
+module ports.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Probes map to top-level I/O: <strong>CLOCK</strong> and <strong>SWITCHES</strong> become <code>input</code> pins, <strong>LEDS</strong> and <strong>7-SEG</strong>
-become <code>output</code> pins. A <strong>SWITCHES</strong> placed inside a composite is exported as a constant fixed at
-its <em>Initial value</em>.</p>
+<p>Probes map to top-level I/O: <strong>CLOCK</strong> and <strong>SWITCHES</strong> become <code>input</code> pins,
+<strong>LEDS</strong> and <strong>7-SEG</strong> become <code>output</code> pins. A <strong>SWITCHES</strong> placed inside a
+composite is exported as a constant fixed at its <em>Initial value</em>.</p>
 </div>
 <div class="paragraph">
 <p>The export reports issues by severity:</p>
@@ -1390,23 +1393,27 @@ its <em>Initial value</em>.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Errors</strong> (shown as a toast and logged to the console): <em>floating nets</em> (an input/output with no
-driver) and a <em>nested CLOCK</em> (a clock inside a composite can&#8217;t be exported).</p>
+<p><strong>Errors</strong> (shown as a toast and logged to the console): <em>floating nets</em>
+(an input/output with no driver) and a <em>nested CLOCK</em> (a clock inside a
+composite can’t be exported).</p>
 </li>
 <li>
-<p><strong>Info</strong> (console only): nested SWITCHES (fixed initial value) and nested LEDS/7-SEG (not exported).</p>
+<p><strong>Info</strong> (console only): nested SWITCHES (fixed initial value) and
+nested LEDS/7-SEG (not exported).</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>The same generator is available as a CLI: <code>pnpm --filter @gatefold/verilog cli &lt;design.json&gt; [out.v]</code>.</p>
+<p>The same generator is available as a CLI:
+<code>pnpm --filter @gatefold/verilog cli &lt;design.json&gt; [out.v]</code>.</p>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-27 23:01:03 +0200
+Last updated 2026-08-29 00:51:45 +0200
 </div>
 </div>
 <script>
