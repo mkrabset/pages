@@ -252,16 +252,27 @@
           }
         },
         {
+          "id": "clock",
+          "name": "clock",
+          "defId": "clock~6",
+          "pos": {
+            "x": -554.7603632292054,
+            "y": -544.348025624293
+          },
+          "props": {
+            "period": 12345
+          }
+        },
+        {
           "id": "7-seg",
           "name": "B",
           "defId": "seven-seg~7",
           "pos": {
-            "x": 350.45725725641256,
-            "y": -711.4193884107171
+            "x": -72.18012305487028,
+            "y": -553.1658950432831
           },
           "props": {
-            "order": "asc",
-            "mode": "DEC"
+            "order": "asc"
           }
         },
         {
@@ -332,11 +343,11 @@
           "name": "clock",
           "defId": "clock~6~3",
           "pos": {
-            "x": -795.4799461036214,
-            "y": -764.900407417581
+            "x": -590.127227985857,
+            "y": -893.6383785278742
           },
           "props": {
-            "period": 20000
+            "period": 10000
           }
         },
         {
@@ -344,12 +355,11 @@
           "name": "A",
           "defId": "seven-seg~7~3",
           "pos": {
-            "x": 351.08901411639556,
-            "y": -869.0397754177334
+            "x": -69.03639759659211,
+            "y": -776.7252402098927
           },
           "props": {
-            "order": "asc",
-            "mode": "DEC"
+            "order": "asc"
           }
         },
         {
@@ -393,12 +403,11 @@
           "name": "A + B",
           "defId": "seven-seg~8",
           "pos": {
-            "x": 353.7271995123692,
-            "y": -489.74858759829885
+            "x": 346.8193169450082,
+            "y": -486.6085957724792
           },
           "props": {
-            "order": "asc",
-            "mode": "DEC"
+            "order": "asc"
           }
         },
         {
@@ -484,6 +493,17 @@
           },
           "to": {
             "instanceId": "counter44",
+            "portId": "in:7"
+          }
+        },
+        {
+          "id": "c8",
+          "from": {
+            "instanceId": "clock",
+            "portId": "out:0"
+          },
+          "to": {
+            "instanceId": "counter4",
             "portId": "in:7"
           }
         },
@@ -826,17 +846,6 @@
           "to": {
             "instanceId": "counter44~2",
             "portId": "in:6"
-          }
-        },
-        {
-          "id": "c45",
-          "from": {
-            "instanceId": "clock~2",
-            "portId": "out:0"
-          },
-          "to": {
-            "instanceId": "counter4",
-            "portId": "in:7"
           }
         }
       ],
@@ -49459,6 +49468,20 @@
       ],
       "variant": true
     },
+    "clock~6": {
+      "id": "clock~6",
+      "name": "CLOCK",
+      "kind": "primitive",
+      "primitive": "clock",
+      "ports": [
+        {
+          "id": "out:0",
+          "name": "CLK",
+          "direction": "output"
+        }
+      ],
+      "variant": true
+    },
     "seven-seg~7": {
       "id": "seven-seg~7",
       "name": "7-SEG",
@@ -73445,34 +73468,6 @@
         }
       ],
       "variant": true
-    },
-    "dff": {
-      "id": "dff",
-      "name": "DFF",
-      "kind": "primitive",
-      "primitive": "dff",
-      "ports": [
-        {
-          "id": "in:0",
-          "name": "D",
-          "direction": "input"
-        },
-        {
-          "id": "in:1",
-          "name": "CLK",
-          "direction": "input"
-        },
-        {
-          "id": "in:2",
-          "name": "RST",
-          "direction": "input"
-        },
-        {
-          "id": "out:0",
-          "name": "Q",
-          "direction": "output"
-        }
-      ]
     }
   }
 }
