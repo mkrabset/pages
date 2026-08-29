@@ -1054,7 +1054,8 @@ cleanup.</p>
 </li>
 <li>
 <p>A source producing a periodic <strong>square wave</strong>. Property <strong>Period</strong>
-(picoseconds, default 100 000) sets the period.</p>
+(picoseconds, default 100 000) sets the period. Its <strong>frequency</strong> (Hz /
+kHz / MHz) is shown above the component.</p>
 </li>
 </ul>
 </div>
@@ -1070,8 +1071,10 @@ cleanup.</p>
 </li>
 <li>
 <p>A D flip-flop. On the configured <strong>Edge</strong> of <code>CLK</code>, <code>Q</code> takes the value
-of <code>D</code> (after a clk-to-q delay); between edges <code>Q</code> holds. <code>!Q</code> is always
-the complement of <code>Q</code>.</p>
+of <code>D</code> (after a clk-to-q delay); between edges <code>Q</code> holds.</p>
+</li>
+<li>
+<p><code>!Q</code> is always the complement of <code>Q</code>.</p>
 </li>
 <li>
 <p>When <code>RST</code> is asserted (high by default, low with <em>Active-high reset</em>
@@ -1262,7 +1265,8 @@ simulation continuously.</p>
 <p><strong>Space</strong> — toggle between running and paused while simulating.</p>
 </li>
 <li>
-<p><strong>Settings</strong> — set the default gate delay (ps) and the step mode.</p>
+<p><strong>Settings</strong> — set the default gate delay (ps), the step mode, and the
+simulation speed.</p>
 </li>
 </ul>
 </div>
@@ -1292,6 +1296,26 @@ the logic).</p>
 <div class="paragraph">
 <p>A yellow or red lamp latches on and stays until the next <strong>Run</strong>/<strong>Reset</strong>.
 Hover the lamp for a tooltip.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_simulation_speed">Simulation speed</h4>
+<div class="paragraph">
+<p>The <strong>Simulation speed</strong> setting is a multiplier of simulated time per
+real time: <code>1</code> means real-time, larger values run faster, smaller values
+run slower. While running, each tick advances a fixed slice of simulated
+time, so <strong>increasing a CLOCK’s period makes it cycle slower on screen</strong>
+(a period longer than the slice simply fires its edge on a later tick).
+At speed <code>s</code>, a clock with period <code>P</code> ps cycles at <code>s × 10^12 / P</code> Hz.
+The default speed (<code>0.001</code>) with the built-in <code>100 000</code> ps clock is
+therefore ~10 kHz — too fast to see — so use a much larger period
+(e.g. <code>1 000 000 000</code> ps for ~1 Hz) to watch slow motion. Set the speed
+to <code>1</code> for real-time behavior (again, with a much larger clock period).</p>
+</div>
+<div class="paragraph">
+<p>While simulating, the current speed is shown as a small badge in the
+<strong>top-left corner</strong> of the canvas (e.g. <code>10x faster</code>, <code>200x slower</code>, or
+<code>real-time</code> at <code>1</code>).</p>
 </div>
 </div>
 <div class="sect3">
@@ -1437,7 +1461,7 @@ decimals — all regenerated or inconsequential on load.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-29 10:43:28 +0200
+Last updated 2026-08-29 15:53:23 +0200
 </div>
 </div>
 <script>
