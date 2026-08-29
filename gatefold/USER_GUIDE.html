@@ -643,6 +643,11 @@ browser’s <code>localStorage</code> as the automatic launch state, or remove i
 the app starts empty again.</p>
 </li>
 <li>
+<p><strong>Copy link</strong> — copy a shareable URL to the clipboard: the design is
+gzipped and base64-encoded into a <code>?d=</code> query parameter, and opening
+that URL restores the design on launch (see §9).</p>
+</li>
+<li>
 <p><strong>Theme toggle</strong> — switch between dark and light.</p>
 </li>
 </ul>
@@ -1407,13 +1412,32 @@ nested LEDS/7-SEG (not exported).</p>
 <p>The same generator is available as a CLI:
 <code>pnpm --filter @gatefold/verilog cli &lt;design.json&gt; [out.v]</code>.</p>
 </div>
+<hr>
+</div>
+<div class="sect2">
+<h3 id="_9_sharing_a_link">9. Sharing a link</h3>
+<div class="paragraph">
+<p>The <strong>Copy link</strong> toolbar button copies a URL that encodes the whole
+design: it is serialized to JSON, gzipped, then base64-encoded
+(URL-safe) into a <code>?d=</code> query parameter. Pasting that URL into a browser
+opens Gatefold with that design loaded — it takes precedence over any
+saved default state. If the parameter is missing or corrupt, the app
+falls back to the normal launch path (localStorage default, then an
+empty design).</p>
+</div>
+<div class="paragraph">
+<p>Saved designs (JSON files, the launch default, and share links alike)
+are stored compactly: built-in primitive definitions and unreferenced
+copies are omitted, and component coordinates are rounded to two
+decimals — all regenerated or inconsequential on load.</p>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-29 00:51:45 +0200
+Last updated 2026-08-29 10:43:28 +0200
 </div>
 </div>
 <script>
