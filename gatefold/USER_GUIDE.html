@@ -702,10 +702,11 @@ it grows tall.</p>
 <ul>
 <li>
 <p><strong>Group dialog</strong> — name the new component and its inferred
-inputs/outputs.</p>
+inputs/outputs (press <strong>Enter</strong> to create).</p>
 </li>
 <li>
-<p><strong>Simulation settings</strong> — default gate delay (ps) and the step mode.</p>
+<p><strong>Simulation settings</strong> — default gate delay (ps), the step mode, and
+the simulation speed.</p>
 </li>
 <li>
 <p><strong>Delete dialog</strong> — confirm deleting a library template.</p>
@@ -1156,6 +1157,41 @@ specific width regardless of its source.</p>
 </div>
 </div>
 <div class="sect3">
+<h4 id="_node">NODE</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Inputs:</strong> 1 (<code>A</code>) · <strong>Outputs:</strong> 1 (<code>Y</code>)</p>
+</li>
+<li>
+<p>A single-wire <strong>join point</strong>: a filled dot whose input and output
+terminals coincide, drawn with no labels. It passes its input through
+unchanged, and <strong>multiple wires exit</strong> by fan-out from its single output.
+Drag a wire onto the dot to feed it; press the dot to start another
+outgoing wire; <strong>Alt&#43;press</strong> grabs the incoming wire. To move it,
+drag the ring just around the dot (or region-select it first). The dot
+is wire-colored, signal-colored in simulation, and red while hovered.</p>
+</li>
+<li>
+<p>Two shortcuts insert a NODE <em>into</em> an existing wire, splitting it in
+two:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Drop</strong> a NODE from the library straight onto a wire.</p>
+</li>
+<li>
+<p><strong>Ctrl/Cmd&#43;drag</strong> across a wire — an imaginary dashed line is
+drawn, and on release a NODE is inserted where the line crosses the
+wire.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_7_seg">7-SEG</h4>
 <div class="ulist">
 <ul>
@@ -1461,7 +1497,7 @@ decimals — all regenerated or inconsequential on load.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-29 15:53:23 +0200
+Last updated 2026-08-30 12:01:12 +0200
 </div>
 </div>
 <script>
