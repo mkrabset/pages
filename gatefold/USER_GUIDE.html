@@ -883,6 +883,14 @@ pressing <strong><code>i</code></strong> while hovering the terminal, or with th
 ports editor. Inversion is instance-level: a library template’s
 terminals stay clean, and inversion lives on the placed instance.</p>
 </div>
+<div class="paragraph">
+<p>Inversion is <strong>external-only</strong>: it applies to a component <em>instance’s</em>
+terminals (as seen from the sheet it is placed on), never to a
+component’s <em>own</em> terminals from the inside. The current scope’s
+input/output port groups cannot be inverted and never show a bubble — to
+invert a composite’s terminal, select the composite instance on the
+parent sheet and invert it there.</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_copy_on_place_and_templates">Copy-on-place and templates</h4>
@@ -1502,7 +1510,7 @@ decimals — all regenerated or inconsequential on load.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-30 16:56:52 +0200
+Last updated 2026-09-04 18:53:38 +0200
 </div>
 </div>
 <script>
