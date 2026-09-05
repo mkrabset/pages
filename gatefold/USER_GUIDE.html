@@ -787,12 +787,12 @@ parent sheet and invert it there.</p>
 <h4 id="_copy_on_place_and_templates">Copy-on-place and templates</h4>
 <div class="paragraph">
 <p>When you place or group a component, Gatefold deep-copies its definition
-(a <strong>variant</strong>), so every instance is independent. <strong>My components</strong> lists
-your templates; editing a template (via its library card) and pressing
-<strong>Apply to instances</strong> updates every matching instance — one whose
-terminals are the same (by id and order) as the template’s. Port <strong>names</strong>
-don’t affect matching and are overwritten with the template’s names, so
-renaming a template’s ports bulk-updates its instances.</p>
+(a <strong>copy</strong>), so every instance is independent. <strong>My components</strong> lists your
+templates; editing a template (via its library card) and pressing <strong>Apply
+to instances</strong> updates every matching instance — one whose terminals are
+the same (by id and order) as the template’s. Port <strong>names</strong> don’t affect
+matching and are overwritten with the template’s names, so renaming a
+template’s ports bulk-updates its instances.</p>
 </div>
 <hr>
 </div>
@@ -994,8 +994,8 @@ the clock. On power-on <code>Q</code> starts at the <strong>Initial value</stron
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Inputs:</strong> 2&#43; (single-wire) · <strong>Outputs:</strong> 1 (<code>BUS</code>) · <em>inputs
-variable</em></p>
+<p><strong>Inputs:</strong> 2&#43; (single-wire), default 4 · <strong>Outputs:</strong> 1 (<code>BUS</code>) ·
+<em>inputs variable</em></p>
 </li>
 <li>
 <p>Bundles its <code>n</code> single-wire inputs into one <code>n</code>-wide bus output.</p>
@@ -1008,8 +1008,8 @@ variable</em></p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Inputs:</strong> 1 (<code>BUS</code>) · <strong>Outputs:</strong> 2&#43; (single-wire) · <em>outputs
-variable</em></p>
+<p><strong>Inputs:</strong> 1 (<code>BUS</code>) · <strong>Outputs:</strong> 2&#43; (single-wire), default 4 ·
+<em>outputs variable</em></p>
 </li>
 <li>
 <p>Splits one <code>n</code>-wide bus input into <code>n</code> single-wire outputs.</p>
@@ -1425,9 +1425,9 @@ empty design).</p>
 </div>
 <div class="paragraph">
 <p>Saved designs (JSON files, the launch default, and share links alike)
-are stored compactly: built-in primitive definitions and unreferenced
-copies are omitted, and component coordinates are rounded to two
-decimals — all regenerated or inconsequential on load.</p>
+are stored compactly: built-in primitives are inline references (never
+stored as definitions), and component coordinates are rounded to two
+decimals.</p>
 </div>
 </div>
 </div>
@@ -1435,7 +1435,7 @@ decimals — all regenerated or inconsequential on load.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-05 11:53:23 +0200
+Last updated 2026-09-05 22:21:50 +0200
 </div>
 </div>
 </body>
