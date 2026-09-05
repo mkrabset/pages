@@ -1133,8 +1133,9 @@ end of the bus is the least-significant bit.</p>
 <ul>
 <li>
 <p><strong>Inputs:</strong> none · <strong>Outputs:</strong> 1&#43; · Properties <strong>Terminal type</strong>
-(<code>wire</code> / <code>bus</code>, default <code>bus</code>) and <strong>Initial value</strong> (boolean, default
-off)</p>
+(<code>wire</code> / <code>bus</code>, default <code>bus</code>), <strong>Initial value</strong> (boolean, default off),
+<strong>Value format</strong> (<code>HEX</code> / <code>DEC</code> / <code>SIGNED DEC</code>, default <code>HEX</code>), and
+<strong>Order</strong> (<code>asc</code> / <code>desc</code>, default <code>asc</code>)</p>
 </li>
 <li>
 <p>A multi-lane interactive source. In <code>wire</code> mode each output terminal
@@ -1142,6 +1143,11 @@ is one switch; in <code>bus</code> mode a single bus output carries one lane per
 wire. Every lane starts at the <strong>Initial value</strong> when simulation starts
 (and shows that state, colored, in design mode). In simulate mode, click
 an indicator circle to toggle its lane.</p>
+</li>
+<li>
+<p><strong>Value format</strong> is the radix used by the set-value dialog (see §7);
+<strong>Order</strong> selects which end of the bus is the least-significant bit (<code>asc</code>
+= lane 0 is the LSB).</p>
 </li>
 </ul>
 </div>
@@ -1293,6 +1299,34 @@ double-click just toggles twice — it does <em>not</em> enter the component).</
 </div>
 </div>
 <div class="sect3">
+<h4 id="_setting_a_switch_value">Setting a switch value</h4>
+<div class="paragraph">
+<p>Each <strong>SWITCHES</strong> component shows a small <strong>#</strong> badge in its top-left corner
+while simulating. Click it to type a value into that switch instead of
+clicking lanes one by one: a dialog titled <em>"`enter N-bit value in …`"</em>
+opens with a radix dropdown (<strong>HEX</strong> / <strong>DEC</strong> / <strong>SIGNED DEC</strong>, initialized
+from the instance’s <em>Value format</em>) and an input pre-filled with the
+current value (selected, so typing replaces it).</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Enter</strong> parses the value (in the chosen radix) and sets the switches,
+closing the dialog; an out-of-range or malformed value shows an error
+and stays open.</p>
+</li>
+<li>
+<p><strong>Escape</strong> (or <strong>Cancel</strong>) closes without changing anything.</p>
+</li>
+<li>
+<p>The radix chosen in the dialog only affects that dialog — it does not
+change the instance’s <em>Value format</em>. The instance’s <em>Order</em> is applied
+when the typed value is mapped onto the lanes.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_step_mode">Step mode</h4>
 <div class="ulist">
 <ul>
@@ -1401,7 +1435,7 @@ decimals — all regenerated or inconsequential on load.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-04 21:35:36 +0200
+Last updated 2026-09-05 11:53:23 +0200
 </div>
 </div>
 </body>
