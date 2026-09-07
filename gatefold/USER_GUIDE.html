@@ -531,6 +531,14 @@ browser’s <code>localStorage</code> as the automatic launch state, or remove i
 the app starts empty again.</p>
 </li>
 <li>
+<p><strong>Clear everything</strong> — wipe parts of the design after a confirmation
+dialog with checkboxes: the <strong>component tree</strong> (the root sheet) and the
+<strong>&#8220;My components&#8221; library</strong>, where the library can be deleted as a whole
+(<strong>All components</strong>) or per category (<strong>Uncategorized</strong> plus each
+user-defined category). Everything is checked by default; uncheck what
+you want to keep (disabled while simulating).</p>
+</li>
+<li>
 <p><strong>Copy link</strong> — copy a shareable URL to the clipboard: the design is
 gzipped and base64-encoded into a <code>?d=</code> query parameter, and opening
 that URL restores the design on launch (see §9).</p>
@@ -1386,9 +1394,13 @@ module ports.</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>Probes map to top-level I/O: <strong>CLOCK</strong> and <strong>SWITCHES</strong> become <code>input</code> pins,
-<strong>LEDS</strong> and <strong>7-SEG</strong> become <code>output</code> pins. A <strong>SWITCHES</strong> placed inside a
-composite is exported as a constant fixed at its <em>Initial value</em>.</p>
+<p>The top module’s inputs and outputs are only the port terminals of the
+main scope, plus a top-level <strong>CLOCK</strong> (an <code>input</code> pin, for the FPGA
+clock). A <strong>SWITCHES</strong> at the main scope becomes an <code>input</code> pin only when
+its <strong>Exported</strong> property is checked; otherwise — and always when placed
+inside a composite — it is emitted as a constant fixed at its <em>Initial
+value</em>. A <strong>SWITCHES</strong> that isn’t wired to anything is ignored, and <strong>LEDS</strong>
+and <strong>7-SEG</strong> are always ignored.</p>
 </div>
 <div class="paragraph">
 <p>The export reports issues by severity:</p>
@@ -1399,10 +1411,6 @@ composite is exported as a constant fixed at its <em>Initial value</em>.</p>
 <p><strong>Errors</strong> (shown as a toast and logged to the console): <em>floating nets</em>
 (an input/output with no driver) and a <em>nested CLOCK</em> (a clock inside a
 composite can’t be exported).</p>
-</li>
-<li>
-<p><strong>Info</strong> (console only): nested SWITCHES (fixed initial value) and
-nested LEDS/7-SEG (not exported).</p>
 </li>
 </ul>
 </div>
@@ -1435,7 +1443,7 @@ decimals.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-05 22:21:50 +0200
+Last updated 2026-09-07 21:26:24 +0200
 </div>
 </div>
 </body>
