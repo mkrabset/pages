@@ -511,7 +511,7 @@ enters simulate mode from design mode and starts running; <strong>Space</strong>
 toggles run/pause while simulating.</p>
 </li>
 <li>
-<p><strong>Settings (gear)</strong> — open the simulation settings dialog.</p>
+<p><strong>Simulation settings (gear)</strong> — open the simulation settings dialog.</p>
 </li>
 <li>
 <p><strong>Breadcrumb</strong> — the path of components you’ve navigated into
@@ -542,6 +542,10 @@ you want to keep (disabled while simulating).</p>
 <p><strong>Copy link</strong> — copy a shareable URL to the clipboard: the design is
 gzipped and base64-encoded into a <code>?d=</code> query parameter, and opening
 that URL restores the design on launch (see §9).</p>
+</li>
+<li>
+<p><strong>Settings</strong> — open the global settings dialog (currently a single <strong>lane
+distance</strong> setting; see below).</p>
 </li>
 <li>
 <p><strong>Theme toggle</strong> — switch between dark and light.</p>
@@ -606,6 +610,14 @@ inputs/outputs (press <strong>Enter</strong> to create).</p>
 <li>
 <p><strong>Simulation settings</strong> — default gate delay (ps), the step mode, and
 the simulation speed.</p>
+</li>
+<li>
+<p><strong>Settings</strong> — the global settings dialog. Its <strong>lane distance</strong> (0–7,
+world units) controls how far apart the individual wires of a bus
+terminal are drawn, so large buses can take less vertical space. It
+affects every bus terminal <em>except</em> those on the LED and switch arrays
+(whose indicator rows keep their fixed spacing). The value persists
+across reloads.</p>
 </li>
 <li>
 <p><strong>Delete dialog</strong> — confirm deleting a library template.</p>
@@ -1141,7 +1153,7 @@ end of the bus is the least-significant bit.</p>
 <ul>
 <li>
 <p><strong>Inputs:</strong> none · <strong>Outputs:</strong> 1&#43; · Properties <strong>Terminal type</strong>
-(<code>wire</code> / <code>bus</code>, default <code>bus</code>), <strong>Initial value</strong> (boolean, default off),
+(<code>wire</code> / <code>bus</code>, default <code>bus</code>), <strong>Initial value</strong> (text, default <code>0</code>),
 <strong>Value format</strong> (<code>HEX</code> / <code>DEC</code> / <code>SIGNED DEC</code>, default <code>HEX</code>), and
 <strong>Order</strong> (<code>asc</code> / <code>desc</code>, default <code>asc</code>)</p>
 </li>
@@ -1153,9 +1165,10 @@ wire. Every lane starts at the <strong>Initial value</strong> when simulation st
 an indicator circle to toggle its lane.</p>
 </li>
 <li>
-<p><strong>Value format</strong> is the radix used by the set-value dialog (see §7);
-<strong>Order</strong> selects which end of the bus is the least-significant bit (<code>asc</code>
-= lane 0 is the LSB).</p>
+<p><strong>Initial value</strong> is a number entered in the current <strong>Value format</strong>
+(signed or unsigned decimal, or hex); <strong>Order</strong> decides how the typed
+value maps onto the lanes. In Verilog export a non-exported switch
+becomes a constant fixed at this value.</p>
 </li>
 </ul>
 </div>
@@ -1443,7 +1456,7 @@ decimals.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-07 21:26:24 +0200
+Last updated 2026-09-09 23:00:10 +0200
 </div>
 </div>
 </body>
