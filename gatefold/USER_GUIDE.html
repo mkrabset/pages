@@ -588,14 +588,15 @@ to place it.</p>
 <li>
 <p><strong>My components</strong> — your composite components. Drag to place;
 double-click to edit its template; <strong>×</strong> deletes it. <strong>Export</strong> / <strong>Import</strong>
-exchange your component library as JSON, and <strong>Apply to instances</strong> (shown
-when a template is selected) propagates that template’s edits (including
-its port names) to every matching placed instance. The list scrolls if
-it grows tall. A <strong>category dropdown</strong> above the list shows one category
-at a time; the <strong>Move to category</strong> dropdown below the buttons moves the
-selected component to an existing category or <strong>＋ New category…</strong> (type a
-name and press <strong>Enter</strong>). It is always visible but disabled until a
-component is selected, and while you are editing a template.</p>
+exchange your component library as JSON, and <strong>Apply to scope</strong> / <strong>Apply
+to all</strong> (shown when a template is selected) propagate that template’s
+edits (including its port names) to matching placed instances — in the
+current scope, or across the whole design. The list scrolls if it grows
+tall. A <strong>category dropdown</strong> above the list shows one category at a time;
+the <strong>Move to category</strong> dropdown below the buttons moves the selected
+component to an existing category or <strong>＋ New category…</strong> (type a name and
+press <strong>Enter</strong>). It is always visible but disabled until a component is
+selected, and while you are editing a template.</p>
 </li>
 </ul>
 </div>
@@ -810,10 +811,13 @@ parent sheet and invert it there.</p>
 <p>When you place or group a component, Gatefold deep-copies its definition
 (a <strong>copy</strong>), so every instance is independent. <strong>My components</strong> lists your
 templates; editing a template (via its library card) and pressing <strong>Apply
-to instances</strong> updates every matching instance — one whose terminals are
-the same (by id and order) as the template’s. Port <strong>names</strong> don’t affect
-matching and are overwritten with the template’s names, so renaming a
-template’s ports bulk-updates its instances.</p>
+to scope</strong> updates every matching instance in the current scope, while
+<strong>Apply to all</strong> updates every matching instance in the whole design
+(including copies embedded inside other components). An instance matches
+when its terminals are the same (by id and order) as the template’s.
+Port <strong>names</strong> don’t affect matching and are overwritten with the
+template’s names, so renaming a template’s ports bulk-updates its
+instances.</p>
 </div>
 <hr>
 </div>
@@ -1155,8 +1159,8 @@ end of the bus is the least-significant bit.</p>
 <li>
 <p><strong>Inputs:</strong> none · <strong>Outputs:</strong> 1&#43; · Properties <strong>Terminal type</strong>
 (<code>wire</code> / <code>bus</code>, default <code>bus</code>), <strong>Initial value</strong> (text, default <code>0</code>),
-<strong>Value format</strong> (<code>HEX</code> / <code>DEC</code> / <code>SIGNED DEC</code>, default <code>HEX</code>), and
-<strong>Order</strong> (<code>asc</code> / <code>desc</code>, default <code>asc</code>)</p>
+<strong>Value format</strong> (<code>HEX</code> / <code>DEC</code> / <code>SIGNED DEC</code>, default <code>HEX</code>), <strong>Order</strong>
+(<code>asc</code> / <code>desc</code>, default <code>asc</code>), and <strong>Compact</strong> (boolean, default off)</p>
 </li>
 <li>
 <p>A multi-lane interactive source. In <code>wire</code> mode each output terminal
@@ -1170,6 +1174,12 @@ an indicator circle to toggle its lane.</p>
 (signed or unsigned decimal, or hex); <strong>Order</strong> decides how the typed
 value maps onto the lanes. In Verilog export a non-exported switch
 becomes a constant fixed at this value.</p>
+</li>
+<li>
+<p><strong>Compact</strong> renders the switch as a single small box showing its current
+value (in the instance’s <strong>Value format</strong>) instead of one circle per lane
+— useful for wide buses. Its lanes are set via the <strong>#</strong> badge / set-value
+dialog rather than individual clicks.</p>
 </li>
 </ul>
 </div>
@@ -1457,7 +1467,7 @@ decimals.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-10 08:03:41 +0200
+Last updated 2026-09-10 17:06:23 +0200
 </div>
 </div>
 </body>
