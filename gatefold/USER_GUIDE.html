@@ -848,6 +848,10 @@ buses into one (twice the width).</p>
 is a passthrough.</p>
 </li>
 <li>
+<p><strong>COMPARE</strong> takes two buses of the same (derived) width and outputs <code>1</code>
+when they match, <code>0</code> when they differ.</p>
+</li>
+<li>
 <p>Connecting mismatched widths is rejected at wiring time (&#8220;Bus width
 mismatch&#8221;), and a bus splitter requires an even width (&#8220;Bus width must
 be even&#8221;).</p>
@@ -1081,6 +1085,22 @@ the clock. On power-on <code>Q</code> starts at the <strong>Initial value</stron
 <p>A passthrough that <strong>fixes</strong> the bus width. Property <strong>Lanes</strong> (default 8,
 1–32) sets the width of both terminals; use it to pin a bus to a
 specific width regardless of its source.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_compare">COMPARE</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Inputs:</strong> 2 (<code>A</code>, <code>B</code>, equal derived width) · <strong>Outputs:</strong> 1 (<code>EQ</code>)</p>
+</li>
+<li>
+<p>Compares its two bus inputs bit-for-bit: <code>EQ</code> is <code>1</code> when they match,
+<code>0</code> when they differ, and <code>x</code> when either input has an unknown bit. Both
+inputs adopt the same width (neither is fixed), so the comparator
+follows whatever width its buses carry.</p>
 </li>
 </ul>
 </div>
@@ -1467,7 +1487,7 @@ decimals.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-10 17:06:23 +0200
+Last updated 2026-09-11 21:54:54 +0200
 </div>
 </div>
 </body>
