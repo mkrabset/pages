@@ -714,8 +714,8 @@ driven input is rejected with a message.</p>
 <h4 id="_keyboard_shortcuts">Keyboard shortcuts</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
+<col style="width: 56%;">
+<col style="width: 44%;">
 </colgroup>
 <thead>
 <tr>
@@ -755,6 +755,11 @@ driven input is rejected with a message.</p>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>i</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Toggle inversion on the hovered terminal</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1</code> / <code>0</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set (or remove) a pull-up / pull-down on the hovered input
+terminal (see §3)</p></td>
 </tr>
 </tbody>
 </table>
@@ -803,6 +808,39 @@ component’s <em>own</em> terminals from the inside. The current scope’s
 input/output port groups cannot be inverted and never show a bubble — to
 invert a composite’s terminal, select the composite instance on the
 parent sheet and invert it there.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_terminal_pull_up_pull_down">Terminal pull-up / pull-down</h4>
+<div class="paragraph">
+<p>An <strong>input</strong> terminal can be given a weak pull-up or pull-down, which
+drives it only while the pin is left <strong>floating</strong> (nothing wired to it).
+Press <strong><code>1</code></strong> while hovering an input pin to set a pull-up, <strong><code>0</code></strong> for a
+pull-down; press the same key again to remove it. A small <code>1</code>/<code>0</code> glyph
+is drawn just left of the pin while a pull is active and the pin is
+unconnected.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A floating pulled input reads as a real <code>1</code>/<code>0</code> in simulation (instead
+of <code>x</code>) — so, for example, an unconnected active-high reset can be tied
+inactive.</p>
+</li>
+<li>
+<p>In Verilog export a pulled floating input is tied to a constant and is
+not reported as a floating net.</p>
+</li>
+<li>
+<p>Like inversion, pull is instance-level and external-only: it lives on
+the placed instance, never on the template or on a component’s own port
+groups.</p>
+</li>
+<li>
+<p>The <strong>DFF</strong>’s <code>RST</code> input is pulled <strong>down</strong> by default, so a DFF whose
+reset is left unconnected behaves as &#8220;no reset&#8221; rather than floating.</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect3">
@@ -892,7 +930,7 @@ be even&#8221;).</p>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>x</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">unknown / floating</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">gray</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yellow</p></td>
 </tr>
 </tbody>
 </table>
@@ -1014,6 +1052,10 @@ of <code>D</code> (after a clk-to-q delay); between edges <code>Q</code> holds.<
 <p>When <code>RST</code> is asserted (high by default, low with <em>Active-high reset</em>
 off), <code>Q</code> is forced <strong>asynchronously</strong> to the <strong>Initial value</strong>, overriding
 the clock. On power-on <code>Q</code> starts at the <strong>Initial value</strong>.</p>
+</li>
+<li>
+<p><code>RST</code> is pulled <strong>down</strong> by default, so leaving it unconnected reads as
+inactive (no reset) rather than floating.</p>
 </li>
 </ul>
 </div>
@@ -1323,7 +1365,9 @@ to <code>1</code> for real-time behavior (again, with a much larger clock period
 changes a configured number of picoseconds after its inputs change. On
 start (or reset), driven nets begin at <code>0</code> (floating stay <code>x</code>), then a
 zero-delay settle pass resolves feedback loops (latches, flip-flops) to
-a stable state; a true oscillator is detected and shown as <code>x</code>.</p>
+a stable state; a true oscillator is detected and shown as <code>x</code>. A
+floating input with a <strong>pull-up/pull-down</strong> (§3) starts at its pulled
+level (<code>1</code>/<code>0</code>) instead of <code>x</code>.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1332,7 +1376,7 @@ a stable state; a true oscillator is detected and shown as <code>x</code>.</p>
 <ul>
 <li>
 <p>Wires and terminal markers are colored by their value: <strong>red = 1, black
-= 0, gray = x</strong>.</p>
+= 0, yellow = x</strong>.</p>
 </li>
 <li>
 <p><strong>CLOCK</strong> toggles its output on a square wave with its <code>Period</code>.</p>
@@ -1454,7 +1498,9 @@ and <strong>7-SEG</strong> are always ignored.</p>
 <li>
 <p><strong>Errors</strong> (shown as a toast and logged to the console): <em>floating nets</em>
 (an input/output with no driver) and a <em>nested CLOCK</em> (a clock inside a
-composite can’t be exported).</p>
+composite can’t be exported). A floating input with a
+<strong>pull-up/pull-down</strong> is <em>not</em> an error — its net is tied to a constant
+(<code>assign net = 1&#8217;b1;</code> / <code>1&#8217;b0</code>).</p>
 </li>
 </ul>
 </div>
@@ -1487,7 +1533,7 @@ decimals.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-11 23:06:38 +0200
+Last updated 2026-09-13 00:34:46 +0200
 </div>
 </div>
 </body>
