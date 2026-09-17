@@ -704,6 +704,13 @@ wire, drag, and release on a new input (re-target) or on empty space
 (delete).</p>
 </li>
 <li>
+<p><strong>Cut wires to delete</strong> — hold <strong>Alt</strong> and drag across the canvas: a red
+dashed line is drawn, and on release every wire it crosses is removed. A
+bus is removed only when the line cuts through <strong>all</strong> of its lanes.
+(Unlike Ctrl/Cmd&#43;drag, this deletes rather than splitting, and it
+can remove many wires at once.)</p>
+</li>
+<li>
 <p>An input can have <strong>at most one</strong> driver; dropping a second wire onto a
 driven input is rejected with a message.</p>
 </li>
@@ -1533,7 +1540,7 @@ decimals.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-13 00:34:46 +0200
+Last updated 2026-09-17 07:12:33 +0200
 </div>
 </div>
 </body>
