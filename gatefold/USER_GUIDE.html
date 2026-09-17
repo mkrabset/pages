@@ -491,6 +491,11 @@ editor</p></td>
 </tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p>The center panel has a <strong>tab bar</strong> with two views: <strong>Designer</strong> (the
+schematic canvas) and <strong>Simulation timeline</strong> (the recorded probe
+waveforms — see §7).</p>
+</div>
 <div class="sect3">
 <h4 id="_toolbar">Toolbar</h4>
 <div class="paragraph">
@@ -544,8 +549,8 @@ gzipped and base64-encoded into a <code>?d=</code> query parameter, and opening
 that URL restores the design on launch (see §9).</p>
 </li>
 <li>
-<p><strong>Settings</strong> — open the global settings dialog (currently a single <strong>lane
-distance</strong> setting; see below).</p>
+<p><strong>Settings</strong> — open the global settings dialog (lane distance,
+simulation history size, and history-limit behaviour; see below).</p>
 </li>
 <li>
 <p><strong>Theme toggle</strong> — switch between dark and light.</p>
@@ -615,12 +620,28 @@ inputs/outputs (press <strong>Enter</strong> to create).</p>
 the simulation speed.</p>
 </li>
 <li>
-<p><strong>Settings</strong> — the global settings dialog. Its <strong>lane distance</strong> (0–7,
-world units) controls how far apart the individual wires of a bus
-terminal are drawn, so large buses can take less vertical space. It
-affects every bus terminal <em>except</em> those on the LED and switch arrays
-(whose indicator rows keep their fixed spacing). The value persists
-across reloads.</p>
+<p><strong>Settings</strong> — the global settings dialog:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Lane distance</strong> (0–7, world units) controls how far apart the
+individual wires of a bus terminal are drawn, so large buses can take
+less vertical space. It affects every bus terminal <em>except</em> those on the
+LED and switch arrays (whose indicator rows keep their fixed spacing).</p>
+</li>
+<li>
+<p><strong>Max simulation history</strong> (events) is the maximum number of
+probe-signal changes recorded for the simulation timeline (see §7), so a
+long simulation never exhausts memory.</p>
+</li>
+<li>
+<p><strong>History limit</strong> chooses what happens when that limit is hit: <strong>Stop
+simulation</strong> (pause and keep the full trace) or <strong>Sliding ring buffer</strong>
+(drop the oldest events and keep recording). The values persist across
+reloads.</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
 <p><strong>Delete dialog</strong> — confirm deleting a library template.</p>
@@ -1281,6 +1302,25 @@ when its signal is <code>1</code>.</p>
 </li>
 </ul>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_probe">PROBE</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Inputs:</strong> 1 (<code>IN</code>) · <strong>Outputs:</strong> none · Properties none</p>
+</li>
+<li>
+<p>A monitoring tap: it records the signal on whatever it is wired to (a
+single wire or a whole bus, adopting the connected width) so you can
+inspect it in the <strong>Simulation timeline</strong> (§7). It has no effect on the
+circuit. Probes are <strong>not grouped</strong> — if you select a probe alongside
+other components and click <strong>Group</strong>, the probe stays on the sheet and
+keeps tapping the new component’s output. A probe is ignored by the
+Verilog export.</p>
+</li>
+</ul>
+</div>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
@@ -1410,6 +1450,40 @@ double-click just toggles twice — it does <em>not</em> enter the component).</
 </li>
 <li>
 <p><strong>7-SEG</strong> displays the value of each 4-bit nibble of its bus.</p>
+</li>
+<li>
+<p><strong>PROBE</strong> records the signal on its input for the timeline (below).</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_simulation_timeline">Simulation timeline</h4>
+<div class="paragraph">
+<p>The <strong>Simulation timeline</strong> tab shows the recorded state history of every
+<strong>PROBE</strong> in the design (at every level of the hierarchy). Each probe lane
+is one horizontal row — its label on the left, and a colored line
+showing the signal over time (<strong>red = 1, black = 0, yellow = x</strong>).</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The horizontal axis is <strong>time-proportional</strong>: the distance between two
+events is proportional to the time between them.</p>
+</li>
+<li>
+<p><strong>Mouse wheel</strong> zooms the time axis (anchored at the cursor);
+<strong>press-and-drag</strong> pans horizontally; rows that don’t fit scroll
+vertically.</p>
+</li>
+<li>
+<p>The timeline keeps the <strong>last</strong> simulation, so you can inspect it after
+leaving simulate mode.</p>
+</li>
+<li>
+<p>If the history limit is hit in <em>Stop</em> mode, the simulation pauses and
+the timeline shows a <em>"`History limit reached`"</em> notice (change the
+limit or switch to <em>Sliding</em> in <strong>Settings</strong>).</p>
 </li>
 </ul>
 </div>
@@ -1553,7 +1627,7 @@ decimals.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-17 08:07:28 +0200
+Last updated 2026-09-17 12:10:23 +0200
 </div>
 </div>
 </body>
