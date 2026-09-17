@@ -591,12 +591,13 @@ double-click to edit its template; <strong>×</strong> deletes it. <strong>Expor
 exchange your component library as JSON, and <strong>Apply to scope</strong> / <strong>Apply
 to all</strong> (shown when a template is selected) propagate that template’s
 edits (including its port names) to matching placed instances — in the
-current scope, or across the whole design. The list scrolls if it grows
-tall. A <strong>category dropdown</strong> above the list shows one category at a time;
-the <strong>Move to category</strong> dropdown below the buttons moves the selected
-component to an existing category or <strong>＋ New category…</strong> (type a name and
-press <strong>Enter</strong>). It is always visible but disabled until a component is
-selected, and while you are editing a template.</p>
+current scope, or across the whole design. <strong>Delete</strong> opens a dialog that
+removes whole library <em>categories</em> (see below). The list scrolls if it
+grows tall. A <strong>category dropdown</strong> above the list shows one category at a
+time; the <strong>Move to category</strong> dropdown below the buttons moves the
+selected component to an existing category or <strong>＋ New category…</strong> (type a
+name and press <strong>Enter</strong>). It is always visible but disabled until a
+component is selected, and while you are editing a template.</p>
 </li>
 </ul>
 </div>
@@ -625,7 +626,19 @@ across reloads.</p>
 <p><strong>Delete dialog</strong> — confirm deleting a library template.</p>
 </li>
 <li>
+<p><strong>Delete categories dialog</strong> — opened from the library’s <strong>Delete</strong>
+button: it lists every library category (including <strong>Uncategorized</strong>) with
+a checkbox, plus a <strong>Select all</strong> master toggle, so you can delete the
+whole library or just chosen categories. The list scrolls when it grows
+past ~15 categories.</p>
+</li>
+<li>
 <p><strong>Toast</strong> — transient messages (e.g. &#8220;Input already has a driver&#8221;).</p>
+</li>
+<li>
+<p>In every dialog, <strong>Escape</strong> cancels/closes it, and the confirmation
+dialogs pre-focus their primary button so <strong>Enter</strong> completes the action
+immediately.</p>
 </li>
 </ul>
 </div>
@@ -1540,7 +1553,7 @@ decimals.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-17 07:12:33 +0200
+Last updated 2026-09-17 08:07:28 +0200
 </div>
 </div>
 </body>
