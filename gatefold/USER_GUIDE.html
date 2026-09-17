@@ -1461,9 +1461,10 @@ double-click just toggles twice — it does <em>not</em> enter the component).</
 <h4 id="_simulation_timeline">Simulation timeline</h4>
 <div class="paragraph">
 <p>The <strong>Simulation timeline</strong> tab shows the recorded state history of every
-<strong>PROBE</strong> in the design (at every level of the hierarchy). Each probe lane
-is one horizontal row — its label on the left, and a colored line
-showing the signal over time (<strong>red = 1, black = 0, yellow = x</strong>).</p>
+<strong>PROBE</strong> in the design (at every level of the hierarchy). Each probe is a
+group of one or more lanes (a bus is one group, one row per wire); its
+<strong>drag handle</strong> and <strong>name</strong> are on the left, and a colored line shows the
+signal over time (<strong>red = 1, black = 0, yellow = x</strong>).</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1473,8 +1474,12 @@ events is proportional to the time between them.</p>
 </li>
 <li>
 <p><strong>Mouse wheel</strong> zooms the time axis (anchored at the cursor);
-<strong>press-and-drag</strong> pans horizontally; rows that don’t fit scroll
-vertically.</p>
+<strong>press-and-drag</strong> on the waveform area pans horizontally; rows that don’t
+fit scroll vertically.</p>
+</li>
+<li>
+<p><strong>Drag a probe’s handle/name</strong> up or down to reorder it — a bus moves as
+one unit. The order is remembered while the app is open.</p>
 </li>
 <li>
 <p>The timeline keeps the <strong>last</strong> simulation, so you can inspect it after
@@ -1627,7 +1632,7 @@ decimals.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-17 12:10:23 +0200
+Last updated 2026-09-17 17:17:12 +0200
 </div>
 </div>
 </body>
