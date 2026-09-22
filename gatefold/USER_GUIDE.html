@@ -1102,6 +1102,54 @@ inactive (no reset) rather than floating.</p>
 </div>
 </div>
 <div class="sect3">
+<h4 id="_counter">COUNTER</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Inputs:</strong> <code>CLK</code>, <code>RST</code> · <strong>Outputs:</strong> <code>Q</code> bus, or <code>Q0…</code> single wires ·
+Properties <strong>Reset</strong> (<code>sync</code> / <code>async</code>, default <code>sync</code>), <strong>Terminal type</strong>
+(<code>wire</code> / <code>bus</code>, default <code>wire</code>), <strong>Width</strong> (1–32, default 4, wire mode
+only)</p>
+</li>
+<li>
+<p>A binary counter. On each rising edge of <code>CLK</code> the count increments by
+one, wrapping at its width. <code>Q0</code> is the least-significant bit.</p>
+</li>
+<li>
+<p><strong>Reset</strong> selects when an asserted <code>RST</code> (active-high) clears the count
+to zero:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>sync</strong> — on the clock edge while <code>RST</code> is held high;</p>
+</li>
+<li>
+<p><strong>async</strong> — immediately when <code>RST</code> goes high.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Terminal type</strong> picks the output shape: <code>wire</code> gives one single-wire
+output per counting bit (<code>Q0…Q(n-1)</code>), with the count set by <strong>Width</strong>;
+<code>bus</code> gives one <code>Q</code> bus whose width is adopted from the connected bus
+(the <strong>Width</strong> property is ignored). Changing the terminal type keeps
+<code>CLK</code>/<code>RST</code> wiring but disconnects the output wires.</p>
+</li>
+<li>
+<p><code>RST</code> is pulled <strong>down</strong> by default, so an unconnected reset reads
+inactive.</p>
+</li>
+<li>
+<p>In Verilog export this becomes an <code>always @(posedge clk …)</code> counter
+(with <code>if (rst)</code> for the chosen reset style) — the FPGA gets real
+synchronous counting logic rather than a ripple counter built from
+flip-flops.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_fan_in">FAN-IN</h4>
 <div class="ulist">
 <ul>
@@ -1632,7 +1680,7 @@ decimals.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-17 17:17:12 +0200
+Last updated 2026-09-22 22:38:46 +0200
 </div>
 </div>
 </body>
