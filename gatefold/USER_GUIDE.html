@@ -752,6 +752,31 @@ driven input is rejected with a message.</p>
 </div>
 </div>
 <div class="sect3">
+<h4 id="_proximity_auto_connect">Proximity auto-connect</h4>
+<div class="paragraph">
+<p>Wire several nearby components at once instead of drawing each wire by
+hand:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>With one or more components <strong>selected</strong> (or while dragging them), each
+unconnected terminal that sits near a matching terminal on another
+component is shown as a <strong>dashed orange preview wire</strong>. Inputs look for
+the nearest nearby output, outputs for the nearest nearby unconnected
+input — the closest within about one gate-width wins, and only
+width-compatible pairs are matched. The composite’s own input/output
+port groups are valid targets too.</p>
+</li>
+<li>
+<p>Press <strong><code>c</code></strong> to wire every previewed match at once (a single undo
+step). Clear the selection (or press Escape) to dismiss the previews
+without connecting.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_keyboard_shortcuts">Keyboard shortcuts</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -792,6 +817,10 @@ driven input is rejected with a message.</p>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Space</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Toggle run/pause (in simulate mode)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>c</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Connect the proximity auto-connect (orange) matches</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>i</code></p></td>
@@ -1680,7 +1709,7 @@ decimals.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-22 22:38:46 +0200
+Last updated 2026-09-24 21:50:56 +0200
 </div>
 </div>
 </body>
