@@ -1179,6 +1179,67 @@ flip-flops.</p>
 </div>
 </div>
 <div class="sect3">
+<h4 id="_rom">ROM</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Inputs:</strong> 1 (<code>ADDR</code>) · <strong>Outputs:</strong> 1 (<code>DATA</code>) · Properties <strong>Address
+width</strong> (<code>busWidth</code>, default 8, 1–16), <strong>Data width</strong> (<code>dataWidth</code>, default
+8, 1–64), <strong>Value format</strong> (<code>HEX</code> / <code>DEC</code> / <code>BINARY</code>, default <code>HEX</code>)</p>
+</li>
+<li>
+<p>A read-only memory: put an address on the <code>ADDR</code> bus and, after the
+gate’s propagation delay, the stored word appears on the <code>DATA</code> bus. The
+read is <strong>asynchronous</strong> — there is no clock and no address latching, so
+<code>DATA</code> follows <code>ADDR</code> like any combinational gate. Any unknown (<code>x</code>)
+address bit drives all-<code>x</code> data; addresses past the stored contents read
+<code>0</code>.</p>
+</li>
+<li>
+<p>The memory holds <code>2^AddressWidth</code> words of <code>DataWidth</code> bits each (so
+an 8-bit address is 256 × 8-bit). Click <strong>Edit contents…</strong> in the
+properties panel to open the contents editor:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Each line is <code>ADDR value value …</code> — an address followed by one or
+more values, all shown in the selected <strong>Value format</strong> and zero-padded to
+a fixed width (hex is padded to whole 4-bit nibbles, binary to the full
+bit width). The number of values per line (1, 2, 4, or 8) is chosen
+automatically to fit the editor’s width.</p>
+</li>
+<li>
+<p><strong>Addresses are read-only</strong>; you edit only the values. A cursor
+highlights a single digit of the values, and typing overwrites that
+digit and advances (arrow keys move it; hex/binary digits map to
+nibbles/bits, and a decimal digit re-parses the word, clamping to the
+value range).</p>
+</li>
+<li>
+<p><strong>Load file…</strong> fills the memory from a file. By default a file is
+<strong>data-only</strong> — every token is a value, placed consecutively from the
+start of memory. To place values at specific addresses, prefix each line
+with an address followed by a colon: <code>ADDR: value value …</code>. The <strong>first
+line</strong> decides which format the whole file uses.</p>
+</li>
+<li>
+<p><strong>Value format</strong> only sets the editor’s entry/display radix — the
+stored contents are kept radix-independent, so switching radices never
+corrupts the memory.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>In Verilog export the ROM is emitted as an inferred memory
+(<code>reg mem[]</code> &#43; an <code>initial</code> block &#43;
+<code>assign DATA = mem[ADDR]</code>), leaving the FPGA toolchain to
+implement it as block RAM or distributed LUTs as it sees fit.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_fan_in">FAN-IN</h4>
 <div class="ulist">
 <ul>
@@ -1652,6 +1713,11 @@ connected) and <code>INIT</code> from the <em>Initial value</em> property.</p>
 FAN-OUT/BUS-SPLIT slice.</p>
 </li>
 <li>
+<p><strong>ROM</strong> as an inferred memory (<code>reg mem[]</code> &#43; an <code>initial</code> block
+&#43; <code>assign DATA = mem[ADDR]</code>), so the synthesis toolchain
+picks block RAM vs LUTs.</p>
+</li>
+<li>
 <p><strong>Hierarchy</strong> as nested module instantiations; composite ports become
 module ports.</p>
 </li>
@@ -1709,7 +1775,7 @@ decimals.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-24 22:12:03 +0200
+Last updated 2026-09-26 14:16:36 +0200
 </div>
 </div>
 </body>
