@@ -1223,6 +1223,13 @@ with an address followed by a colon: <code>ADDR: value value …</code>. The <st
 line</strong> decides which format the whole file uses.</p>
 </li>
 <li>
+<p><strong>Copy</strong> / <strong>Paste</strong> (and <strong>Ctrl/Cmd&#43;C</strong> / <strong>Ctrl/Cmd&#43;V</strong>) move the
+memory through the clipboard. Copy writes address-prefixed
+<code>ADDR: value value …</code> text in the current <strong>Value format</strong>; paste parses
+it exactly like a loaded file (same current-format, data-only-or-<code>ADDR:</code>
+rules).</p>
+</li>
+<li>
 <p><strong>Value format</strong> only sets the editor’s entry/display radix — the
 stored contents are kept radix-independent, so switching radices never
 corrupts the memory.</p>
@@ -1775,7 +1782,7 @@ decimals.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-26 14:16:36 +0200
+Last updated 2026-09-26 17:25:48 +0200
 </div>
 </div>
 </body>
