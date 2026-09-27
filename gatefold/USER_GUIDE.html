@@ -1179,6 +1179,56 @@ flip-flops.</p>
 </div>
 </div>
 <div class="sect3">
+<h4 id="_register">REGISTER</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Inputs:</strong> <code>CLK</code>, <code>RST</code>, <code>DATA</code> (bus) or <code>D0…</code> (single wires) ·
+<strong>Outputs:</strong> <code>Q</code> bus, or <code>Q0…</code> single wires · Properties <strong>Reset</strong> (<code>sync</code> /
+<code>async</code>, default <code>sync</code>), <strong>Terminal type</strong> (<code>wire</code> / <code>bus</code>, default
+<code>bus</code>), <strong>Width</strong> (1–32, default 8, wire mode only)</p>
+</li>
+<li>
+<p>An n-bit register (an array of 1-bit memory cells). On each rising
+edge of <code>CLK</code> the register samples <code>DATA</code> into <code>Q</code> (after a clk-to-q
+delay); between edges <code>Q</code> holds its value. <code>D0</code>/<code>Q0</code> is the
+least-significant bit.</p>
+</li>
+<li>
+<p><strong>Reset</strong> selects when an asserted <code>RST</code> (active-high) clears the
+register to zero:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>sync</strong> — on the clock edge while <code>RST</code> is held high;</p>
+</li>
+<li>
+<p><strong>async</strong> — immediately when <code>RST</code> goes high.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Terminal type</strong> picks the data shape: <code>bus</code> gives one <code>DATA</code> bus input
+and one <code>Q</code> bus output whose width is adopted from the connected bus
+(the <strong>Width</strong> property is ignored, but <code>DATA</code> and <code>Q</code> always share the
+same width); <code>wire</code> gives one single-wire <code>D0…</code>/<code>Q0…</code> per bit, with the
+bit count set by <strong>Width</strong>. Changing the terminal type keeps <code>CLK</code>/<code>RST</code>
+wiring but disconnects the data and output wires.</p>
+</li>
+<li>
+<p><code>RST</code> is pulled <strong>down</strong> by default, so an unconnected reset reads
+inactive.</p>
+</li>
+<li>
+<p>In Verilog export this becomes <code>always @(posedge clk …) q &lt;= data</code>
+(with <code>if (rst)</code> for the chosen reset style) — a real synchronous
+register the FPGA can map to flip-flops.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_rom">ROM</h4>
 <div class="ulist">
 <ul>
@@ -1782,7 +1832,7 @@ decimals.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-26 17:25:48 +0200
+Last updated 2026-09-27 12:53:33 +0200
 </div>
 </div>
 </body>
