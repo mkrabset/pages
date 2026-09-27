@@ -1235,15 +1235,18 @@ register the FPGA can map to flip-flops.</p>
 <li>
 <p><strong>Inputs:</strong> 1 (<code>ADDR</code>) · <strong>Outputs:</strong> 1 (<code>DATA</code>) · Properties <strong>Address
 width</strong> (<code>busWidth</code>, default 8, 1–16), <strong>Data width</strong> (<code>dataWidth</code>, default
-8, 1–64), <strong>Value format</strong> (<code>HEX</code> / <code>DEC</code> / <code>BINARY</code>, default <code>HEX</code>)</p>
+8, 1–64), <strong>Access</strong> (<code>async</code> / <code>sync</code>, default <code>async</code>), <strong>Value format</strong>
+(<code>HEX</code> / <code>DEC</code> / <code>BINARY</code>, default <code>HEX</code>)</p>
 </li>
 <li>
-<p>A read-only memory: put an address on the <code>ADDR</code> bus and, after the
-gate’s propagation delay, the stored word appears on the <code>DATA</code> bus. The
-read is <strong>asynchronous</strong> — there is no clock and no address latching, so
-<code>DATA</code> follows <code>ADDR</code> like any combinational gate. Any unknown (<code>x</code>)
-address bit drives all-<code>x</code> data; addresses past the stored contents read
-<code>0</code>.</p>
+<p>A read-only memory: put an address on the <code>ADDR</code> bus and the stored
+word appears on the <code>DATA</code> bus. The <strong>Access</strong> property picks the read
+timing: <strong>async</strong> reads combinationally — there is no clock and no address
+latching, so <code>DATA</code> follows <code>ADDR</code> like any combinational gate (and
+resolves before any clock edge); <strong>sync</strong> adds a <code>CLK</code> input and latches
+the address &#43; registers the data on a clock edge (one-cycle
+latency). Any unknown (<code>x</code>) address bit drives all-<code>x</code> data; addresses
+past the stored contents read <code>0</code>.</p>
 </li>
 <li>
 <p>The memory holds <code>2^AddressWidth</code> words of <code>DataWidth</code> bits each (so
@@ -1288,10 +1291,12 @@ corrupts the memory.</p>
 </div>
 </li>
 <li>
-<p>In Verilog export the ROM is emitted as an inferred memory
-(<code>reg mem[]</code> &#43; an <code>initial</code> block &#43;
-<code>assign DATA = mem[ADDR]</code>), leaving the FPGA toolchain to
-implement it as block RAM or distributed LUTs as it sees fit.</p>
+<p>In Verilog export the ROM follows its <strong>Access</strong>: <strong>async</strong> emits a
+combinational <code>case</code> lookup (distributed LUTs, <code>DATA</code> available before
+any clock edge), while <strong>sync</strong> emits an inferred memory (<code>reg mem[]</code>
+&#43; an <code>initial</code> block &#43;
+<code>always @(posedge CLK) DATA &lt;= mem[ADDR]</code>), which the FPGA
+toolchain can implement as block RAM.</p>
 </li>
 </ul>
 </div>
@@ -1763,16 +1768,18 @@ inversion becomes a <code>~</code>.</p>
 </li>
 <li>
 <p><strong>DFF</strong> as <code>always @(posedge clk …)</code>, with the async reset (when
-connected) and <code>INIT</code> from the <em>Initial value</em> property.</p>
+connected) and <code>INIT</code> from the <em>Initial value</em> property, plus a power-on
+<code>initial</code> block.</p>
 </li>
 <li>
 <p><strong>Buses</strong> as <code>[n-1:0]</code> vectors — FAN-IN/BUS-MERGE concatenate,
 FAN-OUT/BUS-SPLIT slice.</p>
 </li>
 <li>
-<p><strong>ROM</strong> as an inferred memory (<code>reg mem[]</code> &#43; an <code>initial</code> block
-&#43; <code>assign DATA = mem[ADDR]</code>), so the synthesis toolchain
-picks block RAM vs LUTs.</p>
+<p><strong>ROM</strong> following its <em>Access</em>: <strong>async</strong> as a combinational <code>case</code> lookup
+(distributed LUTs), or <strong>sync</strong> as an inferred memory (<code>reg mem[]</code>
+&#43; an <code>initial</code> block &#43; a registered read), so the synthesis
+toolchain can pick block RAM.</p>
 </li>
 <li>
 <p><strong>Hierarchy</strong> as nested module instantiations; composite ports become
@@ -1832,7 +1839,7 @@ decimals.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-27 12:53:33 +0200
+Last updated 2026-09-27 23:46:00 +0200
 </div>
 </div>
 </body>
