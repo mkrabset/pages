@@ -864,6 +864,54 @@ descend into it.</p>
 </ol>
 </div>
 <div class="sect3">
+<h4 id="_array_duplicating_a_component">Array (duplicating a component)</h4>
+<div class="paragraph">
+<p>Avoid repetitive work by replicating a single component many times in
+parallel. Select <strong>one composite</strong> (e.g. a full-adder) and press <strong>Array</strong>
+in the toolbar:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Count</strong> — how many copies to place. Each <em>non-chained</em> terminal
+becomes a <code>count</code>-wide bus (e.g. a full-adder’s <code>A</code>/<code>B</code>/<code>Sum</code> become
+4-bit buses for <code>Count = 4</code>).</p>
+</li>
+<li>
+<p><strong>Orientation</strong> — lay the <strong>copies</strong> out horizontally (left to right) or
+vertically (top to bottom). The surrounding flow — input port, fan-outs,
+the copies, fan-ins, output port — is always left-to-right; orientation
+only affects how the copies are arranged among themselves.</p>
+</li>
+<li>
+<p><strong>Inputs</strong> — for each input, choose <strong>Parallel (bus)</strong> (one wire per copy,
+the default) or <strong>Common (shared)</strong> (one wire delivered to every copy,
+routed through a NODE join-point). Use <em>Common</em> for a signal all copies
+share — e.g. the selection line of a word mux built from bit muxes.
+Chained inputs are already single-wire, so they show as <em>chained</em> and
+can’t be toggled.</p>
+</li>
+<li>
+<p><strong>Chains</strong> — optional rules that wire one output of each copy to the
+next copy’s input (<code>copy[i].from → copy[i&#43;1].to</code>).
+The classic ripple-carry rule is <code>Cout → Cin</code>: the first copy’s <code>Cin</code>
+and last copy’s <code>Cout</code> become the array’s single-wire terminals. Add
+several chains for e.g. a shift register.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The array is a normal composite: its box shows a <code>×N</code> badge, you can
+descend into it (showing the copies), and its <strong>Count</strong> appears in the
+properties panel — changing it regenerates the copies while keeping the
+external wiring. Editing the source template and applying it (&#8220;Apply to
+all&#8221; in the library panel) updates every copy, since the copies share
+the template’s lineage. <em>Note:</em> chaining currently supports single-wire
+terminals only, and arraying a component that is itself a bus-array is
+not yet supported.</p>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_terminal_inversion">Terminal inversion</h4>
 <div class="paragraph">
 <p>Any terminal can be logically inverted (a negation bubble). Toggle it by
@@ -1889,7 +1937,7 @@ decimals.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-10-03 03:32:38 +0200
+Last updated 2026-10-03 17:47:36 +0200
 </div>
 </div>
 </body>
