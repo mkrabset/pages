@@ -948,8 +948,12 @@ on a display).</p>
 <p><strong>FAN-OUT</strong> splits one <code>n</code>-wide bus into <code>n</code> single wires.</p>
 </li>
 <li>
-<p><strong>BUS-SPLIT</strong> splits one bus into two halves; <strong>BUS-MERGE</strong> joins two
-buses into one (twice the width).</p>
+<p><strong>BUS-SPLIT</strong> splits one bus into two parts; <strong>BUS-MERGE</strong> joins two buses
+into one (twice the width). By default the split/merge is even, but a
+<strong>First lanes</strong> property lets you fix the first part to a specific width
+and give the rest to the second (e.g. a 64-lane bus with
+<code>First lanes = 10</code> splits into a 10-lane and a 54-lane part). Set it to
+<code>0</code> to split evenly.</p>
 </li>
 <li>
 <p><strong>BUS</strong> (the primitive) <em>fixes</em> a bus to a specific width (<code>Lanes</code>), and
@@ -961,8 +965,8 @@ when they match, <code>0</code> when they differ.</p>
 </li>
 <li>
 <p>Connecting mismatched widths is rejected at wiring time (&#8220;Bus width
-mismatch&#8221;), and a bus splitter requires an even width (&#8220;Bus width must
-be even&#8221;).</p>
+mismatch&#8221;), and an even bus splitter requires an even width (&#8220;Bus
+width must be even&#8221;).</p>
 </li>
 </ul>
 </div>
@@ -1334,11 +1338,13 @@ toolchain can implement as block RAM.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Inputs:</strong> 1 (<code>BUS</code>, width <code>n</code>, even) · <strong>Outputs:</strong> 2 (<code>Y1</code>, <code>Y2</code>, width
-<code>n/2</code> each)</p>
+<p><strong>Inputs:</strong> 1 (<code>BUS</code>, width <code>n</code>) · <strong>Outputs:</strong> 2 (<code>Y1</code>, <code>Y2</code>)</p>
 </li>
 <li>
-<p>Splits a bus into two equal halves. The input width must be even.</p>
+<p>Splits a bus into two parts. By default it splits evenly (<code>Y1</code>/<code>Y2</code>
+each <code>n/2</code>, requiring an even width); the <strong>First lanes</strong> property
+(default <code>0</code>, 0–64) fixes <code>Y1</code> to that many lanes and gives <code>Y2</code> the
+remainder (<code>n − First lanes</code>). <code>0</code> means &#8220;split evenly&#8221;.</p>
 </li>
 </ul>
 </div>
@@ -1348,11 +1354,13 @@ toolchain can implement as block RAM.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Inputs:</strong> 2 (<code>A</code>, <code>B</code>, width <code>m</code> each) · <strong>Outputs:</strong> 1 (<code>BUS</code>, width
-<code>2m</code>)</p>
+<p><strong>Inputs:</strong> 2 (<code>A</code>, <code>B</code>) · <strong>Outputs:</strong> 1 (<code>BUS</code>)</p>
 </li>
 <li>
-<p>Concatenates two buses into one twice as wide.</p>
+<p>Concatenates two buses into one. By default the two inputs are equal
+(each <code>m</code>, the output <code>2m</code>); the <strong>First lanes</strong> property (default <code>0</code>,
+0–64) fixes <code>A</code> to that many lanes and gives <code>B</code> the remainder
+(<code>output − First lanes</code>). <code>0</code> means &#8220;merge evenly&#8221;.</p>
 </li>
 </ul>
 </div>
@@ -1881,7 +1889,7 @@ decimals.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-09-30 00:50:45 +0200
+Last updated 2026-10-03 03:32:38 +0200
 </div>
 </div>
 </body>
