@@ -901,9 +901,10 @@ becomes a <code>count</code>-wide bus (e.g. a full-adder’s <code>A</code>/<co
 </li>
 <li>
 <p><strong>Orientation</strong> — lay the <strong>copies</strong> out horizontally (left to right) or
-vertically (top to bottom). The surrounding flow — input port, fan-outs,
-the copies, fan-ins, output port — is always left-to-right; orientation
-only affects how the copies are arranged among themselves.</p>
+vertically (top to bottom; the default). The surrounding flow — input
+port, fan-outs, the copies, fan-ins, output port — is always
+left-to-right; orientation only affects how the copies are arranged
+among themselves.</p>
 </li>
 <li>
 <p><strong>Inputs</strong> — for each input, choose <strong>Parallel (bus)</strong> (one wire per copy,
@@ -1549,14 +1550,15 @@ end of the bus is the least-significant bit.</p>
 (<code>wire</code> / <code>bus</code>, default <code>bus</code>), <strong>Initial value</strong> (text, default <code>0</code>),
 <strong>Value format</strong> (<code>HEX</code> / <code>DEC</code> / <code>SIGNED DEC</code> / <code>BINARY</code>, default <code>HEX</code>),
 <strong>Order</strong> (<code>asc</code> / <code>desc</code>, default <code>asc</code>), and <strong>Compact</strong> (boolean, default
-off)</p>
+on)</p>
 </li>
 <li>
 <p>A multi-lane interactive source. In <code>wire</code> mode each output terminal
 is one switch; in <code>bus</code> mode a single bus output carries one lane per
 wire. Every lane starts at the <strong>Initial value</strong> when simulation starts
 (and shows that state, colored, in design mode). In simulate mode, click
-an indicator circle to toggle its lane.</p>
+an indicator circle to toggle its lane, or use the <strong>−</strong>/<strong>&#43;</strong> step
+buttons to increment or decrement the whole value.</p>
 </li>
 <li>
 <p><strong>Initial value</strong> is a number entered in the current <strong>Value format</strong>
@@ -1568,7 +1570,7 @@ becomes a constant fixed at this value.</p>
 <p><strong>Compact</strong> renders the switch as a single small box showing its current
 value (in the instance’s <strong>Value format</strong>) instead of one circle per lane
 — useful for wide buses. Its lanes are set via the <strong>#</strong> badge / set-value
-dialog rather than individual clicks.</p>
+dialog or the <strong>−</strong>/<strong>&#43;</strong> buttons rather than individual clicks.</p>
 </li>
 </ul>
 </div>
@@ -1660,8 +1662,9 @@ zoom (mouse wheel).</p>
 <li>
 <p>In <strong>simulate</strong> mode the test-bench components drive and read <code>main</code>:
 toggle a <strong>SWITCHES</strong> lane by clicking it (or use its <code>#</code> badge to type a
-whole value), and watch <strong>LEDS</strong>/<strong>7-SEG</strong>/probe outputs update. The
-designer still shows the same simulation, one level down inside <code>main</code>.</p>
+whole value, or the <strong>−</strong>/<strong>&#43;</strong> buttons to step the value), and watch
+<strong>LEDS</strong>/<strong>7-SEG</strong>/probe outputs update. The designer still shows the same
+simulation, one level down inside <code>main</code>.</p>
 </li>
 <li>
 <p>The test bench is saved with your project JSON, but it is <strong>ignored by
@@ -1858,6 +1861,13 @@ when the typed value is mapped onto the lanes.</p>
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>Every <strong>SWITCHES</strong> component also shows two small step buttons (<strong>−</strong> and
+<strong>&#43;</strong>) in its top-right corner while simulating. They increment or
+decrement the switch’s whole binary value by one, wrapping around at <code>0</code>
+and the maximum (<code>2^n − 1</code>) — a quick way to cycle a bus through its
+states without typing.</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_step_mode">Step mode</h4>
@@ -1977,7 +1987,7 @@ decimals.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-10-04 11:40:33 +0200
+Last updated 2026-10-04 14:20:53 +0200
 </div>
 </div>
 </body>
