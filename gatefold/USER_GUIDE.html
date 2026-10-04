@@ -505,7 +505,15 @@ see §7), and <strong>Testing</strong> (the test-bench sheet — see §6b).</p>
 <ul>
 <li>
 <p><strong>Group</strong> — turn the current selection into a named composite component
-(enabled only with a selection).</p>
+(enabled only with a selection). With a single selected custom component
+it <em>promotes</em> it into the library.</p>
+</li>
+<li>
+<p><strong>New component (&#43;)</strong> — create a new, empty custom component from
+scratch: name it and it is placed on the canvas (not yet in the
+library). Double-click it to descend and add inputs/outputs and internal
+components; then select it and press <strong>Group</strong> to add it to the library
+(see §3).</p>
 </li>
 <li>
 <p><strong>Simulate / Exit</strong> — switch between <em>design</em> and <em>simulate</em> mode.</p>
@@ -862,6 +870,20 @@ instances.</p>
 descend into it.</p>
 </li>
 </ol>
+</div>
+<div class="sect3">
+<h4 id="_new_component_from_scratch">New component (from scratch)</h4>
+<div class="paragraph">
+<p>Instead of grouping existing components, you can start with an empty
+shell: press <strong>&#43;</strong> in the toolbar, enter a name, and <strong>Create</strong>. A new
+empty component is placed on the canvas (at the center of the current
+view) — it is <em>not</em> added to the library yet. Double-click it to descend
+and build it up: add inputs/outputs in the <strong>Ports</strong> panel (which create
+the port-group pins) and place internal components and wires as usual.
+When you are done, go back up, select the component, and press <strong>Group</strong>
+to <em>promote</em> it into the library so it can be reused and edited as a
+template.</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_array_duplicating_a_component">Array (duplicating a component)</h4>
@@ -1525,8 +1547,9 @@ end of the bus is the least-significant bit.</p>
 <li>
 <p><strong>Inputs:</strong> none · <strong>Outputs:</strong> 1&#43; · Properties <strong>Terminal type</strong>
 (<code>wire</code> / <code>bus</code>, default <code>bus</code>), <strong>Initial value</strong> (text, default <code>0</code>),
-<strong>Value format</strong> (<code>HEX</code> / <code>DEC</code> / <code>SIGNED DEC</code>, default <code>HEX</code>), <strong>Order</strong>
-(<code>asc</code> / <code>desc</code>, default <code>asc</code>), and <strong>Compact</strong> (boolean, default off)</p>
+<strong>Value format</strong> (<code>HEX</code> / <code>DEC</code> / <code>SIGNED DEC</code> / <code>BINARY</code>, default <code>HEX</code>),
+<strong>Order</strong> (<code>asc</code> / <code>desc</code>, default <code>asc</code>), and <strong>Compact</strong> (boolean, default
+off)</p>
 </li>
 <li>
 <p>A multi-lane interactive source. In <code>wire</code> mode each output terminal
@@ -1555,13 +1578,23 @@ dialog rather than individual clicks.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Inputs:</strong> 1&#43; · <strong>Outputs:</strong> none · Property <strong>Terminal type</strong> (<code>wire</code>
-/ <code>bus</code>, default <code>bus</code>)</p>
+<p><strong>Inputs:</strong> 1&#43; · <strong>Outputs:</strong> none · Properties <strong>Terminal type</strong>
+(<code>wire</code> / <code>bus</code>, default <code>bus</code>), <strong>Value format</strong> (<code>HEX</code> / <code>DEC</code> /
+<code>SIGNED DEC</code> / <code>BINARY</code>, default <code>HEX</code>), <strong>Order</strong> (<code>asc</code> / <code>desc</code>,
+default <code>asc</code>), and <strong>Compact</strong> (boolean, default off)</p>
 </li>
 <li>
 <p>A multi-lane lamp. In <code>wire</code> mode each input terminal is one LED; in
 <code>bus</code> mode a single bus input lights one LED per lane. Each lane lights
 when its signal is <code>1</code>.</p>
+</li>
+<li>
+<p><strong>Compact</strong> renders the LED as a single small box showing the current
+value of its input (in the instance’s <strong>Value format</strong>) instead of one
+circle per lane — useful for wide buses. The value updates during
+simulation; in design mode (no signal yet) it shows a <code>?</code> placeholder.
+<strong>Order</strong> picks which end of the bus is the least-significant bit for the
+display.</p>
 </li>
 </ul>
 </div>
@@ -1944,7 +1977,7 @@ decimals.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-10-03 20:42:43 +0200
+Last updated 2026-10-04 11:40:33 +0200
 </div>
 </div>
 </body>
