@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IEEE-754 Floating Point Playground</title>
+<style>
+  :root {
+    --bg1: #0f172a;
+    --bg2: #1e293b;
+    --card: #ffffff;
+    --ink: #1e293b;
+    --muted: #64748b;
+    --accent: #2563eb;
+    --accent2: #4f46e5;
+    --sign: #e11d48;
+    --exp: #059669;
+    --mant: #2563eb;
+    --drop: #d97706;
+    --line: #e2e8f0;
+    --panel: #f8fafc;
+    --ok: #059669;
+    --warn: #d97706;
+    --bad: #dc2626;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: linear-gradient(160deg, var(--bg1), var(--bg2));
+    color: var(--ink);
+    min-height: 100vh;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 24px 20px 80px; }
+  header { color: #fff; margin-bottom: 20px; }
+  header h1 { margin: 0 0 6px; font-size: 1.7rem; letter-spacing: .3px; }
+  header p { margin: 0; color: #cbd5e1; font-size: .95rem; }
+  .panel {
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    padding: 20px;
+  }
+  .controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr 150px 120px auto;
+    gap: 12px;
+    align-items: end;
+  }
+  .field label { display: block; font-size: .78rem; font-weight: 600; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .4px; }
+  .field input, .field select {
+    width: 100%; padding: 11px 12px; font-size: 1rem;
+    border: 1px solid var(--line); border-radius: 9px; background: #fff; color: var(--ink);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  .field select { font-family: inherit; }
+  .field input:focus, .field select:focus { outline: 2px solid var(--accent); border-color: transparent; }
+  .btn {
+    padding: 11px 20px; font-size: 1rem; font-weight: 600;
+    border: none; border-radius: 9px; cursor: pointer;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff; white-space: nowrap;
+    transition: transform .05s ease, filter .15s ease;
+  }
+  .btn:hover { filter: brightness(1.08); }
+  .btn:active { transform: translateY(1px); }
+  .error {
+    margin-top: 12px; padding: 10px 14px; border-radius: 9px;
+    background: #fef2f2; color: var(--bad); border: 1px solid #fecaca; font-size: .9rem; display: none;
+  }
+  .legend { margin-top: 16px; font-size: .8rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 16px; }
+  .legend .lg { display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+  .dot.s { background: var(--sign); }
+  .dot.e { background: var(--exp); }
+  .dot.m { background: var(--mant); }
+  .dot.d { background: var(--drop); }
+
+  /* results */
+  #results { margin-top: 26px; display: flex; flex-direction: column; gap: 14px; }
+  details.chapter {
+    background: var(--card); border-radius: 14px; box-shadow: 0 6px 22px rgba(0,0,0,.28);
+    overflow: hidden;
+  }
+  details.chapter summary {
+    list-style: none; cursor: pointer; padding: 16px 20px;
+    display: flex; align-items: center; gap: 14px; user-select: none;
+    font-weight: 600; font-size: 1.02rem;
+  }
+  details.chapter summary::-webkit-details-marker { display: none; }
+  details.chapter summary:hover { background: #f1f5f9; }
+  .ch-num {
+    width: 30px; height: 30px; border-radius: 8px; flex: 0 0 auto;
+    background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: .85rem; font-weight: 700;
+  }
+  .ch-title { flex: 1; }
+  .ch-toggle { color: var(--muted); font-size: .85rem; font-weight: 500; }
+  details.chapter[open] .ch-toggle { display: none; }
+  details.chapter:not([open]) .ch-toggle-open { display: none; }
+  .ch-body { padding: 4px 20px 20px; border-top: 1px solid var(--line); }
+  .ch-body p { line-height: 1.55; font-size: .95rem; }
+
+  .bits {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .86rem; letter-spacing: .3px; word-break: break-all;
+  }
+  .b-sign { color: var(--sign); font-weight: 700; }
+  .b-exp { color: var(--exp); font-weight: 600; }
+  .b-man { color: var(--mant); font-weight: 600; }
+  .b-drop { color: var(--drop); font-weight: 600; background: #fffbeb; border-radius: 3px; }
+  .hex { color: #7c3aed; font-weight: 700; }
+  .spc { display: inline-block; width: .9em; }
+
+  .block {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+    padding: 12px 14px; margin: 12px 0; overflow-x: auto;
+  }
+  .block h4 { margin: 0 0 8px; font-size: .82rem; text-transform: uppercase; letter-spacing: .4px; color: var(--muted); }
+  .row { display: flex; flex-wrap: wrap; gap: 8px 22px; align-items: baseline; }
+  .lbl { font-size: .8rem; color: var(--muted); min-width: 130px; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .tag {
+    display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: .72rem; font-weight: 700;
+    letter-spacing: .3px;
+  }
+  .tag.normal { background: #dcfce7; color: #166534; }
+  .tag.sub { background: #fef3c7; color: #92400e; }
+  .tag.zero { background: #e2e8f0; color: #475569; }
+  .tag.inf { background: #fee2e2; color: #991b1b; }
+  .tag.nan { background: #ede9fe; color: #5b21b6; }
+  .formula { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .92rem; background: #f1f5f9; padding: 4px 10px; border-radius: 6px; display: inline-block; margin: 4px 0; }
+  .note { font-size: .85rem; color: var(--muted); font-style: italic; }
+  .result-ok { color: var(--ok); font-weight: 700; }
+  .result-warn { color: var(--warn); font-weight: 700; }
+  .result-bad { color: var(--bad); font-weight: 700; }
+
+  .answer {
+    background: linear-gradient(135deg, #0f172a, #1e293b); color: #fff;
+    border-radius: 14px; padding: 22px; box-shadow: 0 10px 34px rgba(0,0,0,.4);
+  }
+  .answer h2 { margin: 0 0 4px; font-size: 1.15rem; color: #e2e8f0; }
+  .answer .val { font-size: 2rem; font-weight: 800; margin: 6px 0 12px; }
+  .answer .bits { font-size: .95rem; }
+  .answer .b-sign { color: #fb7185; }
+  .answer .b-exp { color: #34d399; }
+  .answer .b-man { color: #60a5fa; }
+  .answer .hex { color: #a78bfa; }
+  .answer .meta { color: #94a3b8; font-size: .8rem; margin-top: 10px; }
+  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 820px) {
+    .controls { grid-template-columns: 1fr 1fr; }
+    .twocol { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>IEEE-754 Floating Point Playground</h1>
+    <p>Peek inside the hardware — see every bit of a floating-point operation, step by step.</p>
+  </header>
+
+  <div class="panel">
+    <div class="controls">
+      <div class="field">
+        <label for="inA">Operand A</label>
+        <input id="inA" type="text" value="3.14" spellcheck="false">
+      </div>
+      <div class="field">
+        <label for="inB">Operand B</label>
+        <input id="inB" type="text" value="2.71" spellcheck="false">
+      </div>
+      <div class="field">
+        <label for="selSize">Precision</label>
+        <select id="selSize">
+          <option value="16">16-bit (half)</option>
+          <option value="32" selected>32-bit (single)</option>
+          <option value="64">64-bit (double)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="selOp">Operator</label>
+        <select id="selOp">
+          <option value="add">+ &nbsp;add</option>
+          <option value="sub">&minus; &nbsp;subtract</option>
+          <option value="mul">&times; &nbsp;multiply</option>
+          <option value="div">&divide; &nbsp;divide</option>
+        </select>
+      </div>
+      <button class="btn" id="btnGo">Show me</button>
+    </div>
+    <div class="legend">
+      <span class="lg"><span class="dot s"></span> sign</span>
+      <span class="lg"><span class="dot e"></span> exponent</span>
+      <span class="lg"><span class="dot m"></span> mantissa (fraction)</span>
+      <span class="lg"><span class="dot d"></span> discarded / guard-round-sticky</span>
+    </div>
+    <div class="error" id="errorBox"></div>
+  </div>
+
+  <div id="results"></div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var FORMATS = {
+    16: { E: 5,  M: 10, B: 15,  name: 'half precision (binary16)' },
+    32: { E: 8,  M: 23, B: 127, name: 'single precision (binary32)' },
+    64: { E: 11, M: 52, B: 1023,name: 'double precision (binary64)' }
+  };
+
+  // ---------------- core (format-generic, round-to-nearest-even) ----------------
+
+  function bitLength(n) { return n === 0n ? 0n : BigInt(n.toString(2).length); }
+
+  function doubleToBits(x) { var b = new ArrayBuffer(8); new Float64Array(b)[0] = x; return new BigUint64Array(b)[0]; }
+  function doubleFromBits(b) { return new Float64Array(new BigUint64Array([b]).buffer)[0]; }
+  function singleToBits(x) { var b = new ArrayBuffer(4); new Float32Array(b)[0] = x; return BigInt(new Uint32Array(b)[0]); }
+  function singleFromBits(b) { return new Float32Array(new Uint32Array([Number(b & 0xFFFFFFFFn)]).buffer)[0]; }
+
+  function halfFromBits(bits) {
+    var s = (bits >> 15n) & 1n, e = (bits >> 10n) & 0x1Fn, m = bits & 0x3FFn;
+    if (e === 0n) return (s ? -1 : 1) * Number(m) * Math.pow(2, -24);
+    if (e === 0x1Fn) return m === 0n ? (s ? -Infinity : Infinity) : NaN;
+    return (s ? -1 : 1) * (1 + Number(m) / 1024) * Math.pow(2, Number(e) - 15);
+  }
+
+  function bitsToExact(bits, fmt) {
+    var E = BigInt(fmt.E), M = BigInt(fmt.M), B = BigInt(fmt.B);
+    var sign = (bits >> (E + M)) & 1n;
+    var expField = (bits >> M) & ((1n << E) - 1n);
+    var mant = bits & ((1n << M) - 1n);
+    if (expField === 0n) {
+      if (mant === 0n) return { sign: sign, sig: 0n, exp: 0n, isZero: true, expField: 0n, mantField: 0n };
+      return { sign: sign, sig: mant, exp: 1n - B - M, isSubnormal: true, expField: 0n, mantField: mant };
+    }
+    if (expField === (1n << E) - 1n) {
+      if (mant === 0n) return { sign: sign, isInf: true, expField: expField, mantField: 0n };
+      return { sign: sign, isNaN: true, expField: expField, mantField: mant };
+    }
+    return { sign: sign, sig: (1n << M) | mant, exp: expField - B - M, isNormal: true, expField: expField, mantField: mant };
+  }
+
+  function rneRound(kept, dropped, shift, sticky) {
+    if (shift === 0n) return { value: kept, up: false, guard: 0n, round: 0n, sticky: !!sticky, dropped: dropped };
+    var guard = (dropped >> (shift - 1n)) & 1n;
+    var round = 0n, stickyBit = !!sticky;
+    if (shift >= 2n) {
+      round = (dropped >> (shift - 2n)) & 1n;
+      stickyBit = stickyBit || (dropped & ((1n << (shift - 2n)) - 1n)) !== 0n;
+    }
+    var lsb = kept & 1n;
+    var up = guard === 1n && (round === 1n || stickyBit || lsb === 1n);
+    return { value: kept + (up ? 1n : 0n), up: up, guard: guard, round: round, sticky: stickyBit, dropped: dropped };
+  }
+
+  function roundSubnormal(sign, sig, exp, fmt, sticky) {
+    var E = BigInt(fmt.E), M = BigInt(fmt.M), B = BigInt(fmt.B);
+    var k = exp + B + M - 1n;
+    var m, guard = 0n, round = 0n, stickyBit = !!sticky, up = false;
+    if (k >= 0n) {
+      m = sig << k;
+    } else {
+      var sh = -k;
+      var dropped = sig & ((1n << sh) - 1n);
+      var kept = sig >> sh;
+      var r = rneRound(kept, dropped, sh, sticky);
+      m = r.value; guard = r.guard; round = r.round; stickyBit = r.sticky; up = r.up;
+    }
+    if (m >= (1n << M)) return { bits: (sign << (E + M)) | (1n << M), isNormal: true, sign: sign, expField: 1n, mantField: 0n, up: up, fromSubnormal: true, guard: guard, round: round, sticky: stickyBit };
+    if (m === 0n) return { bits: sign << (E + M), isZero: true, sign: sign, underflow: true, guard: guard, round: round, sticky: stickyBit, up: up };
+    return { bits: (sign << (E + M)) | m, isSubnormal: true, sign: sign, mantField: m, expField: 0n, guard: guard, round: round, sticky: stickyBit, up: up };
+  }
+
+  function roundToFormat(sign, sig, exp, fmt, sticky) {
+    var E = BigInt(fmt.E), M = BigInt(fmt.M), B = BigInt(fmt.B);
+    var maxExpField = (1n << E) - 1n;
+    var infBits = (sign << (E + M)) | (maxExpField << M);
+    var zeroBits = sign << (E + M);
+    if (sig === 0n) return { bits: zeroBits, isZero: true, sign: sign, underflow: !!sticky };
+
+    var len = bitLength(sig);
+    var unbiased = exp + len - 1n;
+    var expField = unbiased + B;
+    if (expField >= maxExpField) return { bits: infBits, isInf: true, sign: sign, overflow: true };
+    if (expField <= 0n) return roundSubnormal(sign, sig, exp, fmt, sticky);
+
+    var shift = len - 1n - M;
+    var mantField, guard = 0n, round = 0n, stickyBit = !!sticky, up = false;
+    if (shift >= 0n) {
+      var dropped = sig & ((1n << shift) - 1n);
+      var kept = sig >> shift;
+      mantField = kept & ((1n << M) - 1n);
+      var r = rneRound(mantField, dropped, shift, sticky);
+      mantField = r.value; guard = r.guard; round = r.round; stickyBit = r.sticky; up = r.up;
+      if (mantField === (1n << M)) { mantField = 0n; unbiased += 1n; }
+    } else {
+      mantField = (sig << (-shift)) & ((1n << M) - 1n);
+    }
+    expField = unbiased + B;
+    if (expField >= maxExpField) return { bits: infBits, isInf: true, sign: sign, overflow: true };
+    return { bits: (sign << (E + M)) | (expField << M) | mantField, isNormal: true, sign: sign, expField: expField, mantField: mantField, guard: guard, round: round, sticky: stickyBit, up: up };
+  }
+
+  function addExact(a, b) {
+    var e = a.exp < b.exp ? a.exp : b.exp;
+    var d1 = a.exp - e, d2 = b.exp - e;
+    var s1 = a.sign === 1n ? -a.sig : a.sig;
+    var s2 = b.sign === 1n ? -b.sig : b.sig;
+    var sum = (s1 << d1) + (s2 << d2);
+    return { sign: sum < 0n ? 1n : 0n, sig: sum < 0n ? -sum : sum, exp: e };
+  }
+  function mulExact(a, b) { return { sign: a.sign ^ b.sign, sig: a.sig * b.sig, exp: a.exp + b.exp }; }
+  function divExact(a, b, fmt) {
+    var M = BigInt(fmt.M);
+    var sign = a.sign ^ b.sign;
+    var sigN = a.sig, expN = a.exp;
+    if (sigN < b.sig) { sigN <<= 1n; expN -= 1n; }
+    var K = 2n * M + 4n;
+    var Q = (sigN << K) / b.sig, R = (sigN << K) % b.sig;
+    return { sign: sign, sig: Q, exp: expN - b.exp - K, sticky: R !== 0n };
+  }
+
+  function canonicalNaN(fmt) { var E = BigInt(fmt.E), M = BigInt(fmt.M); return ((1n << E) - 1n) << M | (1n << (M - 1n)); }
+  function infBits(sign, fmt) { var E = BigInt(fmt.E), M = BigInt(fmt.M); return (sign << (E + M)) | (((1n << E) - 1n) << M); }
+  function zeroBits(sign, fmt) { var E = BigInt(fmt.E), M = BigInt(fmt.M); return sign << (E + M); }
+
+  function operate(a, b, op, fmt) {
+    if (a.isNaN || b.isNaN) return { bits: canonicalNaN(fmt), special: 'nan', isNaN: true, sign: 0n };
+    var aInf = a.isInf, bInf = b.isInf, aZero = a.isZero, bZero = b.isZero;
+
+    if (op === 'add' || op === 'sub') {
+      var bSign = (op === 'sub') ? b.sign ^ 1n : b.sign;
+      if (aInf || bInf) {
+        if (aInf && bInf && a.sign !== bSign) return { bits: canonicalNaN(fmt), special: 'nan', isNaN: true, sign: 0n };
+        return { bits: infBits(aInf ? a.sign : bSign, fmt), special: 'inf', isInf: true, sign: aInf ? a.sign : bSign };
+      }
+      if (aZero && bZero) {
+        var zs = (a.sign === 1n && bSign === 1n) ? 1n : 0n;
+        return { bits: zeroBits(zs, fmt), special: 'zero', isZero: true, sign: zs };
+      }
+      var b2 = { sign: bSign, sig: b.sig, exp: b.exp };
+      var r = addExact(a, b2);
+      var res = roundToFormat(r.sign, r.sig, r.exp, fmt, false);
+      res._exact = r; return res;
+    }
+
+    if (op === 'mul') {
+      if (aInf || bInf) {
+        if (aZero || bZero) return { bits: canonicalNaN(fmt), special: 'nan', isNaN: true, sign: 0n };
+        return { bits: infBits(a.sign ^ b.sign, fmt), special: 'inf', isInf: true, sign: a.sign ^ b.sign };
+      }
+      if (aZero || bZero) return { bits: zeroBits(a.sign ^ b.sign, fmt), special: 'zero', isZero: true, sign: a.sign ^ b.sign };
+      var r = mulExact(a, b);
+      var res = roundToFormat(r.sign, r.sig, r.exp, fmt, false);
+      res._exact = r; return res;
+    }
+
+    if (op === 'div') {
+      if (aInf || bInf) {
+        if (aInf && bInf) return { bits: canonicalNaN(fmt), special: 'nan', isNaN: true, sign: 0n };
+        if (bInf) return { bits: zeroBits(a.sign ^ b.sign, fmt), special: 'zero', isZero: true, sign: a.sign ^ b.sign };
+        return { bits: infBits(a.sign ^ b.sign, fmt), special: 'inf', isInf: true, sign: a.sign ^ b.sign };
+      }
+      if (bZero) {
+        if (aZero) return { bits: canonicalNaN(fmt), special: 'nan', isNaN: true, sign: 0n };
+        return { bits: infBits(a.sign ^ b.sign, fmt), special: 'inf', isInf: true, sign: a.sign ^ b.sign };
+      }
+      if (aZero) return { bits: zeroBits(a.sign ^ b.sign, fmt), special: 'zero', isZero: true, sign: a.sign ^ b.sign };
+      var r = divExact(a, b, fmt);
+      var res = roundToFormat(r.sign, r.sig, r.exp, fmt, r.sticky);
+      res._exact = r; return res;
+    }
+  }
+
+  // ---------------- display helpers ----------------
+
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function binPad(n, w) { return n.toString(2).padStart(w, '0'); }
+  function hexPad(n, nibbles) { return n.toString(16).toUpperCase().padStart(nibbles, '0'); }
+
+  function groupNibbles(s) {
+    return s.replace(/(.{4})(?=.)/g, '$1' + '<span class="spc"></span>');
+  }
+
+  // colored bit pattern (sign | exponent | mantissa)
+  function bitPattern(bits, fmt) {
+    var E = fmt.E, M = fmt.M;
+    var s = binPad(bits, 1 + E + M);
+    var sign = s.slice(0, 1), exp = s.slice(1, 1 + E), man = s.slice(1 + E);
+    return '<span class="b-sign">' + sign + '</span> ' +
+           '<span class="b-exp">' + exp + '</span> ' +
+           '<span class="b-man">' + groupNibbles(man) + '</span>';
+  }
+
+  function bitsToHex(bits, fmt) { return hexPad(bits, (1 + fmt.E + fmt.M) / 4); }
+
+  function kindTag(kind) {
+    var map = { normal: 'Normal', subnormal: 'Subnormal', zero: 'Zero', inf: 'Infinity', nan: 'NaN' };
+    return '<span class="tag ' + kind + '">' + (map[kind] || kind) + '</span>';
+  }
+
+  function bitValueFromBits(bits, fmt) {
+    if (fmt.E === 11) return doubleFromBits(bits);
+    if (fmt.E === 8) return singleFromBits(bits);
+    return halfFromBits(bits);
+  }
+
+  function formatValue(v) {
+    if (Number.isNaN(v)) return 'NaN';
+    if (v === Infinity) return '+Infinity';
+    if (v === -Infinity) return '-Infinity';
+    if (Object.is(v, -0)) return '-0';
+    return String(v);
+  }
+
+  // decode an operand into display-friendly structure
+  function decodeOperand(bits, fmt) {
+    var E = BigInt(fmt.E), M = BigInt(fmt.M), B = BigInt(fmt.B);
+    var sign = (bits >> (E + M)) & 1n;
+    var expField = (bits >> M) & ((1n << E) - 1n);
+    var mant = bits & ((1n << M) - 1n);
+    var kind, unbiased = null, sigStr = null, sigInt = null;
+
+    if (expField === 0n) {
+      if (mant === 0n) { kind = 'zero'; sigInt = 0n; sigStr = '0'; }
+      else { kind = 'subnormal'; unbiased = 1n - B; sigInt = mant; sigStr = '0' + binPad(mant, fmt.M); }
+    } else if (expField === (1n << E) - 1n) {
+      kind = mant === 0n ? 'inf' : 'nan';
+    } else {
+      kind = 'normal'; unbiased = expField - B; sigInt = (1n << M) | mant; sigStr = '1' + binPad(mant, fmt.M);
+    }
+    return {
+      bits: bits, sign: sign, expField: expField, mant: mant, kind: kind,
+      unbiased: unbiased, sigInt: sigInt, sigStr: sigStr,
+      value: bitValueFromBits(bits, fmt)
+    };
+  }
+
+  // render an operand's decode block for chapter 1
+  function renderOperandDecode(label, opd, fmt) {
+    var B = fmt.B;
+    var html = '<h4>' + label + '</h4>';
+    html += '<div class="row"><span class="lbl">Bit pattern</span><span class="bits">' + bitPattern(opd.bits, fmt) + '</span></div>';
+    html += '<div class="row"><span class="lbl">Hex</span><span class="mono hex">0x' + bitsToHex(opd.bits, fmt) + '</span></div>';
+    html += '<div class="row"><span class="lbl">Class</span>' + kindTag(opd.kind) + '</div>';
+
+    if (opd.kind === 'normal' || opd.kind === 'subnormal') {
+      var signVal = opd.sign === 1n ? -1 : 1;
+      html += '<div class="row"><span class="lbl">Sign</span><span class="mono">' + opd.sign + ' &rarr; ' + (opd.sign === 1n ? 'negative' : 'positive') + '</span></div>';
+      html += '<div class="row"><span class="lbl">Exponent field</span><span class="mono">' + binPad(opd.expField, fmt.E) + ' = ' + opd.expField + '</span></div>';
+      if (opd.kind === 'normal') {
+        html += '<div class="row"><span class="lbl">Unbiased exponent</span><span class="mono">' + opd.expField + ' &minus; ' + B + ' = <b>' + opd.unbiased + '</b></span></div>';
+        html += '<div class="row"><span class="lbl">Mantissa field</span><span class="mono">' + groupNibbles(binPad(opd.mant, fmt.M)) + '</span></div>';
+        html += '<div class="row"><span class="lbl">Value</span><span class="formula">(&minus;1)<sup>' + opd.sign + '</sup> &times; 1.' + groupNibbles(binPad(opd.mant, fmt.M)) + ' &times; 2<sup>' + opd.unbiased + '</sup></span></div>';
+      } else {
+        html += '<div class="row"><span class="lbl">Unbiased exponent</span><span class="mono">1 &minus; ' + B + ' = <b>' + opd.unbiased + '</b> (subnormal)</span></div>';
+        html += '<div class="row"><span class="lbl">Mantissa field</span><span class="mono">' + groupNibbles(binPad(opd.mant, fmt.M)) + '</span></div>';
+        html += '<div class="row"><span class="lbl">Value</span><span class="formula">(&minus;1)<sup>' + opd.sign + '</sup> &times; 0.' + groupNibbles(binPad(opd.mant, fmt.M)) + ' &times; 2<sup>' + (1 - B) + '</sup></span></div>';
+      }
+      html += '<div class="row"><span class="lbl">Stored as</span><span class="mono"><b>' + esc(formatValue(opd.value)) + '</b></span></div>';
+    } else if (opd.kind === 'zero') {
+      html += '<div class="row"><span class="lbl">Sign</span><span class="mono">' + opd.sign + ' &rarr; ' + (opd.sign === 1n ? '&minus;0 (negative zero)' : '+0 (positive zero)') + '</span></div>';
+    } else if (opd.kind === 'inf') {
+      html += '<div class="row"><span class="lbl">Meaning</span><span class="mono">' + (opd.sign === 1n ? '&minus;' : '+') + 'Infinity</span></div>';
+    } else {
+      html += '<div class="row"><span class="lbl">Meaning</span><span class="mono">NaN (not a number)</span></div>';
+    }
+    return '<div class="block">' + html + '</div>';
+  }
+
+  // align a significand (M+1 bits) right by `shift`, report G/R/S
+  function alignSig(sigInt, M, shift) {
+    var sh = BigInt(shift);
+    if (shift === 0) return { kept: sigInt, guard: 0, round: 0, sticky: false, droppedInt: 0n, shift: shift };
+    var dropped = sigInt & ((1n << sh) - 1n);
+    var kept = sigInt >> sh;
+    var guard = Number((dropped >> (sh - 1n)) & 1n);
+    var round = shift >= 2 ? Number((dropped >> (sh - 2n)) & 1n) : 0;
+    var sticky = shift >= 2 ? (dropped & ((1n << (sh - 2n)) - 1n)) !== 0n : false;
+    return { kept: kept, guard: guard, round: round, sticky: sticky, droppedInt: dropped, shift: shift };
+  }
+
+  function grsLabel(a) { return '<span class="b-drop">' + a.guard + ' ' + a.round + (a.sticky ? ' 1' : ' 0') + '</span>'; }
+
+  // render the significand with binary point; optional dropped tail
+  function sigWithPoint(sigStr, pointAfter) {
+    if (pointAfter === undefined) pointAfter = 1;
+    return sigStr.slice(0, pointAfter) + '.' + sigStr.slice(pointAfter);
+  }
+
+  function renderAlignmentChapter(opdA, opdB, fmt) {
+    var M = fmt.M;
+    var aZero = opdA.kind === 'zero', bZero = opdB.kind === 'zero';
+
+    if (aZero || bZero) {
+      return '<p>One operand is <b>zero</b> &mdash; its significand is 0, so it contributes nothing to the sum no matter '
+        + 'what exponent is used. No barrel shift is needed for it.</p>'
+        + '<div class="block"><h4>Significands</h4>'
+        + '<div class="row"><span class="lbl">A</span><span class="mono">' + (aZero ? '0' : sigWithPoint(opdA.sigStr) + ' &times; 2<sup>' + opdA.unbiased + '</sup>') + '</span></div>'
+        + '<div class="row"><span class="lbl">B</span><span class="mono">' + (bZero ? '0' : sigWithPoint(opdB.sigStr) + ' &times; 2<sup>' + opdB.unbiased + '</sup>') + '</span></div>'
+        + '</div>';
+    }
+
+    var ua = opdA.unbiased, ub = opdB.unbiased;
+    var larger = ua >= ub ? opdA : opdB;
+    var smaller = ua >= ub ? opdB : opdA;
+    var shift = Number(larger.unbiased - smaller.unbiased);
+
+    var html = '<p>To add or subtract, both significands must share the same exponent. '
+      + 'We shift the significand of the <b>smaller</b> operand to the right &mdash; the <i>barrel shifter</i> '
+      + 'moves every bit right by the exponent difference, and the bits that fall off the end become the '
+      + '<span class="b-drop">guard / round / sticky</span> bits.</p>';
+
+    html += '<div class="block"><h4>Exponents</h4>'
+      + '<div class="row"><span class="lbl">A exponent</span><span class="mono">2<sup>' + ua + '</sup></span></div>'
+      + '<div class="row"><span class="lbl">B exponent</span><span class="mono">2<sup>' + ub + '</sup></span></div>'
+      + '<div class="row"><span class="lbl">Difference</span><span class="mono">|' + ua + ' &minus; ' + ub + '| = <b>' + shift + '</b> bit(s)</span></div>'
+      + '</div>';
+
+    var bigShift = shift > 32;
+    var aAl = alignSig(opdA.sigInt, M, Number(opdA.unbiased === smaller.unbiased ? shift : 0));
+    var bAl = alignSig(opdB.sigInt, M, Number(opdB.unbiased === smaller.unbiased ? shift : 0));
+
+    function renderAligned(label, opd, al) {
+      var h = '<div class="row"><span class="lbl">' + label + ' significand</span><span class="mono">' + sigWithPoint(opd.sigStr) + ' &times; 2<sup>' + opd.unbiased + '</sup></span></div>';
+      if (al.shift > 0) {
+        var keptStr = binPad(al.kept, M + 1);
+        var tail = '';
+        if (bigShift) {
+          tail = '<span class="b-drop"> &hellip;(' + al.shift + ' bits)&hellip; ' + al.guard + ' ' + al.round + (al.sticky ? ' 1' : ' 0') + '</span>';
+        } else {
+          tail = '<span class="b-drop"> ' + groupNibbles(binPad(al.droppedInt, al.shift)) + '</span>';
+        }
+        h += '<div class="row"><span class="lbl">Barrel shift &raquo;' + al.shift + '</span>'
+          + '<span class="mono">0.' + (bigShift ? binPad(al.kept, M + 1) : groupNibbles(binPad(al.kept, M + 1))) + tail + ' &times; 2<sup>' + larger.unbiased + '</sup></span></div>';
+        h += '<div class="row"><span class="lbl">Guard / Round / Sticky</span><span class="mono b-drop">' + al.guard + ' &nbsp; ' + al.round + ' &nbsp; ' + (al.sticky ? '1' : '0') + '</span> <span class="note">(discarded bits)</span></div>';
+      }
+      return h;
+    }
+
+    html += '<div class="block"><h4>Barrel-shift alignment</h4>'
+      + renderAligned('A', opdA, aAl) + (shift > 0 ? '<div style="margin:6px 0 6px 8px;color:var(--muted)">&#8942;</div>' : '')
+      + renderAligned('B', opdB, bAl) + '</div>';
+    return html;
+  }
+
+  function renderExponentArith(op, opdA, opdB, fmt) {
+    var B = fmt.B;
+    var ua = Number(opdA.unbiased), ub = Number(opdB.unbiased);
+    var html;
+    if (op === 'mul') {
+      var uProd = ua + ub;
+      html = '<p>Multiplication adds exponents and multiplies significands. '
+        + 'Because each unbiased exponent is <span class="mono">field &minus; bias</span>, adding them gives a value that is '
+        + '<b>one bias too small</b>, so we add the bias back once.</p>'
+        + '<div class="block"><h4>Exponent arithmetic</h4>'
+        + '<div class="row"><span class="lbl">Unbiased A</span><span class="mono">' + ua + '</span></div>'
+        + '<div class="row"><span class="lbl">Unbiased B</span><span class="mono">' + ub + '</span></div>'
+        + '<div class="row"><span class="lbl">Sum</span><span class="mono">' + ua + ' + ' + ub + ' = <b>' + uProd + '</b></span></div>'
+        + '<div class="row"><span class="lbl">Result exponent field</span><span class="mono">' + uProd + ' + ' + B + ' = <b>' + (uProd + B) + '</b> <span class="note">(before normalization)</span></span></div>'
+        + '</div>';
+    } else {
+      var uQuot = ua - ub;
+      html = '<p>Division subtracts exponents and divides significands. Subtracting unbiased exponents removes the bias '
+        + 'entirely, so we add it back once.</p>'
+        + '<div class="block"><h4>Exponent arithmetic</h4>'
+        + '<div class="row"><span class="lbl">Unbiased A</span><span class="mono">' + ua + '</span></div>'
+        + '<div class="row"><span class="lbl">Unbiased B</span><span class="mono">' + ub + '</span></div>'
+        + '<div class="row"><span class="lbl">Difference</span><span class="mono">' + ua + ' &minus; ' + ub + ' = <b>' + uQuot + '</b></span></div>'
+        + '<div class="row"><span class="lbl">Result exponent field</span><span class="mono">' + uQuot + ' + ' + B + ' = <b>' + (uQuot + B) + '</b> <span class="note">(before normalization)</span></span></div>'
+        + '</div>';
+    }
+    return html;
+  }
+
+  function renderNormalize(exact, res, fmt, op) {
+    var M = fmt.M, B = fmt.B;
+    var len = bitLength(exact.sig);
+    var needed = BigInt(M + 1);
+    var drop = len - needed;
+    var html = '';
+
+    if (drop > 0n) {
+      if ((op === 'add' || op === 'sub') && drop === 1n) {
+        html += '<p>The sum produced a <b>carry</b> out of the significand (now ' + len + ' bits). '
+          + 'We shift it right by 1 and increment the exponent.</p>';
+      } else {
+        html += '<p>The raw result significand is <b>' + len + ' bits</b> wide, but the format stores only '
+          + (M + 1) + ' bits (1 implicit leading bit + ' + M + ' fraction bits). '
+          + 'We keep the top ' + (M + 1) + ' bits and discard the low <b>' + drop + '</b> bits, '
+          + 'which become the guard / round / sticky bits.</p>';
+      }
+    } else if (drop === 0n) {
+      html += '<p>The result already has exactly ' + (M + 1) + ' bits &mdash; no shifting required.</p>';
+    } else {
+      var lz = Number(-drop);
+      html += '<p>The result lost its leading 1 (now only ' + len + ' bit' + (len === 1n ? '' : 's') + '). '
+        + 'A <b>leading-zero counter</b> finds <b>' + lz + '</b> leading zero(s), so we shift left by ' + lz
+        + ' and decrement the exponent by ' + lz + '.</p>';
+    }
+
+    if (res.isNormal || res.isSubnormal) {
+      var ue = exact.exp + len - 1n;
+      html += '<div class="block"><h4>Exponent bookkeeping</h4>'
+        + '<div class="row"><span class="lbl">Unbiased exponent</span><span class="mono">' + String(ue) + '</span></div>'
+        + (res.isNormal
+          ? '<div class="row"><span class="lbl">Exponent field</span><span class="mono">' + String(ue) + ' + ' + B + ' = <b>' + String(res.expField) + '</b></span></div>'
+          : '<div class="row"><span class="lbl">Exponent field</span><span class="mono">too small for normal range &rarr; 0 (subnormal)</span></div>')
+        + '</div>';
+    }
+    return html;
+  }
+
+  function renderRound(exact, res, fmt) {
+    var M = fmt.M, B = fmt.B;
+    var html = '';
+    if (res.isInf && res.overflow) {
+      html += '<p class="result-bad">Overflow! The exponent field would reach all-ones, which is reserved for infinity. '
+        + 'The result rounds to <b>&plusmn;Infinity</b>.</p>';
+      return html;
+    }
+    if (res.isSubnormal || (res.isZero && res.underflow)) {
+      html += '<p>The exponent is too small for the normal range. The result falls into the <b>subnormal</b> region '
+        + '(gradual underflow), where the implicit leading bit becomes 0.</p>';
+      if (res.isZero && res.underflow) html += '<p class="result-warn">Underflow! The value is smaller than half the smallest subnormal, so it rounds to <b>&plusmn;0</b>.</p>';
+      else html += '<p>The significand is placed into the subnormal mantissa field, and rounding still uses the guard / round / sticky bits.</p>';
+      return html;
+    }
+
+    html += '<p>Only ' + M + ' mantissa bits can be stored, so the extra low-order bits must be discarded using '
+      + '<b>round-to-nearest, ties-to-even</b>:</p>';
+    html += '<div class="block"><h4>Rounding decision</h4>';
+    html += '<div class="row"><span class="lbl">Guard bit (G)</span><span class="mono">' + res.guard + '</span></div>';
+    html += '<div class="row"><span class="lbl">Round bit (R)</span><span class="mono">' + res.round + '</span></div>';
+    html += '<div class="row"><span class="lbl">Sticky bit (S)</span><span class="mono">' + (res.sticky ? '1' : '0') + '</span></div>';
+    html += '<div class="row"><span class="lbl">Rule</span><span class="mono">round up if G=1 and (R=1 or S=1 or LSB=1)</span></div>';
+    html += '<div class="row"><span class="lbl">Decision</span>' + (res.up
+      ? '<span class="result-warn">Round up (add 1 to the mantissa)</span>'
+      : '<span class="result-ok">Round down (truncate)</span>') + '</div>';
+    html += '</div>';
+    return html;
+  }
+
+  function renderOperandPanel(label, opd, fmt, extra) {
+    var html = '<div class="block"><h4>' + label + '</h4>';
+    html += '<div class="row"><span class="lbl">Value</span><span class="mono"><b>' + esc(formatValue(opd.value)) + '</b></span> ' + kindTag(opd.kind) + '</div>';
+    html += '<div class="row"><span class="lbl">Bits</span><span class="bits">' + bitPattern(opd.bits, fmt) + '</span></div>';
+    html += '<div class="row"><span class="lbl">Hex</span><span class="mono hex">0x' + bitsToHex(opd.bits, fmt) + '</span></div>';
+    if (extra) html += extra;
+    return html + '</div>';
+  }
+
+  // ---------------- chapter builders ----------------
+
+  function chDecode(opdA, opdB, fmt, size) {
+    var html = '<p>Each operand is split into its three fields: <span class="b-sign">sign</span> (1 bit), '
+      + '<span class="b-exp">exponent</span> (' + fmt.E + ' bits), and <span class="b-man">mantissa</span> (' + fmt.M + ' bits).</p>';
+    html += '<div class="twocol">';
+    html += renderOperandDecode('Operand A', opdA, fmt);
+    html += renderOperandDecode('Operand B', opdB, fmt);
+    html += '</div>';
+    if (size !== 64) {
+      html += '<p class="note">Inputs were rounded to the nearest representable ' + fmt.name + ' value before the operation, '
+        + 'just as real hardware loads them into registers.</p>';
+    }
+    return html;
+  }
+
+  function chEdgeCases(opdA, opdB, fmt, special) {
+    var html = '<p>Before doing any real work, the hardware checks for the special bit patterns that would make the result '
+      + 'undefined or immediate:</p>';
+    var rows = [];
+    function check(label, val, name) {
+      var hit = val ? '<span class="result-bad">' + name + '</span>' : '<span class="result-ok">not ' + name.toLowerCase() + '</span>';
+      rows.push('<div class="row"><span class="lbl">' + label + '</span>' + hit + '</div>');
+    }
+    html += '<div class="block"><h4>Checks</h4>';
+    html += '<div class="row"><span class="lbl">A is NaN?</span>' + (opdA.kind === 'nan' ? '<span class="result-bad">yes</span>' : '<span class="result-ok">no</span>') + '</div>';
+    html += '<div class="row"><span class="lbl">B is NaN?</span>' + (opdB.kind === 'nan' ? '<span class="result-bad">yes</span>' : '<span class="result-ok">no</span>') + '</div>';
+    html += '<div class="row"><span class="lbl">A is &plusmn;&infin;?</span>' + (opdA.kind === 'inf' ? '<span class="result-bad">yes</span>' : '<span class="result-ok">no</span>') + '</div>';
+    html += '<div class="row"><span class="lbl">B is &plusmn;&infin;?</span>' + (opdB.kind === 'inf' ? '<span class="result-bad">yes</span>' : '<span class="result-ok">no</span>') + '</div>';
+    html += '<div class="row"><span class="lbl">A is zero?</span>' + (opdA.kind === 'zero' ? '<span class="result-warn">yes</span>' : '<span class="result-ok">no</span>') + '</div>';
+    html += '<div class="row"><span class="lbl">B is zero?</span>' + (opdB.kind === 'zero' ? '<span class="result-warn">yes</span>' : '<span class="result-ok">no</span>') + '</div>';
+    html += '<div class="row"><span class="lbl">Subnormal operands?</span>' + ((opdA.kind === 'subnormal' || opdB.kind === 'subnormal') ? '<span class="result-warn">yes</span>' : '<span class="result-ok">no</span>') + '</div>';
+    html += '</div>';
+
+    if (special) {
+      html += '<p class="result-bad">An edge case was detected &mdash; the operation is short-circuited and the remaining '
+        + '(alignment / operation / rounding) stages are skipped. The result is produced directly by the IEEE-754 special rules.</p>';
+    } else {
+      html += '<p class="result-ok">No special cases &mdash; both operands are finite numbers, so we proceed to the full pipeline.</p>';
+    }
+    return html;
+  }
+
+  function chOperation(op, opdA, opdB, fmt, exact) {
+    var M = fmt.M;
+    var html = '';
+    if (op === 'add' || op === 'sub') {
+      var aZero = opdA.kind === 'zero', bZero = opdB.kind === 'zero';
+      var larger = null, smaller = null, shift = 0;
+      var sumExp;
+      if (!aZero && !bZero) {
+        larger = opdA.unbiased >= opdB.unbiased ? opdA : opdB;
+        smaller = opdA.unbiased >= opdB.unbiased ? opdB : opdA;
+        shift = Number(larger.unbiased - smaller.unbiased);
+        sumExp = larger.unbiased;
+      } else if (aZero) {
+        sumExp = opdB.unbiased;
+      } else {
+        sumExp = opdA.unbiased;
+      }
+      var aAl, bAl;
+      if (aZero) { aAl = { kept: 0n, shift: 0 }; bAl = alignSig(opdB.sigInt, M, 0); }
+      else if (bZero) { aAl = alignSig(opdA.sigInt, M, 0); bAl = { kept: 0n, shift: 0 }; }
+      else {
+        aAl = alignSig(opdA.sigInt, M, opdA.unbiased === smaller.unbiased ? shift : 0);
+        bAl = alignSig(opdB.sigInt, M, opdB.unbiased === smaller.unbiased ? shift : 0);
+      }
+      var bNeg = op === 'sub';
+      // effective signs after considering subtraction
+      var sa = opdA.sign === 1n ? -1n : 1n;
+      var sb = (opdB.sign ^ (bNeg ? 1n : 0n)) === 1n ? -1n : 1n;
+      var av = sa * aAl.kept;
+      var bv = sb * bAl.kept;
+      var sum = av + bv;
+      var sumAbs = sum < 0n ? -sum : sum;
+      var sumBin;
+      if (sumAbs === 0n) sumBin = '0';
+      else if (sum < 0n) sumBin = '-' + binPad(sumAbs, Number(bitLength(sumAbs)));
+      else sumBin = binPad(sumAbs, Number(bitLength(sumAbs)));
+
+      html += '<p>The aligned significands are ' + (op === 'add' ? 'added' : 'subtracted') + ':</p>';
+      html += '<div class="block"><h4>Mantissa ' + (op === 'add' ? 'addition' : 'subtraction') + '</h4>';
+      html += '<div class="row"><span class="lbl">A (aligned)</span><span class="mono">' + binPad(aAl.kept, M + 1) + '</span></div>';
+      html += '<div class="row"><span class="lbl">B (aligned)</span><span class="mono">' + binPad(bAl.kept, M + 1) + (bNeg ? ' <span class="note">(subtracted)</span>' : '') + '</span></div>';
+      html += '<div class="row"><span class="lbl">Result</span><span class="mono"><b>' + sumBin + '</b> &times; 2<sup>' + sumExp + '</sup></span></div>';
+      html += '</div>';
+      html += '<p class="note">Discarded low bits (guard / round / sticky) are carried along and used during rounding in the next stages.</p>';
+    } else if (op === 'mul') {
+      var prod = exact.sig;
+      var pw = bitLength(prod);
+      var aStr = binPad(opdA.sigInt, M + 1);
+      var bStr = binPad(opdB.sigInt, M + 1);
+      var prodStr = groupNibbles(prod.toString(2));
+      html += '<p>Multiply the two ' + (M + 1) + '-bit significands (the implicit leading 1 is included):</p>';
+      html += '<div class="block"><h4>Significand multiplication</h4>';
+      html += '<div class="row"><span class="lbl">A significand</span><span class="mono">' + groupNibbles(aStr) + '</span></div>';
+      html += '<div class="row"><span class="lbl">B significand</span><span class="mono">' + groupNibbles(bStr) + '</span></div>';
+      html += '<div class="row"><span class="lbl">Product</span><span class="mono">' + prodStr + ' <span class="note">(' + pw + ' bits)</span></span></div>';
+      html += '</div>';
+    } else {
+      var q = exact.sig;
+      var qStr = groupNibbles(q.toString(2));
+      html += '<p>Divide the significands. The quotient is computed to enough extra bits to guarantee correct rounding. '
+        + 'The remainder (if any) becomes the <b>sticky</b> bit.</p>';
+      html += '<div class="block"><h4>Significand division</h4>';
+      html += '<div class="row"><span class="lbl">A significand</span><span class="mono">' + groupNibbles(binPad(opdA.sigInt, M + 1)) + '</span></div>';
+      html += '<div class="row"><span class="lbl">B significand</span><span class="mono">' + groupNibbles(binPad(opdB.sigInt, M + 1)) + '</span></div>';
+      html += '<div class="row"><span class="lbl">Quotient (extra bits)</span><span class="mono">' + qStr + ' <span class="note">(' + bitLength(q) + ' bits)</span></span></div>';
+      html += '<div class="row"><span class="lbl">Remainder</span><span class="mono">' + (exact.sticky ? 'non-zero &rarr; sticky = 1' : '0 &rarr; sticky = 0') + '</span></div>';
+      html += '</div>';
+    }
+    return html;
+  }
+
+  function chAssemble(res, fmt) {
+    var html = '';
+    var E = fmt.E, M = fmt.M;
+    if (res.isNaN) {
+      html += '<p>Result is <b>NaN</b>. Encoded as exponent all-ones and a non-zero mantissa (the top mantissa bit marks it as <i>quiet</i>).</p>';
+    } else if (res.isInf) {
+      html += '<p>Result is <b>&plusmn;Infinity</b>. Encoded as exponent all-ones and mantissa zero.</p>';
+    } else if (res.isZero) {
+      html += '<p>Result is <b>&plusmn;0</b>. Encoded as exponent zero and mantissa zero; the sign bit carries the zero&rsquo;s sign.</p>';
+    } else if (res.isSubnormal) {
+      html += '<p>Result is <b>subnormal</b>: exponent field is zero, and the mantissa holds the significand with an implicit leading 0.</p>';
+      html += '<div class="row"><span class="lbl">Exponent field</span><span class="mono b-exp">' + binPad(0n, E) + '</span></div>';
+      html += '<div class="row"><span class="lbl">Mantissa field</span><span class="mono b-man">' + groupNibbles(binPad(res.mantField, M)) + '</span></div>';
+    } else {
+      html += '<p>Combine the three fields: the final sign, the (biased) exponent, and the rounded mantissa.</p>';
+      html += '<div class="row"><span class="lbl">Exponent field</span><span class="mono b-exp">' + binPad(res.expField, E) + ' = ' + res.expField + '</span></div>';
+      html += '<div class="row"><span class="lbl">Mantissa field</span><span class="mono b-man">' + groupNibbles(binPad(res.mantField, M)) + '</span></div>';
+    }
+    html += '<div class="row"><span class="lbl">Sign bit</span><span class="mono b-sign">' + res.sign + '</span></div>';
+    return html;
+  }
+
+  // ---------------- main ----------------
+
+  function parseInput(raw, fmt) {
+    var t = raw.trim();
+    if (t === '') return { error: 'Please enter a number.' };
+    var lower = t.toLowerCase();
+    var num;
+    if (/nan/.test(lower)) num = NaN;
+    else if (/^(\+|-)?inf(inity)?$/.test(lower)) num = /-/.test(lower) ? -Infinity : Infinity;
+    else {
+      num = Number(t);
+      if (Number.isNaN(num)) return { error: 'Could not parse "' + t + '" as a number.' };
+    }
+    var bits;
+    if (fmt.E === 11) bits = doubleToBits(num);
+    else if (fmt.E === 8) bits = singleToBits(Math.fround(num));
+    else {
+      if (Number.isNaN(num)) bits = 0x7E00n;
+      else if (num === Infinity) bits = 0x7C00n;
+      else if (num === -Infinity) bits = 0xFC00n;
+      else {
+        var db = doubleToBits(num);
+        var ex = bitsToExact(db, FORMATS[64]);
+        bits = roundToFormat(ex.sign, ex.sig, ex.exp, fmt, false).bits;
+      }
+    }
+    return { bits: bits };
+  }
+
+  var opSymbol = { add: '+', sub: '\u2212', mul: '\u00D7', div: '\u00F7' };
+
+  function run() {
+    var results = document.getElementById('results');
+    var errBox = document.getElementById('errorBox');
+    errBox.style.display = 'none';
+
+    var size = Number(document.getElementById('selSize').value);
+    var op = document.getElementById('selOp').value;
+    var fmt = FORMATS[size];
+    var rawA = document.getElementById('inA').value;
+    var rawB = document.getElementById('inB').value;
+
+    var pa = parseInput(rawA, fmt);
+    var pb = parseInput(rawB, fmt);
+    if (pa.error || pb.error) {
+      errBox.textContent = (pa.error || pb.error);
+      errBox.style.display = 'block';
+      results.innerHTML = '';
+      return;
+    }
+
+    var opdA = decodeOperand(pa.bits, fmt);
+    var opdB = decodeOperand(pb.bits, fmt);
+    var res = operate(bitsToExact(pa.bits, fmt), bitsToExact(pb.bits, fmt), op, fmt);
+    var resValue = bitValueFromBits(res.bits, fmt);
+
+    var chapters = [];
+    function add(n, title, body) { chapters.push({ n: n, title: title, body: body }); }
+
+    add(1, 'Decode the operands', chDecode(opdA, opdB, fmt, size));
+    add(2, 'Edge-case detection', chEdgeCases(opdA, opdB, fmt, res.special));
+
+    if (res.special) {
+      // short-circuited
+    } else {
+      if (op === 'add' || op === 'sub') {
+        add(3, 'Mantissa alignment (barrel shift)', renderAlignmentChapter(opdA, opdB, fmt));
+      } else {
+        add(3, 'Exponent arithmetic', renderExponentArith(op, opdA, opdB, fmt));
+      }
+      add(4, 'The core operation', chOperation(op, opdA, opdB, fmt, res._exact));
+      add(5, 'Normalization', renderNormalize(res._exact, res, fmt, op));
+      add(6, 'Rounding', renderRound(res._exact, res, fmt));
+    }
+    add(res.special ? 3 : 7, 'Assemble the result', chAssemble(res, fmt));
+
+    // build chapter HTML
+    var html = '';
+    for (var i = 0; i < chapters.length; i++) {
+      var c = chapters[i];
+      html += '<details class="chapter"><summary>'
+        + '<span class="ch-num">' + c.n + '</span>'
+        + '<span class="ch-title">' + c.title + '</span>'
+        + '<span class="ch-toggle">click to expand &rsaquo;</span>'
+        + '<span class="ch-toggle ch-toggle-open">&#8964;</span>'
+        + '</summary><div class="ch-body">' + c.body + '</div></details>';
+    }
+
+    // answer box
+    var answerKind = res.isNaN ? 'NaN' : res.isInf ? 'Infinity' : res.isZero ? 'Zero' : res.isSubnormal ? 'Subnormal' : 'Normal';
+    html += '<div class="answer">'
+      + '<h2>Result &mdash; ' + esc(opSymbol[op]) + ' &middot; ' + fmt.name + '</h2>'
+      + '<div class="val">' + esc(formatValue(resValue)) + '</div>'
+      + '<div class="bits">' + bitPattern(res.bits, fmt) + '</div>'
+      + '<div class="meta">hex: <span class="mono hex">0x' + bitsToHex(res.bits, fmt) + '</span> &nbsp;&middot;&nbsp; ' + answerKind + '</div>'
+      + '</div>';
+
+    results.innerHTML = html;
+  }
+
+  document.getElementById('btnGo').addEventListener('click', run);
+  ['inA', 'inB', 'selSize', 'selOp'].forEach(function (id) {
+    document.getElementById(id).addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') run();
+    });
+  });
+  document.getElementById('inA').addEventListener('keydown', function (e) { if (e.key === 'Enter') run(); });
+  document.getElementById('inB').addEventListener('keydown', function (e) { if (e.key === 'Enter') run(); });
+
+  run();
+})();
+</script>
+</body>
+</html>
