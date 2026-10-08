@@ -1453,7 +1453,10 @@ remainder (<code>n − First lanes</code>). <code>0</code> means &#8220;split ev
 <li>
 <p>A passthrough that <strong>fixes</strong> the bus width. Property <strong>Lanes</strong> (default 8,
 1–64) sets the width of both terminals; use it to pin a bus to a
-specific width regardless of its source.</p>
+specific width regardless of its source. Property <strong>Flip</strong> (default off)
+reverses the lane order, so the input’s LSB becomes the output’s MSB
+(the width is unchanged); a flipped bus shows a small diagonal <strong>X</strong> in
+place of its middle lane.</p>
 </li>
 </ul>
 </div>
@@ -1987,7 +1990,7 @@ decimals.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-10-08 21:47:11 +0200
+Last updated 2026-10-08 22:58:59 +0200
 </div>
 </div>
 </body>
