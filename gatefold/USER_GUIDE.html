@@ -1219,8 +1219,7 @@ inactive (no reset) rather than floating.</p>
 <li>
 <p><strong>Inputs:</strong> <code>CLK</code>, <code>RST</code> · <strong>Outputs:</strong> <code>Q</code> bus, or <code>Q0…</code> single wires ·
 Properties <strong>Reset</strong> (<code>sync</code> / <code>async</code>, default <code>sync</code>), <strong>Terminal type</strong>
-(<code>wire</code> / <code>bus</code>, default <code>wire</code>), <strong>Width</strong> (1–32, default 4, wire mode
-only)</p>
+(<code>wire</code> / <code>bus</code>, default <code>wire</code>), <strong>Width</strong> (0–32, default 0)</p>
 </li>
 <li>
 <p>A binary counter. On each rising edge of <code>CLK</code> the count increments by
@@ -1242,10 +1241,11 @@ to zero:</p>
 </li>
 <li>
 <p><strong>Terminal type</strong> picks the output shape: <code>wire</code> gives one single-wire
-output per counting bit (<code>Q0…Q(n-1)</code>), with the count set by <strong>Width</strong>;
-<code>bus</code> gives one <code>Q</code> bus whose width is adopted from the connected bus
-(the <strong>Width</strong> property is ignored). Changing the terminal type keeps
-<code>CLK</code>/<code>RST</code> wiring but disconnects the output wires.</p>
+output per counting bit (<code>Q0…Q(n-1)</code>), with the count set by <strong>Width</strong> (0
+uses the default count); <code>bus</code> gives one <code>Q</code> bus whose width is adopted
+from the connected bus when <strong>Width</strong> is 0, and pinned to <strong>Width</strong> lanes
+otherwise. Changing the terminal type keeps <code>CLK</code>/<code>RST</code> wiring but
+disconnects the output wires.</p>
 </li>
 <li>
 <p><code>RST</code> is pulled <strong>down</strong> by default, so an unconnected reset reads
@@ -1268,7 +1268,7 @@ flip-flops.</p>
 <p><strong>Inputs:</strong> <code>CLK</code>, <code>RST</code>, <code>DATA</code> (bus) or <code>D0…</code> (single wires) ·
 <strong>Outputs:</strong> <code>Q</code> bus, or <code>Q0…</code> single wires · Properties <strong>Reset</strong> (<code>sync</code> /
 <code>async</code>, default <code>sync</code>), <strong>Terminal type</strong> (<code>wire</code> / <code>bus</code>, default
-<code>bus</code>), <strong>Width</strong> (1–32, default 8, wire mode only)</p>
+<code>bus</code>), <strong>Width</strong> (0–32, default 0)</p>
 </li>
 <li>
 <p>An n-bit register (an array of 1-bit memory cells). On each rising
@@ -1292,11 +1292,11 @@ register to zero:</p>
 </li>
 <li>
 <p><strong>Terminal type</strong> picks the data shape: <code>bus</code> gives one <code>DATA</code> bus input
-and one <code>Q</code> bus output whose width is adopted from the connected bus
-(the <strong>Width</strong> property is ignored, but <code>DATA</code> and <code>Q</code> always share the
-same width); <code>wire</code> gives one single-wire <code>D0…</code>/<code>Q0…</code> per bit, with the
-bit count set by <strong>Width</strong>. Changing the terminal type keeps <code>CLK</code>/<code>RST</code>
-wiring but disconnects the data and output wires.</p>
+and one <code>Q</code> bus output (always the same width — adopted from the
+connected bus when <strong>Width</strong> is 0, and pinned to <strong>Width</strong> lanes otherwise);
+<code>wire</code> gives one single-wire <code>D0…</code>/<code>Q0…</code> per bit, with the bit count set
+by <strong>Width</strong> (0 uses the default count). Changing the terminal type keeps
+<code>CLK</code>/<code>RST</code> wiring but disconnects the data and output wires.</p>
 </li>
 <li>
 <p><code>RST</code> is pulled <strong>down</strong> by default, so an unconnected reset reads
@@ -1987,7 +1987,7 @@ decimals.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-10-04 14:20:53 +0200
+Last updated 2026-10-08 21:47:11 +0200
 </div>
 </div>
 </body>
