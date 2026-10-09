@@ -1609,7 +1609,8 @@ display.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Inputs:</strong> 1 (<code>IN</code>) · <strong>Outputs:</strong> none · Properties none</p>
+<p><strong>Inputs:</strong> 1 (<code>IN</code>) · <strong>Outputs:</strong> none · Properties: <strong>Pause on trigger</strong>,
+<strong>Trigger on</strong></p>
 </li>
 <li>
 <p>A monitoring tap: it records the signal on whatever it is wired to (a
@@ -1619,6 +1620,14 @@ circuit. Probes are <strong>not grouped</strong> — if you select a probe along
 other components and click <strong>Group</strong>, the probe stays on the sheet and
 keeps tapping the new component’s output. A probe is ignored by the
 Verilog export.</p>
+</li>
+<li>
+<p><strong>Pause on trigger</strong> arms a run pause: when enabled, the simulation
+stops the moment the probe’s input meets the <strong>Trigger on</strong> condition. The
+condition is an edge — <code>RISING_EDGE</code> (<code>0</code>→<code>1</code>), <code>FALLING_EDGE</code>
+(<code>1</code>→<code>0</code>), or <code>EDGE</code> (either). On a <strong>bus</strong> input the trigger fires if
+<em>any</em> lane meets the condition. Only strict <code>0</code>↔<code>1</code> transitions count
+(<code>x</code> never triggers).</p>
 </li>
 </ul>
 </div>
@@ -1990,7 +1999,7 @@ decimals.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-10-08 22:58:59 +0200
+Last updated 2026-10-09 13:17:56 +0200
 </div>
 </div>
 </body>
