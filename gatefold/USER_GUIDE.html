@@ -487,14 +487,17 @@ editor</p></td>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Library</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Right</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The primitive palette and your custom components</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Your custom components</p></td>
 </tr>
 </tbody>
 </table>
 <div class="paragraph">
 <p>The center panel has a <strong>tab bar</strong> with three views: <strong>Designer</strong> (the
 schematic canvas), <strong>Simulation timeline</strong> (the recorded probe waveforms —
-see §7), and <strong>Testing</strong> (the test-bench sheet — see §6b).</p>
+see §7), and <strong>Testing</strong> (the test-bench sheet — see §6b). The <strong>Designer</strong>
+and <strong>Testing</strong> views each have a horizontal <strong>primitive strip</strong> above the
+canvas — drag a card from it to place that primitive on the canvas
+below.</p>
 </div>
 <div class="sect3">
 <h4 id="_toolbar">Toolbar</h4>
@@ -594,10 +597,6 @@ Values commit on <strong>Enter</strong> or blur.</p>
 <h4 id="_library_right">Library (right)</h4>
 <div class="ulist">
 <ul>
-<li>
-<p><strong>Primitives</strong> — the built-in components (§6). Drag one onto the canvas
-to place it.</p>
-</li>
 <li>
 <p><strong>My components</strong> — your composite components. Drag to place;
 double-click to edit its template; <strong>×</strong> deletes it. <strong>Export</strong> / <strong>Import</strong>
@@ -849,7 +848,8 @@ terminal (see §3)</p></td>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><strong>Place</strong> — drag a primitive from the library onto the canvas.</p>
+<p><strong>Place</strong> — drag a primitive from the strip above the canvas onto the
+canvas.</p>
 </li>
 <li>
 <p><strong>Wire</strong> — connect outputs to inputs.</p>
@@ -1499,7 +1499,7 @@ two:</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Drop</strong> a NODE from the library straight onto a wire.</p>
+<p><strong>Drop</strong> a NODE from the primitive strip straight onto a wire.</p>
 </li>
 <li>
 <p><strong>Ctrl/Cmd&#43;drag</strong> across a wire — an imaginary dashed line is
@@ -1635,9 +1635,9 @@ condition is an edge — <code>RISING_EDGE</code> (<code>0</code>→<code>1</cod
 <blockquote>
 <div class="paragraph">
 <p><strong>Internal primitives</strong> (<code>INPUT-PORT</code> / <code>OUTPUT-PORT</code>) are not in the
-palette: they model a composite’s own input/output terminals internally
-and are created automatically when you group components or edit a
-composite’s ports.</p>
+primitive strip: they model a composite’s own input/output terminals
+internally and are created automatically when you group components or
+edit a composite’s ports.</p>
 </div>
 </blockquote>
 </div>
@@ -1660,11 +1660,13 @@ top-level sheet) with its input ports on the left and output ports on
 the right. It is <strong>movable</strong> (drag it) but <strong>not deletable</strong>.</p>
 </li>
 <li>
-<p>A small palette above the canvas offers the interface primitives —
-<strong>CLOCK</strong>, <strong>SWITCHES</strong>, <strong>LEDS</strong>, <strong>7-SEG</strong>, and <strong>PROBE</strong>. Drag one onto the
-sheet, then wire it to a <code>main</code> port exactly like on the designer canvas
-(drag from an output pin to an input pin; grab an existing wire to
-re-target or delete it).</p>
+<p>A horizontal <strong>primitive strip</strong> above the canvas offers every primitive
+(the same set as the Designer tab), so you can model arbitrary external
+circuitry — not just <strong>CLOCK</strong>, <strong>SWITCHES</strong>, <strong>LEDS</strong>, <strong>7-SEG</strong>, and <strong>PROBE</strong>,
+but also gates, buses, and stateful parts. Drag one onto the sheet, then
+wire it to a <code>main</code> port exactly like on the designer canvas (drag from
+an output pin to an input pin; grab an existing wire to re-target or
+delete it). The component you just placed becomes the selection.</p>
 </li>
 <li>
 <p>Editing works like the designer: drag components, marquee/Shift-click
@@ -1999,7 +2001,7 @@ decimals.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-10-09 13:17:56 +0200
+Last updated 2026-10-15 22:03:31 +0200
 </div>
 </div>
 </body>
